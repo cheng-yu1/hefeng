@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>何芬 · 桌宠</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body { height:100%; overflow:hidden; font-family:-apple-system,"PingFang SC",sans-serif; }
+  body {
+    background: linear-gradient(160deg,#ffeef2,#e8f4f8 55%,#f3e8ff);
+    display:flex; flex-direction:column; align-items:center; justify-content:flex-end;
+    user-select:none;
+  }
+
+  /* 状态栏 */
+  #stats {
+    position:fixed; top:0; left:0; right:0; z-index:10;
+    padding:10px 14px; display:flex; gap:12px; justify-content:center; align-items:center;
+    background:rgba(255,255,255,.62); backdrop-filter:blur(10px);
+    font-size:13px; color:#345;
+  }
+  .bar { width:78px; }
+  .bar-label { font-size:10px; margin-bottom:3px; }
+  .bar-bg { height:7px; background:rgba(0,0,0,.1); border-radius:4px; overflow:hidden; }
+  .bar-fill { height:100%; border-radius:4px; transition:width .4s; }
+  #moodFill { background:linear-gradient(90deg,#ff9a9e,#fad0c4); }
+  #foodFill { background:linear-gradient(90deg,#84fab0,#8fd3f4); }
+  #loveFill { background:linear-gradient(90deg,#ff7eb3,#ff9a5a); }
+  #angryFill { background:linear-gradient(90deg,#ff6b6b,#ff9f43); }
+  #loveLv { font-size:11px; color:#e0629a; font-weight:700; margin-left:2px; }
+
+  /* 桌宠区 */
+  #petWrap {
+    position:relative;
+    margin-bottom:22vh;
+    animation: idle 2.6s ease-in-out infinite;
+    transition: transform .15s;
+    cursor:pointer;
+    filter: drop-shadow(0 10px 18px rgba(0,0,0,.18));
+    touch-action: manipulation;
+  }
+  #petWrap:active { transform:scale(.92); }
+  @keyframes idle {
+    0%,100% { transform:translateY(0) rotate(0deg); }
+    50%     { transform:translateY(-10px) rotate(-1.5deg); }
+  }
+  @keyframes happy {
+    0%,100% { transform:translateY(0) scale(1); }
+    30%     { transform:translateY(-28px) scale(1.12); }
+    60%     { transform:translateY(0) scale(.94); }
+  }
+  .happy { animation: happy .6s ease; }
+  @keyframes shake {
+    0%,100% { transform:translateX(0); }
+    20%     { transform:translateX(-7px) rotate(-2deg); }
+    40%     { transform:translateX(7px) rotate(2deg); }
+    60%     { transform:translateX(-5px); }
+    80%     { transform:translateX(5px); }
+  }
+  .shake { animation: shake .45s ease; }
+
+  #pet { width:190px; height:228px; }
+  #pet svg { width:100%; height:100%; display:block; }
+
+  /* 气泡 —— 放在头顶 */
+  #bubble {
+    position:fixed;
+    background:#fff; padding:9px 15px; border-radius:16px;
+    font-size:14px; color:#345; max-width:70vw; text-align:center;
+    box-shadow:0 4px 14px rgba(0,0,0,.13);
+    opacity:0; transition:opacity .3s, transform .3s;
+    transform:translateY(6px); pointer-events:none; z-index:20;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  #bubble.show { opacity:1; transform:translateY(0); }
+  #bubble::after {
+    content:''; position:absolute; bottom:-7px; left:50%; transform:translateX(-50%);
+    border:7px solid transparent; border-top-color:#fff; border-bottom:0;
+  }
+
+  /* 聊天选项 */
+  #choices {
+    position:fixed; bottom:23vh; left:0; right:0;
+    display:flex; flex-direction:column; gap:8px; align-items:center;
+    padding:0 20px; z-index:11;
+    opacity:0; transform:translateY(10px); pointer-events:none;
+    transition:opacity .25s, transform .25s;
+  }
+  #choices.show { opacity:1; transform:translateY(0); pointer-events:auto; }
+  #choices button {
+    width:100%; max-width:300px; padding:11px 16px;
+    border:none; border-radius:14px; font-size:14px; text-align:left;
+    background:rgba(255,255,255,.95); color:#456;
+    box-shadow:0 3px 12px rgba(0,0,0,.1);
+    cursor:pointer; transition:transform .1s, background .2s;
+  }
+  #choices button:active { transform:scale(.97); background:#fff0f5; }
+  #choices button .emo { margin-right:8px; }
+
+  /* 表情栏 */
+  #emoBar {
+    position:fixed; bottom:88px; left:0; right:0;
+    display:flex; gap:8px; justify-content:center; flex-wrap:wrap;
+    padding:0 12px; z-index:10;
+  }
+  #emoBar button {
+    width:42px; height:42px; padding:0;
+    border:none; border-radius:50%; font-size:21px;
+    background:rgba(255,255,255,.85); backdrop-filter:blur(6px);
+    box-shadow:0 2px 8px rgba(0,0,0,.12);
+    cursor:pointer; transition:transform .1s;
+  }
+  #emoBar button:active { transform:scale(.88); }
+
+  /* 底部按钮 */
+  #actions {
+    position:fixed; bottom:0; left:0; right:0; z-index:10;
+    padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+    display:flex; gap:8px; justify-content:center;
+    background:rgba(255,255,255,.65); backdrop-filter:blur(10px);
+  }
+  #actions button {
+    flex:1; max-width:96px; padding:12px 0;
+    border:none; border-radius:14px; font-size:14px; font-weight:600;
+    background:#fff; color:#456; box-shadow:0 2px 8px rgba(0,0,0,.1);
+    cursor:pointer; transition:transform .1s, background .2s;
+  }
+  #actions button:active { transform:scale(.94); background:#fff0f5; }
+
+  /* 飘字 */
+  .float {
+    position:fixed; font-size:20px; pointer-events:none; z-index:99;
+    animation: floatUp 1s ease-out forwards;
+  }
+  @keyframes floatUp {
+    0%   { opacity:1; transform:translateY(0); }
+    100% { opacity:0; transform:translateY(-70px); }
+  }
+
+  /* 升级 / 生气提示 */
+  #toast {
+    position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(.7);
+    color:#fff; padding:14px 26px; border-radius:18px;
+    font-size:17px; font-weight:700; z-index:200;
+    opacity:0; pointer-events:none; transition:all .4s;
+    white-space:nowrap;
+  }
+  #toast.show { opacity:1; transform:translate(-50%,-50%) scale(1); }
+  #toast.love  { background:linear-gradient(135deg,#ff9a9e,#ff7eb3); box-shadow:0 10px 30px rgba(255,126,179,.5); }
+  #toast.angry { background:linear-gradient(135deg,#ff6b6b,#ff9f43); box-shadow:0 10px 30px rgba(255,107,107,.5); }
+</style>
+</head>
+<body>
+
+<div id="stats">
+  <div class="bar">
+    <div class="bar-label">😊 心情</div>
+    <div class="bar-bg"><div class="bar-fill" id="moodFill" style="width:55%"></div></div>
+  </div>
+  <div class="bar">
+    <div class="bar-label">🍚 饱食</div>
+    <div class="bar-bg"><div class="bar-fill" id="foodFill" style="width:80%"></div></div>
+  </div>
+  <div class="bar">
+    <div class="bar-label">😠 怒气</div>
+    <div class="bar-bg"><div class="bar-fill" id="angryFill" style="width:0%"></div></div>
+  </div>
+  <div class="bar" style="width:96px">
+    <div class="bar-label">💗 好感 <span id="loveLv">Lv.1 陌生</span></div>
+    <div class="bar-bg"><div class="bar-fill" id="loveFill" style="width:0%"></div></div>
+  </div>
+</div>
+
+<div id="bubble"></div>
+
+<div id="petWrap">
+  <div id="pet">
+    <svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="100" cy="235" rx="55" ry="8" fill="rgba(0,0,0,.08)"/>
+      <path d="M40 110 Q35 40 100 30 Q165 40 160 110 L162 200 Q150 210 140 200 L138 120
+               Q120 105 100 105 Q80 105 62 120 L60 200 Q50 210 38 200 Z" fill="#2b2b33"/>
+      <rect x="88" y="150" width="24" height="22" rx="8" fill="#f7d9c4"/>
+      <path d="M55 235 Q60 180 100 172 Q140 180 145 235 Z" fill="#dfe9f5"/>
+      <path d="M100 172 L88 200 L100 210 L112 200 Z" fill="#fff"/>
+      <ellipse cx="100" cy="115" rx="44" ry="48" fill="#fbe3d3"/>
+      <ellipse cx="68" cy="128" rx="9" ry="5" fill="#ffb3b3" opacity=".55"/>
+      <ellipse cx="132" cy="128" rx="9" ry="5" fill="#ffb3b3" opacity=".55"/>
+      <path d="M56 108 Q52 48 100 42 Q148 48 144 108
+               Q140 92 128 86 Q120 96 112 84
+               Q104 96 96 82 Q88 96 80 84
+               Q70 92 56 108 Z" fill="#2b2b33"/>
+      <g id="eyes">
+        <ellipse cx="80" cy="118" rx="9" ry="10" fill="#fff"/>
+        <ellipse cx="120" cy="118" rx="9" ry="10" fill="#fff"/>
+        <circle cx="80" cy="119" r="6.5" fill="#3a2b2b"/>
+        <circle cx="120" cy="119" r="6.5" fill="#3a2b2b"/>
+        <circle cx="82" cy="116" r="2.2" fill="#fff"/>
+        <circle cx="122" cy="116" r="2.2" fill="#fff"/>
+        <path d="M70 110 Q80 106 90 110" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <path d="M110 110 Q120 106 130 110" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/>
+      </g>
+      <path id="mouth" d="M94 140 Q100 143 106 140" stroke="#c9736f" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    </svg>
+  </div>
+</div>
+
+<div id="choices"></div>
+
+<div id="emoBar">
+  <button onclick="setFace('normal')">🙂</button>
+  <button onclick="setFace('happy')">😊</button>
+  <button onclick="setFace('shy')">😳</button>
+  <button onclick="setFace('sad')">😢</button>
+  <button onclick="setFace('angry')">😠</button>
+  <button onclick="setFace('sleep')">😴</button>
+  <button onclick="setFace('love')">🥰</button>
+</div>
+
+<div id="actions">
+  <button onclick="feed()">🍚 喂食</button>
+  <button onclick="play()">🎾 玩耍</button>
+  <button onclick="chat()">💬 聊天</button>
+  <button onclick="pat()">🫶 摸摸</button>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ================= 配置 ================= */
+const CONFIG = {
+  name: "何芬",
+  lines: {
+    idle:  ["……", "嗯。", "你在啊。", "……有事吗？", "发呆中。"],
+    tap:   ["干嘛。", "……别戳。", "嗯？", "有事说事。"],
+    head:  ["……摸头干嘛。", "嗯……还行。", "……就一下。"],
+    faceTap:["别戳脸。", "……喂。", "痒。"],
+    body:  ["……干嘛碰我。", "喂。", "……手拿开。"],
+    feed:  ["……谢谢。", "还行。", "嗯，好吃。"],
+    play:  ["……好吧。", "陪你一下。", "就一会儿。"],
+    sleep: ["困了。", "……晚安。", "Zzz…"],
+    hungry:["饿了。", "……有吃的吗。"],
+    sad:   ["……", "有点无聊。", "你很久没来了。"],
+    warm:  ["今天……也谢谢你陪我。", "其实挺开心的。", "你别走那么快嘛。"]
+  },
+  angry: {
+    lines: ["……生气了。", "别碰我。", "哼。", "……走开。", "不理你了。"],
+    overTap: ["你再戳一下试试。", "……够了。", "烦。"],
+    calm: ["……算了。", "哼，这次原谅你。", "……下次别这样。"]
+  }
+};
+
+/* ================= 聊天话题 ================= */
+const TOPICS = [
+  { id:'name', minLv:0, emo:'👋', q:'你叫什么名字？',
+    a:['……何芬。','记住了吗。','嗯，我叫何芬。'], face:'shy', love:3 },
+  { id:'like', minLv:0, emo:'🍰', q:'你喜欢什么？',
+    a:['……安静待着。','好吃的吧。','睡觉算吗。'], face:'normal', love:3 },
+  { id:'age', minLv:1, emo:'🎂', q:'你多大了？',
+    a:['……不告诉你。','问这个干嘛。','猜。'], face:'angry', love:2 },
+  { id:'today', minLv:1, emo:'🌤️', q:'今天过得怎么样？',
+    a:['还行。','……就那样。','有点无聊。'], face:'normal', love:4 },
+  { id:'friend', minLv:2, emo:'🤝', q:'我们是朋友吗？',
+    a:['……算是吧。','嗯。','问这个干嘛……但，是的。'], face:'shy', love:6 },
+  { id:'miss', minLv:3, emo:'💭', q:'我不在的时候你会想我吗？',
+    a:['……谁会想你。','一点点。','……嗯，会。'], face:'love', love:8 },
+  { id:'secret', minLv:4, emo:'🤫', q:'跟我说个秘密吧',
+    a:['……其实我不太会主动说话。','不是讨厌你，只是慢热。','……谢谢你一直来找我。'], face:'love', love:10 }
+];
+
+/* ================= 好感等级 ================= */
+const LEVELS = [
+  { lv:1, name:'陌生', min:0 },
+  { lv:2, name:'眼熟', min:30 },
+  { lv:3, name:'朋友', min:80 },
+  { lv:4, name:'好朋友', min:150 },
+  { lv:5, name:'很亲近', min:240 },
+  { lv:6, name:'特别的人', min:360 }
+];
+
+/* ================= 状态 ================= */
+let state = {
+  mood: 55, food: 80, love: 0, angry: 0,
+  lastTime: Date.now(),
+  lastTap: 0, tapCount: 0, angryCooldown: 0
+};
+
+const petWrap = document.getElementById('petWrap');
+const bubble  = document.getElementById('bubble');
+const choices = document.getElementById('choices');
+const moodFill= document.getElementById('moodFill');
+const foodFill= document.getElementById('foodFill');
+const loveFill= document.getElementById('loveFill');
+const angryFill=document.getElementById('angryFill');
+const loveLv  = document.getElementById('loveLv');
+const eyes    = document.getElementById('eyes');
+const mouth   = document.getElementById('mouth');
+const toastEl = document.getElementById('toast');
+
+/* ================= 表情 ================= */
+function setFace(type) {
+  const E = {
+    normal: `<ellipse cx="80" cy="118" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="118" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="119" r="6.5" fill="#3a2b2b"/><circle cx="120" cy="119" r="6.5" fill="#3a2b2b"/><circle cx="82" cy="116" r="2.2" fill="#fff"/><circle cx="122" cy="116" r="2.2" fill="#fff"/><path d="M70 110 Q80 106 90 110" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 110 Q120 106 130 110" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+    happy: `<path d="M70 120 Q80 108 90 120" stroke="#2b2b33" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M110 120 Q120 108 130 120" stroke="#2b2b33" stroke-width="3.5" fill="none" stroke-linecap="round"/>`,
+    shy: `<ellipse cx="80" cy="118" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="118" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="119" r="6.5" fill="#3a2b2b"/><circle cx="120" cy="119" r="6.5" fill="#3a2b2b"/><circle cx="82" cy="116" r="2.2" fill="#fff"/><circle cx="122" cy="116" r="2.2" fill="#fff"/><path d="M70 108 Q80 104 90 108" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 108 Q120 104 130 108" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+    sad: `<ellipse cx="80" cy="120" rx="9" ry="9" fill="#fff"/><ellipse cx="120" cy="120" rx="9" ry="9" fill="#fff"/><circle cx="80" cy="121" r="6" fill="#3a2b2b"/><circle cx="120" cy="121" r="6" fill="#3a2b2b"/><path d="M70 108 Q80 112 90 108" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 108 Q120 112 130 108" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+    angry: `<ellipse cx="80" cy="118" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="118" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="119" r="6.5" fill="#3a2b2b"/><circle cx="120" cy="119" r="6.5" fill="#3a2b2b"/><path d="M70 106 L90 114" stroke="#2b2b33" stroke-width="3.5" stroke-linecap="round"/><path d="M130 106 L110 114" stroke="#2b2b33" stroke-width="3.5" stroke-linecap="round"/>`,
+    sleep: `<path d="M70 120 Q80 126 90 120" stroke="#2b2b33" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M110 120 Q120 126 130 120" stroke="#2b2b33" stroke-width="3.5" fill="none" stroke-linecap="round"/>`,
+    love: `<path d="M80 112 C75 104 64 106 64 115 C64 123 80 130 80 130 C80 130 96 123 96 115 C96 106 85 104 80 112 Z" fill="#ff6b8a" transform="translate(-6,-2) scale(.85)"/><path d="M120 112 C115 104 104 106 104 115 C104 123 120 130 120 130 C120 130 136 123 136 115 C136 106 125 104 120 112 Z" fill="#ff6b8a" transform="translate(6,-2) scale(.85)"/>`
+  };
+  const M = {
+    normal: `<path d="M94 140 Q100 143 106 140" stroke="#c9736f" stroke-width="2.2" fill="none" stroke-linecap="round"/>`,
+    happy:  `<path d="M90 138 Q100 148 110 138" stroke="#c9736f" stroke-width="2.5" fill="none" stroke-linecap="round"/>`,
+    shy:    `<path d="M96 141 Q100 143 104 141" stroke="#c9736f" stroke-width="2.2" fill="none" stroke-linecap="round"/>`,
+    sad:    `<path d="M92 144 Q100 138 108 144" stroke="#c9736f" stroke-width="2.2" fill="none" stroke-linecap="round"/>`,
+    angry:  `<path d="M92 142 L108 142" stroke="#c9736f" stroke-width="2.5" stroke-linecap="round"/>`,
+    sleep:  `<ellipse cx="100" cy="141" rx="4" ry="3" fill="#c9736f" opacity=".7"/>`,
+    love:   `<path d="M90 138 Q100 148 110 138" stroke="#c9736f" stroke-width="2.5" fill="none" stroke-linecap="round"/>`
+  };
+  if (eyes)  eyes.innerHTML = E[type] || E.normal;
+  if (mouth) mouth.outerHTML = (M[type] || M.normal).replace('<path', '<path id="mouth"');
+}
+
+/* ================= 好感 ================= */
+function getLevel() {
+  let cur = LEVELS[0];
+  for (const l of LEVELS) if (state.love >= l.min) cur = l;
+  return cur;
+}
+function lovePercent() {
+  const cur = getLevel();
+  const idx = LEVELS.indexOf(cur);
+  const next = LEVELS[idx + 1];
+  if (!next) return 100;
+  return Math.min(100, ((state.love - cur.min) / (next.min - cur.min)) * 100);
+}
+function addLove(n) {
+  const before = getLevel().lv;
+  state.love += n;
+  const after = getLevel();
+  if (after.lv > before) showToast(`💗 好感提升！${after.name}`, 'love');
+}
+
+/* ================= 生气 ================= */
+function addAngry(n) {
+  if (state.angryCooldown > 0) return;
+  const before = state.angry < 60;
+  state.angry = Math.min(100, state.angry + n);
+  if (before && state.angry >= 60) {
+    showToast('😠 何芬生气了！', 'angry');
+    setFace('angry');
+    petWrap.classList.remove('shake'); void petWrap.offsetWidth; petWrap.classList.add('shake');
+    say(rand(CONFIG.angry.lines), 2800);
+  }
+}
+function calmDown(n) {
+  state.angry = Math.max(0, state.angry - n);
+  if (state.angry === 0 && state.angryCooldown === 0) {
+    // 从生气恢复
+  }
+}
+
+/* ================= 存档 ================= */
+function load() {
+  const s = localStorage.getItem('hefenState');
+  if (!s) return;
+  try {
+    const d = JSON.parse(s);
+    const hours = (Date.now() - d.lastTime) / 3600000;
+    state.mood = Math.max(0, d.mood - hours * 2);
+    state.food = Math.max(0, d.food - hours * 4);
+    state.love = d.love || 0;
+    state.angry = d.angry || 0;
+  } catch(e) {}
+}
+function save() {
+  state.lastTime = Date.now();
+  localStorage.setItem('hefenState', JSON.stringify({
+    mood: state.mood, food: state.food,
+    love: state.love, angry: state.angry,
+    lastTime: state.lastTime
+  }));
+}
+function render() {
+  moodFill.style.width = state.mood + '%';
+  foodFill.style.width = state.food + '%';
+  loveFill.style.width = lovePercent() + '%';
+  angryFill.style.width = state.angry + '%';
+  const lv = getLevel();
+  loveLv.textContent = `Lv.${lv.lv} ${lv.name}`;
+}
+function update() {
+  state.mood = Math.max(0, Math.min(100, state.mood));
+  state.food = Math.max(0, Math.min(100, state.food));
+  state.angry = Math.max(0, Math.min(100, state.angry));
+  render(); save();
+}
+
+/* ================= 说话（气泡在头顶） ================= */
+let bubbleTimer;
+function say(text, ms = 2400) {
+  bubble.textContent = text;
+  bubble.classList.add('show');
+  positionBubble();
+  clearTimeout(bubbleTimer);
+  bubbleTimer = setTimeout(() => bubble.classList.remove('show'), ms);
+}
+function positionBubble() {
+  const r = petWrap.getBoundingClientRect();
+  const bw = bubble.offsetWidth;
+  let left = r.left + r.width / 2 - bw / 2;
+  left = Math.max(8, Math.min(window.innerWidth - bw - 8, left));
+  const top = r.top - bubble.offsetHeight - 14;
+  bubble.style.left = left + 'px';
+  bubble.style.top  = Math.max(8, top) + 'px';
+}
+window.addEventListener('resize', () => {
+  if (bubble.classList.contains('show')) positionBubble();
+});
+
+function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function pickLine(type) {
+  if (type === 'idle' && state.love > 80 && state.mood > 70 && Math.random() < 0.5) {
+    return rand(CONFIG.lines.warm);
+  }
+  return rand(CONFIG.lines[type]);
+}
+
+function floatText(txt, x, y) {
+  const el = document.createElement('div');
+  el.className = 'float';
+  el.textContent = txt;
+  el.style.left = (x - 14) + 'px';
+  el.style.top  = (y - 20) + 'px';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1000);
+}
+
+function showToast(text, type) {
+  toastEl.textContent = text;
+  toastEl.className = 'show ' + (type || '');
+  setTimeout(() => toastEl.className = '', 1800);
+}
+
+/* ================= 点她身体不同部位 ================= */
+petWrap.addEventListener('click', (e) => {
+  const rect = petWrap.getBoundingClientRect();
+  const y = (e.clientY - rect.top) / rect.height;
+  const x = (e.clientX - rect.left) / rect.width;
+
+  // 生气中：点她只会更烦
+  if (state.angry >= 60) {
+    const now = Date.now();
+    if (now - state.lastTap < 1200) {
+      addAngry(5);
+      say(rand(CONFIG.angry.overTap), 2000);
+    } else {
+      say(rand(CONFIG.angry.lines), 2000);
+    }
+    state.lastTap = now;
+    setFace('angry');
+    petWrap.classList.remove('shake'); void petWrap.offsetWidth; petWrap.classList.add('shake');
+    return;
+  }
+
+  petWrap.classList.remove('happy');
+  void petWrap.offsetWidth;
+  petWrap.classList.add('happy');
+
+  // 连点检测
+  const now = Date.now();
+  if (now - state.lastTap < 700) state.tapCount++;
+  else state.tapCount = 1;
+  state.lastTap = now;
+
+  let face = 'normal';
+  let line = 'tap';
+  let loveAdd = 1;
+
+  if (y < 0.42) {
+    // 头部
+    if (x > 0.35 && x < 0.65 && y > 0.28) {
+      face = 'angry'; line = 'faceTap'; loveAdd = 0;
+      addAngry(6);
+      floatText('💢', e.clientX, e.clientY);
+    } else {
+      face = 'shy'; line = 'head'; loveAdd = 2;
+      floatText('🫶', e.clientX, e.clientY);
+    }
+  } else if (y > 0.75) {
+    // 身体
+    face = 'angry'; line = 'body'; loveAdd = 0;
+    addAngry(5);
+    floatText('💢', e.clientX, e.clientY);
+  } else {
+    // 脸/中间
+    face = state.mood > 60 && Math.random() < 0.5 ? 'happy' : 'shy';
+    line = 'tap'; loveAdd = 1;
+    floatText('💕', e.clientX, e.clientY);
+  }
+
+  // 连点太多 → 生气
+  if (state.tapCount >= 5) {
+    addAngry(10);
+    state.tapCount = 0;
+  }
+
+  state.mood = Math.min(100, state.mood + 2);
+  addLove(loveAdd);
+  update();
+  say(pickLine(line));
+  setFace(face);
+});
+
+/* ================= 聊天 ================= */
+function chat() {
+  choices.classList.remove('show');
+  if (state.angry >= 60) {
+    say('……现在不想说话。', 2500);
+    setFace('angry');
+    return;
+  }
+  const lv = getLevel().lv;
+  const available = TOPICS.filter(t => t.minLv <= lv);
+  const pool = [...available].sort(() => Math.random() - 0.5).slice(0, 3);
+
+  choices.innerHTML = '';
+  pool.forEach(t => {
+    const btn = document.createElement('button');
+    btn.innerHTML = `<span class="emo">${t.emo}</span>${t.q}`;
+    btn.onclick = () => askTopic(t);
+    choices.appendChild(btn);
+  });
+  choices.classList.add('show');
+  say('……你想问什么？', 3000);
+  setFace('normal');
+}
+
+function askTopic(t) {
+  choices.classList.remove('show');
+  const answer = rand(t.a);
+  say(answer, 3200);
+  setFace(t.face || 'normal');
+  addLove(t.love || 2);
+  state.mood = Math.min(100, state.mood + 2);
+  calmDown(8);
+  update();
+}
+
+document.addEventListener('click', (e) => {
+  if (!choices.contains(e.target) && !e.target.closest('#actions')) {
+    choices.classList.remove('show');
+  }
+});
+
+/* ================= 喂食 / 玩耍 / 摸摸 ================= */
+function feed() {
+  choices.classList.remove('show');
+  if (state.angry >= 60) { say('……不吃。', 2000); setFace('angry'); return; }
+  if (state.food >= 100) { say("……吃不下了。"); setFace('shy'); return; }
+  state.food = Math.min(100, state.food + 18);
+  state.mood = Math.min(100, state.mood + 5);
+  addLove(2); calmDown(10);
+  say(pickLine('feed'));
+  setFace('happy');
+  update();
+  const r = petWrap.getBoundingClientRect();
+  floatText('🍚', r.left + r.width/2, r.top);
+}
+
+function play() {
+  choices.classList.remove('show');
+  if (state.angry >= 60) { say('……不想玩。', 2000); setFace('angry'); return; }
+  if (state.food < 15) { say(pickLine('hungry')); setFace('sad'); return; }
+  state.mood = Math.min(100, state.mood + 15);
+  state.food = Math.max(0, state.food - 8);
+  addLove(3); calmDown(10);
+  say(pickLine('play'));
+  petWrap.classList.remove('happy'); void petWrap.offsetWidth; petWrap.classList.add('happy');
+  setFace('happy');
+  update();
+  const r = petWrap.getBoundingClientRect();
+  floatText('✨', r.left + r.width/2, r.top);
+}
+
+function pat() {
+  choices.classList.remove('show');
+  if (state.angry >= 60) { say('……别碰我。', 2000); setFace('angry'); addAngry(3); return; }
+  state.mood = Math.min(100, state.mood + 8);
+  addLove(2); calmDown(12);
+  say(rand(CONFIG.lines.head));
+  setFace('shy');
+  update();
+  const r = petWrap.getBoundingClientRect();
+  floatText('🫶', r.left + r.width/2, r.top);
+}
+
+/* ================= 定时 ================= */
+setInterval(() => {
+  state.mood = Math.max(0, state.mood - 0.6);
+  state.food = Math.max(0, state.food - 1.2);
+  update();
+
+  // 生气自然消退
+  if (state.angry > 0 && state.angry < 60) {
+    state.angry = Math.max(0, state.angry - 1);
+  }
+  // 生气中，慢慢冷静
+  if (state.angry >= 60) {
+    state.angry = Math.max(0, state.angry - 0.8);
+    if (state.angry < 60 && state.angry > 0) {
+      say(rand(CONFIG.angry.calm), 2500);
+      setFace('normal');
+    }
+  }
+
+  // 饿太久 / 心情太差 → 生气
+  if (state.food < 10) addAngry(0.5);
+  if (state.mood < 10) addAngry(0.3);
+
+  if (Math.random() < 0.12 && !choices.classList.contains('show') && state.angry < 60) {
+    if (state.food < 25)      { say(pickLine('hungry')); setFace('sad'); }
+    else if (state.mood < 25) { say(pickLine('sad'));    setFace('sad'); }
+    else                      { say(pickLine('idle')); }
+  }
+
+  // 保存
+  save();
+}, 8000);
+
+window.addEventListener('beforeunload', save);
+document.addEventListener('visibilitychange', () => { if (document.hidden) save(); });
+
+/* ================= 启动 ================= */
+load();
+update();
+setFace('normal');
+setTimeout(() => say(`我是${CONFIG.name}。……你好。`), 700);
+</script>
+</body>
+</html>
