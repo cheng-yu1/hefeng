@@ -227,7 +227,7 @@
   <h1>选一个桌宠</h1>
   <div class="charCard" onclick="chooseMode('qiu')"><div class="avatar" style="background:#ffe0e6">😠</div><div class="name">邱禧悦</div></div>
   <div class="charCard" onclick="chooseMode('he')"><div class="avatar" style="background:#e8f0ff">🙂</div><div class="name">何芬</div></div>
-  <div class="charCard" onclick="chooseMode('yang')"><div class="avatar" style="background:#fff0d6">😏</div><div class="name">杨颖</div></div>
+  <div class="charCard" onclick="chooseMode('yang')"><div class="avatar" style="background:#fff0d6">😏</div><div class="name">杨影</div></div>
   <div class="charCard" onclick="chooseMode('chen')"><div class="avatar" style="background:#e0ffe8">😊</div><div class="name">陈碧娴</div></div>
   <div class="charCard both" onclick="chooseMode('both')"><div class="avatar" style="background:linear-gradient(135deg,#ffe0e6,#e8f0ff,#fff0d6,#e0ffe8)">👭</div><div class="name">四人同屏</div></div>
 </div>
@@ -359,9 +359,10 @@ const CHARS = {
       { minLv:1, emo:'📝', q:'你会记仇吗？', a:['……会。','我记性很好。','你欠我一次。'], face:'angry', love:2 },
       { minLv:2, emo:'🏠', q:'我们认识多久了？', a:['……3年。','从大一住一起。','……你居然记得。'], face:'shy', love:8 },
       { minLv:3, emo:'👭', q:'何芬怎么样？', a:['……她啊。','……比你好。','……至少她听我的。'], face:'soft', love:6 },
-      { minLv:3, emo:'😏', q:'杨颖怎么样？', a:['……话多。','……但还行。','……她没个正形。'], face:'soft', love:6 },
-      { minLv:3, emo:'📷', q:'陈碧娴怎么样？', a:['……她阳光。','……就是太爱拍了。','……还行。'], face:'soft', love:6 },
-      { minLv:4, emo:'💗', q:'你喜欢我吗？', a:['……问这个干嘛！','……哼。','……嗯。'], face:'blush', love:12 }
+      { minLv:3, emo:'😏', q:'杨影怎么样？', a:['……还好。','……但还行。','……她没个正形。'], face:'soft', love:6 },
+      { minLv:3, emo:'📷', q:'陈碧娴怎么样？', a:['……她阳光。','……喜欢拍照。','……还行。'], face:'soft', love:6 },
+      { minLv:4, emo:'💗', q:'你喜欢我吗？', a:['……问这个干嘛！','……哼。','……。。。'], face:'blush', love:12 }
+     { minLv:5, emo:'💗', q:'我喜欢你', a:['……干嘛！','……哼。','……嗯。'], face:'blush', love:12 }
     ]
   },
 
@@ -440,14 +441,14 @@ const CHARS = {
       { minLv:1, emo:'😴', q:'你困了吗？', a:['有点。','……还不困。','你困了就去睡。'], face:'sleep', love:3 },
       { minLv:2, emo:'👑', q:'邱禧悦是你什么人？', a:['……老大。','……她很凶，但对我好。','……我听她的。'], face:'shy', love:5 },
       { minLv:2, emo:'🏠', q:'我们认识多久了？', a:['……3年。','从住一起开始。','……你记得就好。'], face:'shy', love:8 },
-      { minLv:3, emo:'😏', q:'杨颖怎么样？', a:['……她话好多。','……但她人好。','……嗯。'], face:'soft', love:6 },
+      { minLv:3, emo:'😏', q:'杨影怎么样？', a:['……她话好多。','……但她人好。','……嗯。'], face:'soft', love:6 },
       { minLv:3, emo:'📷', q:'陈碧娴怎么样？', a:['……她好阳光。','……我很羡慕。','……嗯。'], face:'soft', love:6 },
       { minLv:4, emo:'💗', q:'你喜欢我吗？', a:['……问这个干嘛。','……一点点。','……嗯。'], face:'blush', love:12 }
     ]
   },
 
   yang: {
-    name:'杨颖', avatarBg:'#fff0d6',
+    name:'杨影', avatarBg:'#fff0d6',
     baseColor:'#ffe8b8', bodyColor:'#fbe3d3', neckColor:'#f7d9c4', faceColor:'#fbe3d3',
     defaultHair:'wave', defaultGlasses:'round',
     backHair:`<path d="M42 88 Q38 26 100 20 Q162 26 158 88 L160 168 Q148 180 138 168 L136 96 Q118 80 100 80 Q82 80 64 96 L62 168 Q52 180 40 168 Z" fill="#3a2b2a"/>`,
@@ -465,7 +466,7 @@ const CHARS = {
       lookUp:`<ellipse cx="80" cy="89" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="89" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="87" r="6.5" fill="#4a3a2a"/><circle cx="120" cy="87" r="6.5" fill="#4a3a2a"/><circle cx="82" cy="84" r="2.2" fill="#fff"/><circle cx="122" cy="84" r="2.2" fill="#fff"/>`,
       soft:`<path d="M70 92 Q80 87 90 92" stroke="#3a2b2a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 92 Q120 87 130 92" stroke="#3a2b2a" stroke-width="3" fill="none" stroke-linecap="round"/>`,
       love:`<path d="M80 86 C75 78 64 80 64 89 C64 97 80 104 80 104 C80 104 96 97 96 89 C96 80 85 78 80 86 Z" fill="#ff8fb1" transform="translate(-5,-2) scale(.8)"/><path d="M120 86 C115 78 104 80 104 89 C104 97 120 104 120 104 C120 104 136 97 136 89 C136 80 125 78 120 86 Z" fill="#ff8fb1" transform="translate(5,-2) scale(.8)"/>`,
-      // ★ 只有杨颖有吐舌头
+      // ★ 只有杨影有吐舌头
       tongue:`<ellipse cx="80" cy="92" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="92" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="92" r="6.5" fill="#4a3a2a"/><circle cx="120" cy="92" r="6.5" fill="#4a3a2a"/><circle cx="82" cy="89" r="2.2" fill="#fff"/><circle cx="122" cy="89" r="2.2" fill="#fff"/><path d="M70 84 Q80 81 90 84" stroke="#3a2b2a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 84 Q120 81 130 84" stroke="#3a2b2a" stroke-width="3" fill="none" stroke-linecap="round"/>`,
       spicy:`<ellipse cx="80" cy="90" rx="9" ry="11" fill="#fff"/><ellipse cx="120" cy="90" rx="9" ry="11" fill="#fff"/><circle cx="80" cy="91" r="6.5" fill="#4a3a2a"/><circle cx="120" cy="91" r="6.5" fill="#4a3a2a"/><circle cx="82" cy="88" r="2.2" fill="#fff"/><circle cx="122" cy="88" r="2.2" fill="#fff"/>`,
       bitter:`<ellipse cx="80" cy="94" rx="8" ry="8" fill="#fff"/><ellipse cx="120" cy="94" rx="8" ry="8" fill="#fff"/><circle cx="80" cy="95" r="5" fill="#4a3a2a"/><circle cx="120" cy="95" r="5" fill="#4a3a2a"/>`,
@@ -519,7 +520,7 @@ const CHARS = {
       { text:"……饿了。", emo:'🍰', want:'food', love:4 }
     ],
     topics:[
-      { minLv:0, emo:'👋', q:'你叫什么名字？', a:['……杨颖。','记住了吗。','……别叫错。'], face:'shy', love:3 },
+      { minLv:0, emo:'👋', q:'你叫什么名字？', a:['……杨影。','记住了吗。','……别叫错。'], face:'shy', love:3 },
       { minLv:0, emo:'😏', q:'你很有梗吗？', a:['……嗯。','……我随便说说的。','……你别当真。'], face:'happy', love:3 },
       { minLv:1, emo:'🫥', q:'你社恐吗？', a:['……嗯。','……别看我。','……跟你说话已经很努力了。'], face:'shy', love:4 },
       { minLv:1, emo:'💭', q:'你会内耗吗？', a:['……会。','……每天。','……你别问这个。'], face:'sad', love:4 },
@@ -611,7 +612,7 @@ const CHARS = {
       { minLv:2, emo:'🏠', q:'我们认识多久了？', a:['……3年啦！','……时间好快。','……谢谢你。'], face:'happy', love:8 },
       { minLv:3, emo:'👑', q:'邱禧悦怎么样？', a:['……邱邱很好。','……她嘴硬心软。','……嘿嘿。'], face:'soft', love:6 },
       { minLv:3, emo:'🙂', q:'何芬怎么样？', a:['……荷包蛋好安静。','……我喜欢她。','……嗯！'], face:'soft', love:6 },
-      { minLv:3, emo:'😏', q:'杨颖怎么样？', a:['……杨好有梗。','……但她社恐。','……嘿嘿。'], face:'soft', love:6 },
+      { minLv:3, emo:'😏', q:'杨影怎么样？', a:['……杨好有梗。','……但她社恐。','……嘿嘿。'], face:'soft', love:6 },
       { minLv:4, emo:'💗', q:'你喜欢我吗？', a:['……喜欢呀！','……你很好。','……嗯！'], face:'blush', love:12 }
     ]
   }
@@ -633,7 +634,7 @@ function heCallYang() { return '咩'; }
 function heCallQiu() { return '老大'; }
 function qiuCallYang() {
   const s = getState('qiu');
-  if (s.angry >= 60 || s.sad >= 50 || s.mood < 40) return '杨颖';
+  if (s.angry >= 60 || s.sad >= 50 || s.mood < 40) return '杨影';
   return '影';
 }
 function yangCallQiu() { return '老大'; }
@@ -797,7 +798,7 @@ const FIGHTS = {
   ],
   qiu_yang: [
     { a:'qiu', b:'yang', lines:[
-      ['……杨颖，你又躺着。','……我累。'],
+      ['……你又躺着。','……我累。'],
       ['……起来。','……不要。'],
       ['……你是不是又熬夜了。','……没有。'],
       ['……撒谎。','……哼。']
@@ -844,7 +845,7 @@ const FIGHTS = {
   // 大吵
   big: [
     { a:'qiu', b:'yang', lines:[
-      ['……杨颖！你是不是又动我东西了！','……我没有。'],
+      ['……杨影！你是不是又动我东西了！','……我没有。'],
       ['……那我的本子呢！','……我不知道。'],
       ['……你撒谎！','……你凭什么凶我！'],
       ['……你！','……哼！'],
@@ -1450,7 +1451,7 @@ function shakeSlot(key) {
   slot.classList.remove('shake'); void slot.offsetWidth; slot.classList.add('shake');
 }
 
-/* ================= 点击（只有杨颖吐舌头，3秒收回） ================= */
+/* ================= 点击（只有杨影吐舌头，3秒收回） ================= */
 let yangTongueTimer = null;
 function bindPetClick(slot, key) {
   slot.addEventListener('click', (e) => {
@@ -1484,7 +1485,7 @@ function bindPetClick(slot, key) {
     else s.tapCount = 1;
     s.lastTap = now;
 
-    // ★ 只有杨颖点 6 次吐舌头，3 秒收回
+    // ★ 只有杨影点 6 次吐舌头，3 秒收回
     if (key === 'yang' && s.tapCount === 6) {
       say(key, '略——', 1500);
       setFaceFor(key, 'tongue');
