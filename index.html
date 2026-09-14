@@ -3,25 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>桌宠 · 邱禧悦 & 何芬</title>
+<title>桌宠 · 四个舍友</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html,body { height:100%; overflow:hidden; font-family:-apple-system,"PingFang SC",sans-serif; }
   body { user-select:none; }
 
-  /* ===== 背景层 ===== */
-  #bgLayer {
-    position:fixed; inset:0; z-index:0;
-    transition: background 0.8s ease;
-    background: linear-gradient(160deg,#ffeef2,#e8f4f8 55%,#f3e8ff);
-  }
-  #bgLayer.dorm    { background: linear-gradient(160deg,#ffe8d6,#ffd6b0 50%,#ffc9a0); }
-  #bgLayer.class   { background: linear-gradient(160deg,#d6ecff,#c0dcff 50%,#a8ccff); }
-  #bgLayer.cafe    { background: linear-gradient(160deg,#f0e0d0,#e0c8b0 50%,#d0b090); }
-  #bgLayer.park    { background: linear-gradient(160deg,#d6f0d6,#b8e8c0 50%,#a0d8a8); }
-  #bgLayer.night   { background: linear-gradient(160deg,#2a2a4a,#3a3a5a 50%,#1a1a3a); }
+  #bgLayer { position:fixed; inset:0; z-index:0; transition: background 0.8s ease; background: linear-gradient(160deg,#ffeef2,#e8f4f8 55%,#f3e8ff); }
+  #bgLayer.dorm  { background: linear-gradient(160deg,#ffe8d6,#ffd6b0 50%,#ffc9a0); }
+  #bgLayer.class { background: linear-gradient(160deg,#d6ecff,#c0dcff 50%,#a8ccff); }
+  #bgLayer.cafe  { background: linear-gradient(160deg,#f0e0d0,#e0c8b0 50%,#d0b090); }
+  #bgLayer.park  { background: linear-gradient(160deg,#d6f0d6,#b8e8c0 50%,#a0d8a8); }
+  #bgLayer.night { background: linear-gradient(160deg,#2a2a4a,#3a3a5a 50%,#1a1a3a); }
+  #bgLayer.beach { background: linear-gradient(160deg,#a8e0f0,#7fc8e8 50%,#5ab0d8); }
 
-  /* 背景装饰 */
   #bgDecor { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
   #bgDecor .deco { position:absolute; opacity:0.85; }
   #bgDecor .bed { bottom:0; left:0; width:100%; height:22vh; background:linear-gradient(180deg,transparent,#c9a8d8); opacity:0.4; }
@@ -32,38 +27,37 @@
   #bgDecor .table { bottom:0; left:50%; transform:translateX(-50%); width:60%; height:14vh; background:linear-gradient(180deg,#a87850,#8a5830); border-radius:8px 8px 0 0; opacity:0.5; }
   #bgDecor .moon { top:8%; right:12%; width:60px; height:60px; border-radius:50%; background:radial-gradient(circle,#fff8d0,#ffe066); box-shadow:0 0 30px #ffe066; }
   #bgDecor .stars { top:0; left:0; width:100%; height:60%; background-image:radial-gradient(2px 2px at 20% 30%,#fff,transparent),radial-gradient(2px 2px at 60% 20%,#fff,transparent),radial-gradient(1px 1px at 80% 50%,#fff,transparent),radial-gradient(2px 2px at 40% 60%,#fff,transparent),radial-gradient(1px 1px at 90% 30%,#fff,transparent); opacity:0.6; }
+  #bgDecor .sun { top:8%; right:14%; width:70px; height:70px; border-radius:50%; background:radial-gradient(circle,#fff8d0,#ffd166); box-shadow:0 0 40px #ffd166; }
+  #bgDecor .wave { bottom:0; left:0; width:100%; height:18vh; background:linear-gradient(180deg,transparent,#5ab0d8); opacity:0.6; }
 
-  /* ===== 选择页 ===== */
   #selectPage {
     position:fixed; inset:0; z-index:500;
     background:linear-gradient(160deg,#ffeef2,#e8f4f8 55%,#f3e8ff);
     display:flex; flex-direction:column; align-items:center; justify-content:center;
-    gap:14px; padding:20px; overflow-y:auto;
+    gap:10px; padding:20px; overflow-y:auto;
   }
   #selectPage.hide { display:none; }
-  #selectPage h1 { font-size:20px; color:#e0629a; margin-bottom:4px; }
-  #selectPage p { font-size:12px; color:#889; margin-bottom:8px; }
+  #selectPage h1 { font-size:20px; color:#e0629a; margin-bottom:6px; }
   .charCard {
     width:80vw; max-width:340px;
-    background:#fff; border-radius:22px; padding:16px;
+    background:#fff; border-radius:22px; padding:14px;
     box-shadow:0 10px 30px rgba(0,0,0,.12);
-    display:flex; align-items:center; gap:16px;
+    display:flex; align-items:center; gap:14px;
     cursor:pointer; transition:transform .15s;
     border:3px solid transparent;
   }
   .charCard:active { transform:scale(.97); }
   .charCard.both { border-color:#ffd6e0; background:linear-gradient(135deg,#fff,#fff5f8); }
-  .charCard .avatar { width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:32px; flex-shrink:0; }
-  .charCard .name { font-size:18px; font-weight:700; color:#456; }
+  .charCard .avatar { width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:26px; flex-shrink:0; }
+  .charCard .name { font-size:16px; font-weight:700; color:#456; }
 
-  /* ===== 状态栏 ===== */
   #stats {
     position:fixed; top:0; left:0; right:0; z-index:10;
     padding:6px; display:flex; gap:5px; justify-content:center; align-items:center;
     background:rgba(255,255,255,.68); backdrop-filter:blur(10px);
     font-size:10px; color:#345; flex-wrap:wrap;
   }
-  .bar { width:48px; }
+  .bar { width:44px; }
   .bar-label { font-size:8px; margin-bottom:1px; white-space:nowrap; }
   .bar-bg { height:5px; background:rgba(0,0,0,.1); border-radius:4px; overflow:hidden; }
   .bar-fill { height:100%; border-radius:4px; transition:width .4s; }
@@ -72,12 +66,13 @@
   #loveFill { background:linear-gradient(90deg,#ff7eb3,#ff9a5a); }
   #angryFill { background:linear-gradient(90deg,#ff6b6b,#ff9f43); }
   #sadFill { background:linear-gradient(90deg,#7fa8d8,#a8c8f0); }
+  #tempFill { background:linear-gradient(90deg,#8fd3f4,#ff9a9e); }
+  #fightFill { background:linear-gradient(90deg,#a060ff,#ff6b9d); }
   #loveLv { font-size:8px; color:#e0629a; font-weight:700; }
 
-  /* ===== 舞台 ===== */
   #stage {
     position:fixed; left:0; right:0; bottom:24vh; z-index:5;
-    display:flex; gap:2vw; align-items:flex-end; justify-content:center;
+    display:flex; gap:1.2vw; align-items:flex-end; justify-content:center;
     width:100%;
   }
   .petSlot {
@@ -89,11 +84,17 @@
     touch-action: manipulation;
   }
   .petSlot.single { width:62vmin; max-width:340px; height:62vmin; max-height:340px; }
-  .petSlot.duo    { width:38vmin; max-width:220px; height:38vmin; max-height:220px; }
+  .petSlot.duo    { width:32vmin; max-width:180px; height:32vmin; max-height:180px; }
+  .petSlot.trio   { width:28vmin; max-width:160px; height:28vmin; max-height:160px; }
+  .petSlot.quad   { width:22vmin; max-width:130px; height:22vmin; max-height:130px; }
   .petSlot:active { transform:scale(.94); }
   .petSlot.away { opacity:0; transform:translateX(120px) scale(.7); pointer-events:none; }
   .petSlot.talking { animation: talk 0.5s ease-in-out infinite; }
+  .petSlot.fighting { animation: fighting 0.25s ease-in-out infinite; }
+  .petSlot.hit { animation: hit 0.3s ease; }
   @keyframes talk { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-6px); } }
+  @keyframes fighting { 0%,100% { transform:translateX(0) rotate(0deg); } 25% { transform:translateX(-5px) rotate(-3deg); } 75% { transform:translateX(5px) rotate(3deg); } }
+  @keyframes hit { 0% { transform:translateX(0); } 30% { transform:translateX(-15px) scale(.92); } 60% { transform:translateX(10px); } 100% { transform:translateX(0); } }
   @keyframes idle { 0%,100% { transform:translateY(0) rotate(0deg); } 50% { transform:translateY(-10px) rotate(-1.5deg); } }
   @keyframes happy { 0%,100% { transform:translateY(0) scale(1); } 30% { transform:translateY(-28px) scale(1.12); } 60% { transform:translateY(0) scale(.94); } }
   .happy { animation: happy .6s ease; }
@@ -101,9 +102,14 @@
   .shake { animation: shake .45s ease; }
   @keyframes lean { 0%,100% { transform:translateY(0) rotate(0deg); } 50% { transform:translateY(-14px) rotate(3deg) scale(1.04); } }
   .lean { animation: lean 1.2s ease-in-out infinite; }
+  @keyframes tongue { 0%,100% { transform:scale(1); } 50% { transform:scale(1.15) rotate(-3deg); } }
+  .tongue { animation: tongue .4s ease; }
+  @keyframes cold { 0%,100% { transform:translateY(0); } 50% { transform:translateY(2px) rotate(-1deg); } }
+  .cold { animation: cold 1.5s ease-in-out infinite; }
+  @keyframes hot { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-4px); } }
+  .hot { animation: hot 1s ease-in-out infinite; }
   .petSlot svg { width:100%; height:100%; display:block; }
 
-  /* ===== 气泡 ===== */
   .bubble {
     position:fixed; background:#fff; padding:8px 13px; border-radius:14px;
     font-size:13px; color:#345; max-width:70vw; text-align:center;
@@ -115,8 +121,9 @@
   .bubble::after { content:''; position:absolute; bottom:-7px; left:50%; transform:translateX(-50%); border:7px solid transparent; border-top-color:#fff; border-bottom:0; }
   .bubble.qiu { border-top:3px solid #ff8fb1; }
   .bubble.he  { border-top:3px solid #8fb1ff; }
+  .bubble.yang{ border-top:3px solid #ffd166; }
+  .bubble.chen{ border-top:3px solid #8fe0a8; }
 
-  /* ===== 选项 / 面板 ===== */
   #choices {
     position:fixed; bottom:26vh; left:0; right:0;
     display:flex; flex-direction:column; gap:6px; align-items:center;
@@ -157,7 +164,6 @@
   #panel .item.active { border-color:#ff9ec4; background:#ffeef5; }
   #panel .item span { font-size:8px; color:#888; margin-top:1px; }
 
-  /* ===== 底部按钮 ===== */
   #actions {
     position:fixed; bottom:0; left:0; right:0; z-index:10;
     padding:8px 4px calc(8px + env(safe-area-inset-bottom));
@@ -165,7 +171,7 @@
     background:rgba(255,255,255,.7); backdrop-filter:blur(10px);
   }
   #actions button {
-    flex:1; min-width:0; max-width:56px; padding:7px 0;
+    flex:1; min-width:0; max-width:52px; padding:7px 0;
     border:none; border-radius:12px; font-size:9px; font-weight:600;
     background:#fff; color:#456; box-shadow:0 2px 8px rgba(0,0,0,.1);
     cursor:pointer; line-height:1.25;
@@ -178,25 +184,20 @@
   .float { position:fixed; font-size:22px; pointer-events:none; z-index:99; animation: floatUp 1s ease-out forwards; }
   @keyframes floatUp { 0% { opacity:1; transform:translateY(0) scale(1); } 100% { opacity:0; transform:translateY(-80px) scale(1.3); } }
 
-  .itemFly {
-    position:fixed; font-size:34px; pointer-events:none; z-index:120;
-    transition: all 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
-    opacity:0;
-  }
+  .itemFly { position:fixed; font-size:34px; pointer-events:none; z-index:120; transition: all 0.9s cubic-bezier(0.34, 1.56, 0.64, 1); opacity:0; }
   .itemFly.show { opacity:1; }
 
-  /* 扔东西（生气） */
-  .throwItem {
-    position:fixed; font-size:32px; pointer-events:none; z-index:119;
-    animation: throwFly 1s ease-out forwards;
-  }
-  @keyframes throwFly {
-    0%   { opacity:1; transform:translate(0,0) rotate(0deg) scale(1); }
-    100% { opacity:0; transform:translate(80px,-60px) rotate(360deg) scale(.6); }
-  }
+  .throwItem { position:fixed; font-size:32px; pointer-events:none; z-index:119; animation: throwFly 1s ease-out forwards; }
+  @keyframes throwFly { 0% { opacity:1; transform:translate(0,0) rotate(0deg) scale(1); } 100% { opacity:0; transform:translate(80px,-60px) rotate(360deg) scale(.6); } }
+
+  .hitMark { position:fixed; font-size:28px; pointer-events:none; z-index:119; animation: hitMark 0.6s ease-out forwards; }
+  @keyframes hitMark { 0% { opacity:1; transform:translate(0,0) scale(0.5); } 50% { opacity:1; transform:translate(0,-20px) scale(1.4); } 100% { opacity:0; transform:translate(0,-40px) scale(1); } }
 
   .heart { position:fixed; font-size:18px; pointer-events:none; z-index:98; animation: heartFall 1.6s ease-out forwards; }
   @keyframes heartFall { 0% { opacity:1; transform:translateY(0) rotate(0deg); } 100% { opacity:0; transform:translateY(120px) rotate(40deg); } }
+
+  .flash { position:fixed; inset:0; background:#fff; opacity:0; pointer-events:none; z-index:150; animation: flash 0.5s ease-out; }
+  @keyframes flash { 0% { opacity:0.9; } 100% { opacity:0; } }
 
   #toast {
     position:fixed; top:46%; left:50%; transform:translate(-50%,-50%) scale(.7);
@@ -211,20 +212,10 @@
   #toast.calm  { background:linear-gradient(135deg,#8fd3f4,#84fab0); box-shadow:0 10px 30px rgba(143,211,244,.5); }
   #toast.sad   { background:linear-gradient(135deg,#7fa8d8,#a8c8f0); box-shadow:0 10px 30px rgba(127,168,216,.5); }
   #toast.gift  { background:linear-gradient(135deg,#ffd166,#ff9ec4); box-shadow:0 10px 30px rgba(255,209,102,.5); }
+  #toast.fight { background:linear-gradient(135deg,#a060ff,#ff6b9d); box-shadow:0 10px 30px rgba(160,96,255,.5); }
 
-  #giftBag {
-    position:fixed; top:40px; right:6px; z-index:15;
-    background:rgba(255,255,255,.85); backdrop-filter:blur(8px);
-    border-radius:13px; padding:5px 9px; font-size:11px; color:#e0629a;
-    box-shadow:0 2px 10px rgba(0,0,0,.1); font-weight:700; cursor:pointer;
-  }
-  #switchChar {
-    position:fixed; top:40px; left:6px; z-index:15;
-    background:rgba(255,255,255,.85); backdrop-filter:blur(8px);
-    border-radius:13px; padding:5px 9px; font-size:11px; color:#7a6;
-    box-shadow:0 2px 10px rgba(0,0,0,.1); font-weight:700;
-    cursor:pointer; border:none;
-  }
+  #giftBag { position:fixed; top:40px; right:6px; z-index:15; background:rgba(255,255,255,.85); backdrop-filter:blur(8px); border-radius:13px; padding:5px 9px; font-size:11px; color:#e0629a; box-shadow:0 2px 10px rgba(0,0,0,.1); font-weight:700; cursor:pointer; }
+  #switchChar { position:fixed; top:40px; left:6px; z-index:15; background:rgba(255,255,255,.85); backdrop-filter:blur(8px); border-radius:13px; padding:5px 9px; font-size:11px; color:#7a6; box-shadow:0 2px 10px rgba(0,0,0,.1); font-weight:700; cursor:pointer; border:none; }
 </style>
 </head>
 <body>
@@ -234,19 +225,11 @@
 
 <div id="selectPage">
   <h1>选一个桌宠</h1>
-  <p>她们是认识3年的舍友</p>
-  <div class="charCard" onclick="chooseMode('qiu')">
-    <div class="avatar" style="background:#ffe0e6">😠</div>
-    <div class="name">邱禧悦</div>
-  </div>
-  <div class="charCard" onclick="chooseMode('he')">
-    <div class="avatar" style="background:#e8f0ff">🙂</div>
-    <div class="name">何芬</div>
-  </div>
-  <div class="charCard both" onclick="chooseMode('both')">
-    <div class="avatar" style="background:linear-gradient(135deg,#ffe0e6,#e8f0ff)">👭</div>
-    <div class="name">两人同屏</div>
-  </div>
+  <div class="charCard" onclick="chooseMode('qiu')"><div class="avatar" style="background:#ffe0e6">😠</div><div class="name">邱禧悦</div></div>
+  <div class="charCard" onclick="chooseMode('he')"><div class="avatar" style="background:#e8f0ff">🙂</div><div class="name">何芬</div></div>
+  <div class="charCard" onclick="chooseMode('yang')"><div class="avatar" style="background:#fff0d6">😏</div><div class="name">杨颖</div></div>
+  <div class="charCard" onclick="chooseMode('chen')"><div class="avatar" style="background:#e0ffe8">😊</div><div class="name">陈碧娴</div></div>
+  <div class="charCard both" onclick="chooseMode('both')"><div class="avatar" style="background:linear-gradient(135deg,#ffe0e6,#e8f0ff,#fff0d6,#e0ffe8)">👭</div><div class="name">四人同屏</div></div>
 </div>
 
 <button id="switchChar" onclick="showSelect()">🔄 换人</button>
@@ -257,12 +240,16 @@
   <div class="bar"><div class="bar-label">🍚 饱食</div><div class="bar-bg"><div class="bar-fill" id="foodFill" style="width:80%"></div></div></div>
   <div class="bar"><div class="bar-label">💧 伤心</div><div class="bar-bg"><div class="bar-fill" id="sadFill" style="width:0%"></div></div></div>
   <div class="bar"><div class="bar-label">😠 怒气</div><div class="bar-bg"><div class="bar-fill" id="angryFill" style="width:0%"></div></div></div>
+  <div class="bar"><div class="bar-label">🌡️ 温度</div><div class="bar-bg"><div class="bar-fill" id="tempFill" style="width:50%"></div></div></div>
+  <div class="bar"><div class="bar-label">⚔️ 打架</div><div class="bar-bg"><div class="bar-fill" id="fightFill" style="width:0%"></div></div></div>
   <div class="bar"><div class="bar-label">💗 <span id="loveLv">Lv.1</span></div><div class="bar-bg"><div class="bar-fill" id="loveFill" style="width:0%"></div></div></div>
 </div>
 
 <div id="stage">
   <div class="petSlot single" id="slotQiu" style="display:none"></div>
   <div class="petSlot single" id="slotHe"  style="display:none"></div>
+  <div class="petSlot single" id="slotYang" style="display:none"></div>
+  <div class="petSlot single" id="slotChen" style="display:none"></div>
 </div>
 
 <div id="choices"></div>
@@ -274,13 +261,16 @@
 
 <div id="actions">
   <button onclick="openItems()"><span class="ico">🎁</span>礼物</button>
+  <button onclick="openFood()"><span class="ico">🍽️</span>食物</button>
   <button onclick="openClothes()"><span class="ico">👗</span>衣服</button>
   <button onclick="openHeadwear()"><span class="ico">🎀</span>头饰</button>
   <button onclick="openHair()"><span class="ico">💇</span>发型</button>
   <button onclick="openGlasses()"><span class="ico">👓</span>眼镜</button>
   <button onclick="openScene()"><span class="ico">🏠</span>场景</button>
+  <button onclick="openTemp()"><span class="ico">🌡️</span>温度</button>
   <button onclick="chat()"><span class="ico">💬</span>聊天</button>
   <button onclick="openMean()"><span class="ico">😈</span>欺负</button>
+  <button onclick="openFight()"><span class="ico">⚔️</span>打架</button>
   <button id="apologyBtn" onclick="apologize()"><span class="ico">🙇</span>道歉</button>
   <button class="switchMode" onclick="showSelect()"><span class="ico">👭</span>换人</button>
 </div>
@@ -289,168 +279,372 @@
 
 <script>
 /* ============================================================
-   角色（认识3年的舍友）
+   角色：邱禧悦 / 何芬 / 杨颖 / 陈碧娴
+   四个舍友，认识3年
    ============================================================ */
 const CHARS = {
   qiu: {
-    name: '邱禧悦', avatarBg: '#ffe0e6',
-    baseColor: '#ffd6e0', bodyColor: '#fbe3d3', neckColor: '#f7d9c4', faceColor: '#fbe3d3',
-    defaultHair: 'long',
-    backHair: `<path d="M40 90 Q36 24 100 18 Q164 24 160 90 L162 172 Q150 184 140 172 L138 98 Q120 82 100 82 Q80 82 62 98 L60 172 Q50 184 38 172 Z" fill="#241f20"/>`,
+    name:'邱禧悦', avatarBg:'#ffe0e6',
+    baseColor:'#ffd6e0', bodyColor:'#fbe3d3', neckColor:'#f7d9c4', faceColor:'#fbe3d3',
+    defaultHair:'long', defaultGlasses:'none',
+    backHair:`<path d="M40 90 Q36 24 100 18 Q164 24 160 90 L162 172 Q150 184 140 172 L138 98 Q120 82 100 82 Q80 82 62 98 L60 172 Q50 184 38 172 Z" fill="#241f20"/>`,
     eyesStyle: {
-      normal: `<ellipse cx="80" cy="92" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="92" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="92" r="6.5" fill="#5a3b3b"/><circle cx="120" cy="92" r="6.5" fill="#5a3b3b"/><circle cx="82" cy="89" r="2.2" fill="#fff"/><circle cx="122" cy="89" r="2.2" fill="#fff"/><path d="M70 83 Q80 79 90 85" stroke="#241f20" stroke-width="3.2" fill="none" stroke-linecap="round"/><path d="M110 85 Q120 79 130 83" stroke="#241f20" stroke-width="3.2" fill="none" stroke-linecap="round"/>`,
-      happy: `<path d="M70 95 Q80 83 90 95" stroke="#241f20" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M110 95 Q120 83 130 95" stroke="#241f20" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M70 83 Q80 79 90 85" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 85 Q120 79 130 83" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/>`,
-      shy: `<ellipse cx="80" cy="92" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="92" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="93" r="6.5" fill="#5a3b3b"/><circle cx="120" cy="93" r="6.5" fill="#5a3b3b"/><circle cx="82" cy="90" r="2.2" fill="#fff"/><circle cx="122" cy="90" r="2.2" fill="#fff"/><path d="M70 82 Q80 78 90 82" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 82 Q120 78 130 82" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/>`,
-      sad: `<ellipse cx="80" cy="94" rx="9" ry="9" fill="#fff"/><ellipse cx="120" cy="94" rx="9" ry="9" fill="#fff"/><circle cx="80" cy="95" r="6" fill="#5a3b3b"/><circle cx="120" cy="95" r="6" fill="#5a3b3b"/><path d="M70 82 Q80 86 90 82" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 82 Q120 86 130 82" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/>`,
-      cry: `<ellipse cx="80" cy="94" rx="9" ry="9" fill="#fff"/><ellipse cx="120" cy="94" rx="9" ry="9" fill="#fff"/><circle cx="80" cy="96" r="5.5" fill="#5a3b3b"/><circle cx="120" cy="96" r="5.5" fill="#5a3b3b"/><path d="M70 80 Q80 86 90 80" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 80 Q120 86 130 80" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/>`,
-      angry: `<ellipse cx="80" cy="92" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="92" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="93" r="6.5" fill="#5a3b3b"/><circle cx="120" cy="93" r="6.5" fill="#5a3b3b"/><path d="M70 79 L90 88" stroke="#241f20" stroke-width="3.8" stroke-linecap="round"/><path d="M130 79 L110 88" stroke="#241f20" stroke-width="3.8" stroke-linecap="round"/>`,
-      sleep: `<path d="M70 95 Q80 101 90 95" stroke="#241f20" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M110 95 Q120 101 130 95" stroke="#241f20" stroke-width="3.5" fill="none" stroke-linecap="round"/>`,
-      star: `<ellipse cx="80" cy="92" rx="10" ry="11" fill="#fff"/><ellipse cx="120" cy="92" rx="10" ry="11" fill="#fff"/><circle cx="80" cy="93" r="7" fill="#5a3b3b"/><circle cx="120" cy="93" r="7" fill="#5a3b3b"/><path d="M80 86 L82 92 L88 93 L82 94 L80 100 L78 94 L72 93 L78 92 Z" fill="#fff"/><path d="M120 86 L122 92 L128 93 L122 94 L120 100 L118 94 L112 93 L118 92 Z" fill="#fff"/><path d="M70 83 Q80 79 90 85" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 85 Q120 79 130 83" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/>`,
-      blush: `<ellipse cx="80" cy="94" rx="9" ry="9" fill="#fff"/><ellipse cx="120" cy="94" rx="9" ry="9" fill="#fff"/><circle cx="80" cy="97" r="6" fill="#5a3b3b"/><circle cx="120" cy="97" r="6" fill="#5a3b3b"/><circle cx="82" cy="94" r="2" fill="#fff"/><circle cx="122" cy="94" r="2" fill="#fff"/><path d="M70 85 Q80 81 90 85" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 85 Q120 81 130 85" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/>`,
-      shyLook: `<ellipse cx="80" cy="94" rx="9" ry="9" fill="#fff"/><ellipse cx="120" cy="94" rx="9" ry="9" fill="#fff"/><circle cx="76" cy="96" r="5.5" fill="#5a3b3b"/><circle cx="116" cy="96" r="5.5" fill="#5a3b3b"/><path d="M70 85 Q80 81 90 85" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 85 Q120 81 130 85" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/>`,
-      lookUp: `<ellipse cx="80" cy="89" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="89" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="87" r="6.5" fill="#5a3b3b"/><circle cx="120" cy="87" r="6.5" fill="#5a3b3b"/><circle cx="82" cy="84" r="2.2" fill="#fff"/><circle cx="122" cy="84" r="2.2" fill="#fff"/><path d="M70 81 Q80 77 90 81" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 81 Q120 77 130 81" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/>`,
-      soft: `<path d="M70 92 Q80 86 90 92" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 92 Q120 86 130 92" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M70 83 Q80 79 90 85" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 85 Q120 79 130 83" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/>`,
-      love: `<path d="M80 86 C75 78 64 80 64 89 C64 97 80 104 80 104 C80 104 96 97 96 89 C96 80 85 78 80 86 Z" fill="#ff8fb1" transform="translate(-5,-2) scale(.8)"/><path d="M120 86 C115 78 104 80 104 89 C104 97 120 104 120 104 C120 104 136 97 136 89 C136 80 125 78 120 86 Z" fill="#ff8fb1" transform="translate(5,-2) scale(.8)"/>`
+      normal:`<ellipse cx="80" cy="92" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="92" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="92" r="6.5" fill="#5a3b3b"/><circle cx="120" cy="92" r="6.5" fill="#5a3b3b"/><circle cx="82" cy="89" r="2.2" fill="#fff"/><circle cx="122" cy="89" r="2.2" fill="#fff"/><path d="M70 83 Q80 79 90 85" stroke="#241f20" stroke-width="3.2" fill="none" stroke-linecap="round"/><path d="M110 85 Q120 79 130 83" stroke="#241f20" stroke-width="3.2" fill="none" stroke-linecap="round"/>`,
+      happy:`<path d="M70 95 Q80 83 90 95" stroke="#241f20" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M110 95 Q120 83 130 95" stroke="#241f20" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M70 83 Q80 79 90 85" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 85 Q120 79 130 83" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      shy:`<ellipse cx="80" cy="92" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="92" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="93" r="6.5" fill="#5a3b3b"/><circle cx="120" cy="93" r="6.5" fill="#5a3b3b"/><circle cx="82" cy="90" r="2.2" fill="#fff"/><circle cx="122" cy="90" r="2.2" fill="#fff"/><path d="M70 82 Q80 78 90 82" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 82 Q120 78 130 82" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      sad:`<ellipse cx="80" cy="94" rx="9" ry="9" fill="#fff"/><ellipse cx="120" cy="94" rx="9" ry="9" fill="#fff"/><circle cx="80" cy="95" r="6" fill="#5a3b3b"/><circle cx="120" cy="95" r="6" fill="#5a3b3b"/><path d="M70 82 Q80 86 90 82" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 82 Q120 86 130 82" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      cry:`<ellipse cx="80" cy="94" rx="9" ry="9" fill="#fff"/><ellipse cx="120" cy="94" rx="9" ry="9" fill="#fff"/><circle cx="80" cy="96" r="5.5" fill="#5a3b3b"/><circle cx="120" cy="96" r="5.5" fill="#5a3b3b"/><path d="M70 80 Q80 86 90 80" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 80 Q120 86 130 80" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      angry:`<ellipse cx="80" cy="92" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="92" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="93" r="6.5" fill="#5a3b3b"/><circle cx="120" cy="93" r="6.5" fill="#5a3b3b"/><path d="M70 79 L90 88" stroke="#241f20" stroke-width="3.8" stroke-linecap="round"/><path d="M130 79 L110 88" stroke="#241f20" stroke-width="3.8" stroke-linecap="round"/>`,
+      sleep:`<path d="M70 95 Q80 101 90 95" stroke="#241f20" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M110 95 Q120 101 130 95" stroke="#241f20" stroke-width="3.5" fill="none" stroke-linecap="round"/>`,
+      star:`<ellipse cx="80" cy="92" rx="10" ry="11" fill="#fff"/><ellipse cx="120" cy="92" rx="10" ry="11" fill="#fff"/><circle cx="80" cy="93" r="7" fill="#5a3b3b"/><circle cx="120" cy="93" r="7" fill="#5a3b3b"/><path d="M80 86 L82 92 L88 93 L82 94 L80 100 L78 94 L72 93 L78 92 Z" fill="#fff"/><path d="M120 86 L122 92 L128 93 L122 94 L120 100 L118 94 L112 93 L118 92 Z" fill="#fff"/><path d="M70 83 Q80 79 90 85" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 85 Q120 79 130 83" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      blush:`<ellipse cx="80" cy="94" rx="9" ry="9" fill="#fff"/><ellipse cx="120" cy="94" rx="9" ry="9" fill="#fff"/><circle cx="80" cy="97" r="6" fill="#5a3b3b"/><circle cx="120" cy="97" r="6" fill="#5a3b3b"/><circle cx="82" cy="94" r="2" fill="#fff"/><circle cx="122" cy="94" r="2" fill="#fff"/><path d="M70 85 Q80 81 90 85" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 85 Q120 81 130 85" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      shyLook:`<ellipse cx="80" cy="94" rx="9" ry="9" fill="#fff"/><ellipse cx="120" cy="94" rx="9" ry="9" fill="#fff"/><circle cx="76" cy="96" r="5.5" fill="#5a3b3b"/><circle cx="116" cy="96" r="5.5" fill="#5a3b3b"/><path d="M70 85 Q80 81 90 85" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 85 Q120 81 130 85" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      lookUp:`<ellipse cx="80" cy="89" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="89" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="87" r="6.5" fill="#5a3b3b"/><circle cx="120" cy="87" r="6.5" fill="#5a3b3b"/><circle cx="82" cy="84" r="2.2" fill="#fff"/><circle cx="122" cy="84" r="2.2" fill="#fff"/><path d="M70 81 Q80 77 90 81" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 81 Q120 77 130 81" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      soft:`<path d="M70 92 Q80 86 90 92" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 92 Q120 86 130 92" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      love:`<path d="M80 86 C75 78 64 80 64 89 C64 97 80 104 80 104 C80 104 96 97 96 89 C96 80 85 78 80 86 Z" fill="#ff8fb1" transform="translate(-5,-2) scale(.8)"/><path d="M120 86 C115 78 104 80 104 89 C104 97 120 104 120 104 C120 104 136 97 136 89 C136 80 125 78 120 86 Z" fill="#ff8fb1" transform="translate(5,-2) scale(.8)"/>`,
+      spicy:`<ellipse cx="80" cy="90" rx="9" ry="11" fill="#fff"/><ellipse cx="120" cy="90" rx="9" ry="11" fill="#fff"/><circle cx="80" cy="91" r="6.5" fill="#5a3b3b"/><circle cx="120" cy="91" r="6.5" fill="#5a3b3b"/><circle cx="82" cy="88" r="2.2" fill="#fff"/><circle cx="122" cy="88" r="2.2" fill="#fff"/><path d="M70 80 Q80 76 90 82" stroke="#241f20" stroke-width="3.2" fill="none" stroke-linecap="round"/><path d="M110 82 Q120 76 130 80" stroke="#241f20" stroke-width="3.2" fill="none" stroke-linecap="round"/>`,
+      bitter:`<ellipse cx="80" cy="94" rx="8" ry="8" fill="#fff"/><ellipse cx="120" cy="94" rx="8" ry="8" fill="#fff"/><circle cx="80" cy="95" r="5" fill="#5a3b3b"/><circle cx="120" cy="95" r="5" fill="#5a3b3b"/><path d="M70 82 Q80 88 90 82" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 82 Q120 88 130 82" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      sour:`<ellipse cx="80" cy="94" rx="9" ry="9" fill="#fff"/><ellipse cx="120" cy="94" rx="9" ry="9" fill="#fff"/><circle cx="80" cy="95" r="6" fill="#5a3b3b"/><circle cx="120" cy="95" r="6" fill="#5a3b3b"/><path d="M70 80 L90 88" stroke="#241f20" stroke-width="3.5" stroke-linecap="round"/><path d="M130 80 L110 88" stroke="#241f20" stroke-width="3.5" stroke-linecap="round"/>`,
+      cold:`<ellipse cx="80" cy="94" rx="7" ry="8" fill="#fff"/><ellipse cx="120" cy="94" rx="7" ry="8" fill="#fff"/><circle cx="80" cy="95" r="5" fill="#5a3b3b"/><circle cx="120" cy="95" r="5" fill="#5a3b3b"/><path d="M72 84 Q80 88 88 84" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M112 84 Q120 88 128 84" stroke="#241f20" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      hot:`<ellipse cx="80" cy="92" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="92" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="92" r="6.5" fill="#5a3b3b"/><circle cx="120" cy="92" r="6.5" fill="#5a3b3b"/><path d="M70 82 Q80 78 90 84" stroke="#241f20" stroke-width="3.2" fill="none" stroke-linecap="round"/><path d="M110 84 Q120 78 130 82" stroke="#241f20" stroke-width="3.2" fill="none" stroke-linecap="round"/>`
     },
     lines: {
-      idle:  ["……干嘛。", "嗯。", "有事吗。", "……我盯着你呢。", "别偷懒。", "……这地方有点乱。", "……你今天怎么这么闲。", "……看什么看。", "……哼。", "……该收拾了。"],
-      tap:   ["干嘛！", "……别戳。", "有事说事。", "……手拿开。", "再戳我记着了。", "……你烦不烦。", "……干嘛呀。", "别碰。", "……住手。"],
-      head:  ["……摸头干嘛。", "嗯……可以。", "……就一下。", "别弄乱我头发。", "……勉强让你摸一下。", "……哼。", "……别得寸进尺。"],
-      faceTap:["别戳脸！", "……喂！", "再戳我生气了。", "记你一笔。", "……你想干嘛。", "住手。"],
-      body:  ["……干嘛碰我。", "喂！", "……手拿开。", "别乱碰。", "……你找死啊。"],
-      feed:  ["……谢谢。", "还行。", "……味道不错。", "你做的？勉强可以。", "……嗯，还行。", "……不错。", "下次还买这个。"],
-      play:  ["……好吧。", "陪你一下。", "就一会儿。", "……笑什么笑。", "……勉强。", "别得寸进尺。"],
-      sleep: ["困了。", "……晚安。", "别吵。", "……我要睡了。"],
-      hungry:["饿了。", "……有吃的吗。", "肚子叫了，你没听见？", "……我饿了。", "……去弄点吃的。"],
-      sad:   ["……", "有点无聊。", "你很久没来了。", "……我一个人。", "……你在哪。", "……哼。", "……你是不是把我忘了。"],
-      warm:  ["今天……也谢谢你陪我。", "其实挺好的。", "……别走那么快。", "……留下来。", "……你在的时候，还行。", "……嗯。", "……认识你之后，也没那么糟。"]
+      idle:["……干嘛。","嗯。","有事吗。","……我盯着你呢。","别偷懒。","……这地方有点乱。","……你今天怎么这么闲。","……看什么看。","……哼。","……该收拾了。"],
+      tap:["干嘛！","……别戳。","有事说事。","……手拿开。","再戳我记着了。","……你烦不烦。","……干嘛呀。","别碰。","……住手。"],
+      head:["……摸头干嘛。","嗯……可以。","……就一下。","别弄乱我头发。","……勉强让你摸一下。","……哼。"],
+      faceTap:["别戳脸！","……喂！","再戳我生气了。","记你一笔。","……你想干嘛。"],
+      body:["……干嘛碰我。","喂！","……手拿开。","别乱碰。"],
+      feed:["……谢谢。","还行。","……味道不错。","你做的？勉强可以。","……嗯，还行。","……不错。"],
+      play:["……好吧。","陪你一下。","就一会儿。","……笑什么笑。","……勉强。"],
+      sleep:["困了。","……晚安。","别吵。"],
+      hungry:["饿了。","……有吃的吗。","肚子叫了，你没听见？","……我饿了。"],
+      sad:["……","有点无聊。","你很久没来了。","……我一个人。","……你在哪。","……哼。"],
+      warm:["今天……也谢谢你陪我。","其实挺好的。","……别走那么快。","……留下来。","……你在的时候，还行。"],
+      scene:{
+        dorm:["……宿舍还是干净点好。","……谁又把袜子乱扔。","……该打扫了。"],
+        class:["……上课别玩手机。","……笔记记了吗。","……你别趴着睡。"],
+        cafe:["……咖啡别点太甜的。","……安静点。","……这里还行。"],
+        park:["……空气不错。","……你别乱跑。","……慢点。"],
+        night:["……该睡了。","……别熬夜。","……晚安。"],
+        beach:["……晒死了。","……你别下水太远。","……涂防晒了吗。"]
+      }
     },
     angry: {
-      lines: ["……我生气了。", "别碰我！", "哼。", "……走开。", "记你一笔。", "……不理你了。", "……烦死了。", "……你等着。", "……太过分了。"],
-      overTap: ["你再戳一下试试！", "……够了！", "烦死了。", "……找死啊。", "住手！"],
-      calm: ["……算了。", "哼，这次原谅你。", "……下次别这样。", "……勉强原谅你。"],
-      soft: ["……其实也没那么气。", "……嗯。", "……知道了。", "……哼。"],
-      // 极端生气：骂人 + 丢东西
-      rage: ["……滚！", "……你有病吧！", "……我不想看到你！", "……走开！", "……绝交！"],
-      throw: ['🧸','📕','🍵','🧦','🖊️','🥿']
+      lines:["……我生气了。","别碰我！","哼。","……走开。","记你一笔。","……不理你了。","……烦死了。","……你等着。"],
+      overTap:["你再戳一下试试！","……够了！","烦死了。","……找死啊。"],
+      calm:["……算了。","哼，这次原谅你。","……下次别这样。"],
+      soft:["……其实也没那么气。","……嗯。","……知道了。"],
+      rage:["……滚！","……你有病吧！","……我不想看到你！","……绝交！"],
+      throw:['🧸','📕','🍵','🧦','🖊️']
     },
     sadLines: {
-      lines: ["……", "……你为什么要这么说。", "……我记住了。", "……你太过分了。", "……原来你是这样的。", "……哼。", "……3年了，你就这样。"],
-      cry: ["……（瞪着你）", "……呜。", "……不想理你。", "……你走。"],
-      recover: ["……嗯，好一点了。", "……不要再说了。", "……嗯。"],
-      leave: ["……我走了。", "……别找我。", "……哼。", "……再见。", "……3年，够了。"],
-      // 消失前说伤心话
-      vanish: ["……我以为我们是朋友。", "……算了。", "……再也不见。", "……你开心就好。"]
+      lines:["……","……你为什么要这么说。","……我记住了。","……你太过分了。","……原来你是这样的。","……3年了，你就这样。"],
+      cry:["……（瞪着你）","……呜。","……不想理你。","……你走。"],
+      recover:["……嗯，好一点了。","……不要再说了。"],
+      leave:["……我走了。","……别找我。","……哼。","……再见。"],
+      vanish:["……我以为我们是朋友。","……算了。","……再也不见。"]
     },
-    coquettish: ["……喂。", "……陪我一下。", "……你看我一眼。", "……别不理我。", "……哼。", "……喂，干嘛呢。", "……过来。", "……嗯？"],
-    requests: [
+    coquettish:["……喂。","……陪我一下。","……你看我一眼。","……别不理我。","……哼。","……过来。"],
+    requests:[
       { text:"……去给我买奶茶。", emo:'🧋', want:'milktea', love:4 },
       { text:"……夸我。不然记你一笔。", emo:'💬', want:'praise', love:5 },
       { text:"……陪我聊会。", emo:'💬', want:'chat', love:3 },
       { text:"……我头发乱了，帮我顺顺。", emo:'🫶', want:'pat', love:4 },
       { text:"……给我朵花。", emo:'🌷', want:'flower', love:5 },
-      { text:"……饿了。", emo:'🍰', want:'food', love:4 },
-      { text:"……给我本书。", emo:'📖', want:'book', love:4 },
-      { text:"……我要音乐盒。", emo:'🎵', want:'music', love:5 },
-      { text:"……围巾有点旧了。", emo:'🧣', want:'scarf', love:5 }
+      { text:"……饿了。", emo:'🍰', want:'food', love:4 }
     ],
-    topics: [
-      { minLv:0, emo:'👋', q:'你叫什么名字？', a:['……邱禧悦。','记住了。','叫我全名，别叫错。','……哼。'], face:'shy', love:3 },
-      { minLv:0, emo:'🧹', q:'你喜欢干净？', a:['……嗯。','东西要放整齐。','你桌面也太乱了。','……看着难受。'], face:'normal', love:3 },
-      { minLv:0, emo:'😤', q:'你爱生气吗？', a:['……看情况。','惹我我就生气。','哼。','……你猜。'], face:'angry', love:2 },
-      { minLv:1, emo:'📝', q:'你会记仇吗？', a:['……会。','我记性很好。','你欠我一次。','……记着呢。'], face:'angry', love:2 },
-      { minLv:1, emo:'💼', q:'你有责任心吗？', a:['……当然。','该做的事我会做。','你别拖我后腿。','……嗯。'], face:'normal', love:4 },
-      { minLv:2, emo:'🤝', q:'我们是朋友吗？', a:['……算是。','哼，勉强。','……你要对我好点。','……嗯。'], face:'shy', love:6 },
-      { minLv:2, emo:'🏠', q:'我们认识多久了？', a:['……3年。','从大一住一起。','……你居然记得。','……嗯。'], face:'shy', love:8 },
-      { minLv:2, emo:'😠', q:'你刚才为什么生气？', a:['……你猜。','自己想去。','……因为你。','……哼，不告诉你。'], face:'angry', love:3 },
-      { minLv:3, emo:'💭', q:'我不在的时候你会想我吗？', a:['……谁想你。','……一点点。','……会。','……你管我呢。'], face:'blush', love:8 },
-      { minLv:3, emo:'🍜', q:'一起吃饭吗？', a:['……好啊。','你请。','……嗯。','……勉强。'], face:'happy', love:5 },
-      { minLv:3, emo:'👭', q:'何芬怎么样？', a:['……她啊。','……比你好。','……至少她听我的。','……嗯，还行。'], face:'soft', love:6 },
-      { minLv:4, emo:'🤫', q:'跟我说个秘密吧', a:['……其实我凶你是因为在意。','……别告诉别人。','……你对我好，我会记一辈子。','……嗯。'], face:'blush', love:10 },
-      { minLv:4, emo:'💗', q:'你喜欢我吗？', a:['……问这个干嘛！','……哼。','……嗯。','……不知道。'], face:'blush', love:12 },
-      { minLv:5, emo:'🛏️', q:'以后还一起住吗？', a:['……嗯。','……别问这种话。','……当然。','……你敢搬走试试。'], face:'blush', love:15 }
+    topics:[
+      { minLv:0, emo:'👋', q:'你叫什么名字？', a:['……邱禧悦。','记住了。','叫我全名，别叫错。'], face:'shy', love:3 },
+      { minLv:0, emo:'🧹', q:'你喜欢干净？', a:['……嗯。','东西要放整齐。','你桌面也太乱了。'], face:'normal', love:3 },
+      { minLv:1, emo:'📝', q:'你会记仇吗？', a:['……会。','我记性很好。','你欠我一次。'], face:'angry', love:2 },
+      { minLv:2, emo:'🏠', q:'我们认识多久了？', a:['……3年。','从大一住一起。','……你居然记得。'], face:'shy', love:8 },
+      { minLv:3, emo:'👭', q:'何芬怎么样？', a:['……她啊。','……比你好。','……至少她听我的。'], face:'soft', love:6 },
+      { minLv:3, emo:'😏', q:'杨颖怎么样？', a:['……话多。','……但还行。','……她没个正形。'], face:'soft', love:6 },
+      { minLv:3, emo:'📷', q:'陈碧娴怎么样？', a:['……她阳光。','……就是太爱拍了。','……还行。'], face:'soft', love:6 },
+      { minLv:4, emo:'💗', q:'你喜欢我吗？', a:['……问这个干嘛！','……哼。','……嗯。'], face:'blush', love:12 }
     ]
   },
 
   he: {
-    name: '何芬', avatarBg: '#e8f0ff',
-    baseColor: '#d6e4ff', bodyColor: '#fbe3d3', neckColor: '#f7d9c4', faceColor: '#fbe3d3',
-    defaultHair: 'bang',
-    backHair: `<path d="M40 90 Q36 24 100 18 Q164 24 160 90 L162 172 Q150 184 140 172 L138 98 Q120 82 100 82 Q80 82 62 98 L60 172 Q50 184 38 172 Z" fill="#2b2b33"/>`,
+    name:'何芬', avatarBg:'#e8f0ff',
+    baseColor:'#d6e4ff', bodyColor:'#fbe3d3', neckColor:'#f7d9c4', faceColor:'#fbe3d3',
+    defaultHair:'bang', defaultGlasses:'none',
+    backHair:`<path d="M40 90 Q36 24 100 18 Q164 24 160 90 L162 172 Q150 184 140 172 L138 98 Q120 82 100 82 Q80 82 62 98 L60 172 Q50 184 38 172 Z" fill="#2b2b33"/>`,
     eyesStyle: {
-      normal: `<ellipse cx="80" cy="92" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="92" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="93" r="6.5" fill="#3a2b2b"/><circle cx="120" cy="93" r="6.5" fill="#3a2b2b"/><circle cx="82" cy="90" r="2.2" fill="#fff"/><circle cx="122" cy="90" r="2.2" fill="#fff"/><path d="M70 84 Q80 80 90 84" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 84 Q120 80 130 84" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/>`,
-      happy: `<path d="M70 95 Q80 83 90 95" stroke="#2b2b33" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M110 95 Q120 83 130 95" stroke="#2b2b33" stroke-width="3.5" fill="none" stroke-linecap="round"/>`,
-      shy: `<ellipse cx="80" cy="92" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="92" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="93" r="6.5" fill="#3a2b2b"/><circle cx="120" cy="93" r="6.5" fill="#3a2b2b"/><circle cx="82" cy="90" r="2.2" fill="#fff"/><circle cx="122" cy="90" r="2.2" fill="#fff"/><path d="M70 82 Q80 78 90 82" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 82 Q120 78 130 82" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/>`,
-      sad: `<ellipse cx="80" cy="94" rx="9" ry="9" fill="#fff"/><ellipse cx="120" cy="94" rx="9" ry="9" fill="#fff"/><circle cx="80" cy="95" r="6" fill="#3a2b2b"/><circle cx="120" cy="95" r="6" fill="#3a2b2b"/><path d="M70 82 Q80 86 90 82" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 82 Q120 86 130 82" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/>`,
-      cry: `<ellipse cx="80" cy="94" rx="9" ry="9" fill="#fff"/><ellipse cx="120" cy="94" rx="9" ry="9" fill="#fff"/><circle cx="80" cy="96" r="5.5" fill="#3a2b2b"/><circle cx="120" cy="96" r="5.5" fill="#3a2b2b"/><path d="M70 80 Q80 86 90 80" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 80 Q120 86 130 80" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/>`,
-      angry: `<ellipse cx="80" cy="92" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="92" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="93" r="6.5" fill="#3a2b2b"/><circle cx="120" cy="93" r="6.5" fill="#3a2b2b"/><path d="M70 79 L90 88" stroke="#2b2b33" stroke-width="3.5" stroke-linecap="round"/><path d="M130 79 L110 88" stroke="#2b2b33" stroke-width="3.5" stroke-linecap="round"/>`,
-      sleep: `<path d="M70 95 Q80 101 90 95" stroke="#2b2b33" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M110 95 Q120 101 130 95" stroke="#2b2b33" stroke-width="3.5" fill="none" stroke-linecap="round"/>`,
-      star: `<ellipse cx="80" cy="92" rx="10" ry="11" fill="#fff"/><ellipse cx="120" cy="92" rx="10" ry="11" fill="#fff"/><circle cx="80" cy="93" r="7" fill="#3a2b2b"/><circle cx="120" cy="93" r="7" fill="#3a2b2b"/><path d="M80 86 L82 92 L88 93 L82 94 L80 100 L78 94 L72 93 L78 92 Z" fill="#fff"/><path d="M120 86 L122 92 L128 93 L122 94 L120 100 L118 94 L112 93 L118 92 Z" fill="#fff"/><path d="M70 84 Q80 80 90 84" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 84 Q120 80 130 84" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/>`,
-      blush: `<ellipse cx="80" cy="94" rx="9" ry="9" fill="#fff"/><ellipse cx="120" cy="94" rx="9" ry="9" fill="#fff"/><circle cx="80" cy="97" r="6" fill="#3a2b2b"/><circle cx="120" cy="97" r="6" fill="#3a2b2b"/><circle cx="82" cy="94" r="2" fill="#fff"/><circle cx="122" cy="94" r="2" fill="#fff"/><path d="M70 85 Q80 81 90 85" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 85 Q120 81 130 85" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/>`,
-      shyLook: `<ellipse cx="80" cy="94" rx="9" ry="9" fill="#fff"/><ellipse cx="120" cy="94" rx="9" ry="9" fill="#fff"/><circle cx="76" cy="96" r="5.5" fill="#3a2b2b"/><circle cx="116" cy="96" r="5.5" fill="#3a2b2b"/><path d="M70 85 Q80 81 90 85" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 85 Q120 81 130 85" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/>`,
-      lookUp: `<ellipse cx="80" cy="89" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="89" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="87" r="6.5" fill="#3a2b2b"/><circle cx="120" cy="87" r="6.5" fill="#3a2b2b"/><circle cx="82" cy="84" r="2.2" fill="#fff"/><circle cx="122" cy="84" r="2.2" fill="#fff"/><path d="M70 81 Q80 77 90 81" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 81 Q120 77 130 81" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/>`,
-      soft: `<path d="M70 92 Q80 86 90 92" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 92 Q120 86 130 92" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/>`,
-      love: `<path d="M80 86 C75 78 64 80 64 89 C64 97 80 104 80 104 C80 104 96 97 96 89 C96 80 85 78 80 86 Z" fill="#ff8fb1" transform="translate(-5,-2) scale(.8)"/><path d="M120 86 C115 78 104 80 104 89 C104 97 120 104 120 104 C120 104 136 97 136 89 C136 80 125 78 120 86 Z" fill="#ff8fb1" transform="translate(5,-2) scale(.8)"/>`
+      normal:`<ellipse cx="80" cy="92" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="92" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="93" r="6.5" fill="#3a2b2b"/><circle cx="120" cy="93" r="6.5" fill="#3a2b2b"/><circle cx="82" cy="90" r="2.2" fill="#fff"/><circle cx="122" cy="90" r="2.2" fill="#fff"/><path d="M70 84 Q80 80 90 84" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 84 Q120 80 130 84" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      happy:`<path d="M70 95 Q80 83 90 95" stroke="#2b2b33" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M110 95 Q120 83 130 95" stroke="#2b2b33" stroke-width="3.5" fill="none" stroke-linecap="round"/>`,
+      shy:`<ellipse cx="80" cy="92" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="92" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="93" r="6.5" fill="#3a2b2b"/><circle cx="120" cy="93" r="6.5" fill="#3a2b2b"/><circle cx="82" cy="90" r="2.2" fill="#fff"/><circle cx="122" cy="90" r="2.2" fill="#fff"/><path d="M70 82 Q80 78 90 82" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 82 Q120 78 130 82" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      sad:`<ellipse cx="80" cy="94" rx="9" ry="9" fill="#fff"/><ellipse cx="120" cy="94" rx="9" ry="9" fill="#fff"/><circle cx="80" cy="95" r="6" fill="#3a2b2b"/><circle cx="120" cy="95" r="6" fill="#3a2b2b"/><path d="M70 82 Q80 86 90 82" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 82 Q120 86 130 82" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      cry:`<ellipse cx="80" cy="94" rx="9" ry="9" fill="#fff"/><ellipse cx="120" cy="94" rx="9" ry="9" fill="#fff"/><circle cx="80" cy="96" r="5.5" fill="#3a2b2b"/><circle cx="120" cy="96" r="5.5" fill="#3a2b2b"/><path d="M70 80 Q80 86 90 80" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 80 Q120 86 130 80" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      angry:`<ellipse cx="80" cy="92" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="92" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="93" r="6.5" fill="#3a2b2b"/><circle cx="120" cy="93" r="6.5" fill="#3a2b2b"/><path d="M70 79 L90 88" stroke="#2b2b33" stroke-width="3.5" stroke-linecap="round"/><path d="M130 79 L110 88" stroke="#2b2b33" stroke-width="3.5" stroke-linecap="round"/>`,
+      sleep:`<path d="M70 95 Q80 101 90 95" stroke="#2b2b33" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M110 95 Q120 101 130 95" stroke="#2b2b33" stroke-width="3.5" fill="none" stroke-linecap="round"/>`,
+      star:`<ellipse cx="80" cy="92" rx="10" ry="11" fill="#fff"/><ellipse cx="120" cy="92" rx="10" ry="11" fill="#fff"/><circle cx="80" cy="93" r="7" fill="#3a2b2b"/><circle cx="120" cy="93" r="7" fill="#3a2b2b"/><path d="M80 86 L82 92 L88 93 L82 94 L80 100 L78 94 L72 93 L78 92 Z" fill="#fff"/><path d="M120 86 L122 92 L128 93 L122 94 L120 100 L118 94 L112 93 L118 92 Z" fill="#fff"/><path d="M70 84 Q80 80 90 84" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 84 Q120 80 130 84" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      blush:`<ellipse cx="80" cy="94" rx="9" ry="9" fill="#fff"/><ellipse cx="120" cy="94" rx="9" ry="9" fill="#fff"/><circle cx="80" cy="97" r="6" fill="#3a2b2b"/><circle cx="120" cy="97" r="6" fill="#3a2b2b"/><circle cx="82" cy="94" r="2" fill="#fff"/><circle cx="122" cy="94" r="2" fill="#fff"/><path d="M70 85 Q80 81 90 85" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 85 Q120 81 130 85" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      shyLook:`<ellipse cx="80" cy="94" rx="9" ry="9" fill="#fff"/><ellipse cx="120" cy="94" rx="9" ry="9" fill="#fff"/><circle cx="76" cy="96" r="5.5" fill="#3a2b2b"/><circle cx="116" cy="96" r="5.5" fill="#3a2b2b"/><path d="M70 85 Q80 81 90 85" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 85 Q120 81 130 85" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      lookUp:`<ellipse cx="80" cy="89" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="89" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="87" r="6.5" fill="#3a2b2b"/><circle cx="120" cy="87" r="6.5" fill="#3a2b2b"/><circle cx="82" cy="84" r="2.2" fill="#fff"/><circle cx="122" cy="84" r="2.2" fill="#fff"/><path d="M70 81 Q80 77 90 81" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 81 Q120 77 130 81" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      soft:`<path d="M70 92 Q80 86 90 92" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 92 Q120 86 130 92" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      love:`<path d="M80 86 C75 78 64 80 64 89 C64 97 80 104 80 104 C80 104 96 97 96 89 C96 80 85 78 80 86 Z" fill="#ff8fb1" transform="translate(-5,-2) scale(.8)"/><path d="M120 86 C115 78 104 80 104 89 C104 97 120 104 120 104 C120 104 136 97 136 89 C136 80 125 78 120 86 Z" fill="#ff8fb1" transform="translate(5,-2) scale(.8)"/>`,
+      spicy:`<ellipse cx="80" cy="90" rx="9" ry="11" fill="#fff"/><ellipse cx="120" cy="90" rx="9" ry="11" fill="#fff"/><circle cx="80" cy="91" r="6.5" fill="#3a2b2b"/><circle cx="120" cy="91" r="6.5" fill="#3a2b2b"/><circle cx="82" cy="88" r="2.2" fill="#fff"/><circle cx="122" cy="88" r="2.2" fill="#fff"/><path d="M70 80 Q80 76 90 82" stroke="#2b2b33" stroke-width="3.2" fill="none" stroke-linecap="round"/><path d="M110 82 Q120 76 130 80" stroke="#2b2b33" stroke-width="3.2" fill="none" stroke-linecap="round"/>`,
+      bitter:`<ellipse cx="80" cy="94" rx="8" ry="8" fill="#fff"/><ellipse cx="120" cy="94" rx="8" ry="8" fill="#fff"/><circle cx="80" cy="95" r="5" fill="#3a2b2b"/><circle cx="120" cy="95" r="5" fill="#3a2b2b"/><path d="M70 82 Q80 88 90 82" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 82 Q120 88 130 82" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      sour:`<ellipse cx="80" cy="94" rx="9" ry="9" fill="#fff"/><ellipse cx="120" cy="94" rx="9" ry="9" fill="#fff"/><circle cx="80" cy="95" r="6" fill="#3a2b2b"/><circle cx="120" cy="95" r="6" fill="#3a2b2b"/><path d="M70 80 L90 88" stroke="#2b2b33" stroke-width="3.5" stroke-linecap="round"/><path d="M130 80 L110 88" stroke="#2b2b33" stroke-width="3.5" stroke-linecap="round"/>`,
+      cold:`<ellipse cx="80" cy="94" rx="7" ry="8" fill="#fff"/><ellipse cx="120" cy="94" rx="7" ry="8" fill="#fff"/><circle cx="80" cy="95" r="5" fill="#3a2b2b"/><circle cx="120" cy="95" r="5" fill="#3a2b2b"/><path d="M72 84 Q80 88 88 84" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M112 84 Q120 88 128 84" stroke="#2b2b33" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      hot:`<ellipse cx="80" cy="92" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="92" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="92" r="6.5" fill="#3a2b2b"/><circle cx="120" cy="92" r="6.5" fill="#3a2b2b"/><path d="M70 82 Q80 78 90 84" stroke="#2b2b33" stroke-width="3.2" fill="none" stroke-linecap="round"/><path d="M110 84 Q120 78 130 82" stroke="#2b2b33" stroke-width="3.2" fill="none" stroke-linecap="round"/>`
     },
     lines: {
-      idle:  ["……", "嗯。", "你在啊。", "……有事吗？", "发呆中。", "窗外天气不错。", "……嗯。", "……你好安静。", "……我在。", "……老大在收拾东西。"],
-      tap:   ["干嘛。", "……别戳。", "嗯？", "有事说事。", "……又来了。", "……嗯。", "……别闹。", "……嗯？"],
-      head:  ["……摸头干嘛。", "嗯……还行。", "……就一下。", "头发要乱了。", "……好舒服。", "……嗯。"],
-      faceTap:["别戳脸。", "……喂。", "痒。", "再戳就生气了。", "……不要。", "……嗯。"],
-      body:  ["……干嘛碰我。", "喂。", "……手拿开。", "……不要。", "……嗯。"],
-      feed:  ["……谢谢。", "还行。", "嗯，好吃。", "……你做的？", "……喜欢。", "……再给我一点。", "……嗯。"],
-      play:  ["……好吧。", "陪你一下。", "就一会儿。", "……笑什么。", "……嗯。", "……好开心。"],
-      sleep: ["困了。", "……晚安。", "Zzz…", "……我要睡了。"],
-      hungry:["饿了。", "……有吃的吗。", "肚子叫了。", "……我饿了。", "……老大说该吃饭了。"],
-      sad:   ["……", "有点无聊。", "你很久没来了。", "……我一个人。", "……你在哪。", "……嗯。", "……我想你了。"],
-      warm:  ["今天……也谢谢你陪我。", "其实挺开心的。", "你别走那么快嘛。", "……留下来陪我会。", "……我喜欢你在。", "……嗯。", "……3年了，谢谢你。"]
+      idle:["……","嗯。","你在啊。","……有事吗？","发呆中。","窗外天气不错。","……嗯。","……你好安静。","……我在。","……老大在收拾东西。"],
+      tap:["干嘛。","……别戳。","嗯？","有事说事。","……又来了。","……嗯。","……别闹。"],
+      head:["……摸头干嘛。","嗯……还行。","……就一下。","头发要乱了。","……好舒服。"],
+      faceTap:["别戳脸。","……喂。","痒。","再戳就生气了。","……不要。"],
+      body:["……干嘛碰我。","喂。","……手拿开。","……不要。"],
+      feed:["……谢谢。","还行。","嗯，好吃。","……你做的？","……喜欢。"],
+      play:["……好吧。","陪你一下。","就一会儿。","……笑什么。","……好开心。"],
+      sleep:["困了。","……晚安。","Zzz…"],
+      hungry:["饿了。","……有吃的吗。","肚子叫了。","……我饿了。"],
+      sad:["……","有点无聊。","你很久没来了。","……我一个人。","……你在哪。"],
+      warm:["今天……也谢谢你陪我。","其实挺开心的。","你别走那么快嘛。","……留下来陪我会。","……3年了，谢谢你。"],
+      scene:{
+        dorm:["……宿舍好安静。","……我在看书。","……嗯。"],
+        class:["……老师讲得好快。","……你别睡。","……嗯。"],
+        cafe:["……这里好香。","……我喜欢。","……嗯。"],
+        park:["……风好舒服。","……嗯。","……你听。"],
+        night:["……晚安。","……嗯。","……你别熬夜。"],
+        beach:["……海好漂亮。","……嗯。","……风好大。"]
+      }
     },
     angry: {
-      lines: ["……生气了。", "别碰我。", "哼。", "……走开。", "不理你了。", "……不要。", "……你好烦。"],
-      overTap: ["你再戳一下试试。", "……够了。", "烦。", "……嗯。"],
-      calm: ["……算了。", "哼，这次原谅你。", "……下次别这样。", "……嗯。"],
-      soft: ["……其实也没那么气。", "……嗯。", "……知道了。", "……好。"],
-      rage: ["……你走开。", "……我不想说话。", "……哼。", "……别烦我。"],
-      throw: ['📕','🧸','🖊️']
+      lines:["……生气了。","别碰我。","哼。","……走开。","不理你了。","……不要。","……你好烦。"],
+      overTap:["你再戳一下试试。","……够了。","烦。"],
+      calm:["……算了。","哼，这次原谅你。","……下次别这样。"],
+      soft:["……其实也没那么气。","……嗯。","……知道了。"],
+      rage:["……你走开。","……我不想说话。","……哼。"],
+      throw:['📕','🧸','🖊️']
     },
     sadLines: {
-      lines: ["……", "……你为什么要这么说。", "……我做错什么了吗。", "……原来你是这么想的。", "……嗯。", "……3年了，你也这样说我。"],
-      cry: ["……（低头不说话）", "……呜。", "……不想理你。", "……不要。"],
-      recover: ["……嗯，好一点了。", "……不要再说了。", "……嗯。"],
-      leave: ["……我走了。", "……让我一个人待会。", "……别找我。", "……嗯。"],
-      vanish: ["……我先走了。", "……你保重。", "……嗯。"]
+      lines:["……","……你为什么要这么说。","……我做错什么了吗。","……原来你是这么想的。","……3年了，你也这样说我。"],
+      cry:["……（低头不说话）","……呜。","……不想理你。","……不要。"],
+      recover:["……嗯，好一点了。","……不要再说了。"],
+      leave:["……我走了。","……让我一个人待会。","……别找我。"],
+      vanish:["……我先走了。","……你保重。","……嗯。"]
     },
-    coquettish: ["……喂。", "……陪我一下。", "……你在忙吗。", "……摸摸我。", "……有点无聊。", "……别走。", "……嗯。", "……你在就好。"],
-    requests: [
+    coquettish:["……喂。","……陪我一下。","……你在忙吗。","……摸摸我。","……有点无聊。","……别走。"],
+    requests:[
       { text:"……给我买奶茶。", emo:'🧋', want:'milktea', love:4 },
       { text:"……夸夸我。", emo:'💬', want:'praise', love:5 },
       { text:"……陪我聊会。", emo:'💬', want:'chat', love:3 },
       { text:"……摸摸头。", emo:'🫶', want:'pat', love:4 },
       { text:"……给我朵花。", emo:'🌷', want:'flower', love:5 },
-      { text:"……有点饿了。", emo:'🍰', want:'food', love:4 },
-      { text:"……给我本书。", emo:'📖', want:'book', love:4 },
-      { text:"……想听音乐。", emo:'🎵', want:'music', love:5 },
-      { text:"……天气有点冷。", emo:'🧣', want:'scarf', love:5 }
+      { text:"……有点饿了。", emo:'🍰', want:'food', love:4 }
     ],
-    topics: [
-      { minLv:0, emo:'👋', q:'你叫什么名字？', a:['……何芬。','记住了吗。','嗯，我叫何芬。','……嗯。'], face:'shy', love:3 },
-      { minLv:0, emo:'🍰', q:'你喜欢什么？', a:['……安静待着。','好吃的吧。','睡觉算吗。','……嗯。'], face:'normal', love:3 },
-      { minLv:0, emo:'🎵', q:'你喜欢听什么歌？', a:['……慢歌。','安静的就行。','不告诉你。','……嗯。'], face:'normal', love:3 },
-      { minLv:1, emo:'🎂', q:'你多大了？', a:['……不告诉你。','问这个干嘛。','猜。','……嗯。'], face:'angry', love:2 },
-      { minLv:1, emo:'🌤️', q:'今天过得怎么样？', a:['还行。','……就那样。','有点无聊。','……嗯。'], face:'normal', love:4 },
-      { minLv:1, emo:'😴', q:'你困了吗？', a:['有点。','……还不困。','你困了就去睡。','……嗯。'], face:'sleep', love:3 },
-      { minLv:2, emo:'🤝', q:'我们是朋友吗？', a:['……算是吧。','嗯。','问这个干嘛……但，是的。','……嗯。'], face:'shy', love:6 },
-      { minLv:2, emo:'👑', q:'邱禧悦是你什么人？', a:['……老大。','……她很凶，但对我好。','……我听她的。','……嗯。'], face:'shy', love:5 },
-      { minLv:2, emo:'🏠', q:'我们认识多久了？', a:['……3年。','从住一起开始。','……嗯。','……你记得就好。'], face:'shy', love:8 },
-      { minLv:3, emo:'💭', q:'我不在的时候你会想我吗？', a:['……谁会想你。','一点点。','……嗯，会。','……嗯。'], face:'blush', love:8 },
-      { minLv:3, emo:'🌙', q:'晚上睡不着怎么办？', a:['……数羊。','找我说说话。','……我陪你。','……嗯。'], face:'shy', love:7 },
-      { minLv:3, emo:'👭', q:'邱禧悦怎么样？', a:['……她很好。','……凶但我习惯了。','……她其实很照顾我。','……嗯。'], face:'soft', love:6 },
-      { minLv:4, emo:'🤫', q:'跟我说个秘密吧', a:['……其实我不太会主动说话。','不是讨厌你，只是慢热。','……谢谢你一直来找我。','……嗯。'], face:'blush', love:10 },
-      { minLv:4, emo:'💗', q:'你喜欢我吗？', a:['……问这个干嘛。','……一点点。','……嗯。','……嗯。'], face:'blush', love:12 },
-      { minLv:5, emo:'🛏️', q:'以后还一起住吗？', a:['……嗯。','……你想的话。','……好。','……嗯。'], face:'blush', love:15 }
+    topics:[
+      { minLv:0, emo:'👋', q:'你叫什么名字？', a:['……何芬。','记住了吗。','嗯，我叫何芬。'], face:'shy', love:3 },
+      { minLv:1, emo:'😴', q:'你困了吗？', a:['有点。','……还不困。','你困了就去睡。'], face:'sleep', love:3 },
+      { minLv:2, emo:'👑', q:'邱禧悦是你什么人？', a:['……老大。','……她很凶，但对我好。','……我听她的。'], face:'shy', love:5 },
+      { minLv:2, emo:'🏠', q:'我们认识多久了？', a:['……3年。','从住一起开始。','……你记得就好。'], face:'shy', love:8 },
+      { minLv:3, emo:'😏', q:'杨颖怎么样？', a:['……她话好多。','……但她人好。','……嗯。'], face:'soft', love:6 },
+      { minLv:3, emo:'📷', q:'陈碧娴怎么样？', a:['……她好阳光。','……我很羡慕。','……嗯。'], face:'soft', love:6 },
+      { minLv:4, emo:'💗', q:'你喜欢我吗？', a:['……问这个干嘛。','……一点点。','……嗯。'], face:'blush', love:12 }
+    ]
+  },
+
+  yang: {
+    name:'杨颖', avatarBg:'#fff0d6',
+    baseColor:'#ffe8b8', bodyColor:'#fbe3d3', neckColor:'#f7d9c4', faceColor:'#fbe3d3',
+    defaultHair:'wave', defaultGlasses:'round',
+    backHair:`<path d="M42 88 Q38 26 100 20 Q162 26 158 88 L160 168 Q148 180 138 168 L136 96 Q118 80 100 80 Q82 80 64 96 L62 168 Q52 180 40 168 Z" fill="#3a2b2a"/>`,
+    eyesStyle: {
+      normal:`<ellipse cx="80" cy="92" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="92" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="92" r="6.5" fill="#4a3a2a"/><circle cx="120" cy="92" r="6.5" fill="#4a3a2a"/><circle cx="82" cy="89" r="2.2" fill="#fff"/><circle cx="122" cy="89" r="2.2" fill="#fff"/><path d="M70 84 Q80 81 90 84" stroke="#3a2b2a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 84 Q120 81 130 84" stroke="#3a2b2a" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      happy:`<path d="M70 94 Q80 84 90 94" stroke="#3a2b2a" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M110 94 Q120 84 130 94" stroke="#3a2b2a" stroke-width="3.5" fill="none" stroke-linecap="round"/>`,
+      shy:`<ellipse cx="80" cy="92" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="92" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="93" r="6.5" fill="#4a3a2a"/><circle cx="120" cy="93" r="6.5" fill="#4a3a2a"/><circle cx="82" cy="90" r="2.2" fill="#fff"/><circle cx="122" cy="90" r="2.2" fill="#fff"/><path d="M70 82 Q80 79 90 82" stroke="#3a2b2a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 82 Q120 79 130 82" stroke="#3a2b2a" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      sad:`<ellipse cx="80" cy="94" rx="9" ry="9" fill="#fff"/><ellipse cx="120" cy="94" rx="9" ry="9" fill="#fff"/><circle cx="80" cy="95" r="6" fill="#4a3a2a"/><circle cx="120" cy="95" r="6" fill="#4a3a2a"/><path d="M70 82 Q80 86 90 82" stroke="#3a2b2a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 82 Q120 86 130 82" stroke="#3a2b2a" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      cry:`<ellipse cx="80" cy="94" rx="9" ry="9" fill="#fff"/><ellipse cx="120" cy="94" rx="9" ry="9" fill="#fff"/><circle cx="80" cy="96" r="5.5" fill="#4a3a2a"/><circle cx="120" cy="96" r="5.5" fill="#4a3a2a"/><path d="M70 80 Q80 86 90 80" stroke="#3a2b2a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 80 Q120 86 130 80" stroke="#3a2b2a" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      angry:`<ellipse cx="80" cy="92" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="92" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="93" r="6.5" fill="#4a3a2a"/><circle cx="120" cy="93" r="6.5" fill="#4a3a2a"/><path d="M70 80 L90 88" stroke="#3a2b2a" stroke-width="3.5" stroke-linecap="round"/><path d="M130 80 L110 88" stroke="#3a2b2a" stroke-width="3.5" stroke-linecap="round"/>`,
+      sleep:`<path d="M70 95 Q80 101 90 95" stroke="#3a2b2a" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M110 95 Q120 101 130 95" stroke="#3a2b2a" stroke-width="3.5" fill="none" stroke-linecap="round"/>`,
+      star:`<ellipse cx="80" cy="92" rx="10" ry="11" fill="#fff"/><ellipse cx="120" cy="92" rx="10" ry="11" fill="#fff"/><circle cx="80" cy="93" r="7" fill="#4a3a2a"/><circle cx="120" cy="93" r="7" fill="#4a3a2a"/><path d="M80 86 L82 92 L88 93 L82 94 L80 100 L78 94 L72 93 L78 92 Z" fill="#fff"/><path d="M120 86 L122 92 L128 93 L122 94 L120 100 L118 94 L112 93 L118 92 Z" fill="#fff"/>`,
+      blush:`<ellipse cx="80" cy="94" rx="9" ry="9" fill="#fff"/><ellipse cx="120" cy="94" rx="9" ry="9" fill="#fff"/><circle cx="80" cy="97" r="6" fill="#4a3a2a"/><circle cx="120" cy="97" r="6" fill="#4a3a2a"/><circle cx="82" cy="94" r="2" fill="#fff"/><circle cx="122" cy="94" r="2" fill="#fff"/>`,
+      shyLook:`<ellipse cx="80" cy="94" rx="9" ry="9" fill="#fff"/><ellipse cx="120" cy="94" rx="9" ry="9" fill="#fff"/><circle cx="76" cy="96" r="5.5" fill="#4a3a2a"/><circle cx="116" cy="96" r="5.5" fill="#4a3a2a"/>`,
+      lookUp:`<ellipse cx="80" cy="89" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="89" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="87" r="6.5" fill="#4a3a2a"/><circle cx="120" cy="87" r="6.5" fill="#4a3a2a"/><circle cx="82" cy="84" r="2.2" fill="#fff"/><circle cx="122" cy="84" r="2.2" fill="#fff"/>`,
+      soft:`<path d="M70 92 Q80 87 90 92" stroke="#3a2b2a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 92 Q120 87 130 92" stroke="#3a2b2a" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      love:`<path d="M80 86 C75 78 64 80 64 89 C64 97 80 104 80 104 C80 104 96 97 96 89 C96 80 85 78 80 86 Z" fill="#ff8fb1" transform="translate(-5,-2) scale(.8)"/><path d="M120 86 C115 78 104 80 104 89 C104 97 120 104 120 104 C120 104 136 97 136 89 C136 80 125 78 120 86 Z" fill="#ff8fb1" transform="translate(5,-2) scale(.8)"/>`,
+      // ★ 只有杨颖有吐舌头
+      tongue:`<ellipse cx="80" cy="92" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="92" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="92" r="6.5" fill="#4a3a2a"/><circle cx="120" cy="92" r="6.5" fill="#4a3a2a"/><circle cx="82" cy="89" r="2.2" fill="#fff"/><circle cx="122" cy="89" r="2.2" fill="#fff"/><path d="M70 84 Q80 81 90 84" stroke="#3a2b2a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 84 Q120 81 130 84" stroke="#3a2b2a" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      spicy:`<ellipse cx="80" cy="90" rx="9" ry="11" fill="#fff"/><ellipse cx="120" cy="90" rx="9" ry="11" fill="#fff"/><circle cx="80" cy="91" r="6.5" fill="#4a3a2a"/><circle cx="120" cy="91" r="6.5" fill="#4a3a2a"/><circle cx="82" cy="88" r="2.2" fill="#fff"/><circle cx="122" cy="88" r="2.2" fill="#fff"/>`,
+      bitter:`<ellipse cx="80" cy="94" rx="8" ry="8" fill="#fff"/><ellipse cx="120" cy="94" rx="8" ry="8" fill="#fff"/><circle cx="80" cy="95" r="5" fill="#4a3a2a"/><circle cx="120" cy="95" r="5" fill="#4a3a2a"/>`,
+      sour:`<ellipse cx="80" cy="94" rx="9" ry="9" fill="#fff"/><ellipse cx="120" cy="94" rx="9" ry="9" fill="#fff"/><circle cx="80" cy="95" r="6" fill="#4a3a2a"/><circle cx="120" cy="95" r="6" fill="#4a3a2a"/>`,
+      cold:`<ellipse cx="80" cy="94" rx="7" ry="8" fill="#fff"/><ellipse cx="120" cy="94" rx="7" ry="8" fill="#fff"/><circle cx="80" cy="95" r="5" fill="#4a3a2a"/><circle cx="120" cy="95" r="5" fill="#4a3a2a"/>`,
+      hot:`<ellipse cx="80" cy="92" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="92" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="92" r="6.5" fill="#4a3a2a"/><circle cx="120" cy="92" r="6.5" fill="#4a3a2a"/>`
+    },
+    lines: {
+      idle:  ["……好累。","别看我。","……我没事。","嗯……","你说啥？","……我社恐。","……别理我。","……（发呆）","……有点烦。","……今天也是废物的一天。"],
+      tap:   ["别戳。","……干嘛。","……你好烦。","嗯？","……手拿开。","别碰我。","……我社恐。","……（躲）"],
+      head:  ["……摸头干嘛。","……还行。","别弄乱我头发。","……你手好暖。","……嗯。","……再摸一下。"],
+      faceTap:["……别戳脸。","喂。","……痒。","再戳我生气了。"],
+      body:  ["……干嘛碰我。","喂。","……手拿开。","……我社恐。"],
+      feed:  ["……谢谢。","嗯。","……好吃。","你做的？","……下次还买。"],
+      play:  ["……好吧。","陪你一下。","……就一会儿。","……我累了。"],
+      sleep: ["困了。","……晚安。","Zzz…"],
+      hungry:["饿了。","……有吃的吗。","……我饿了。","……你去弄。"],
+      sad:   ["……","有点无聊。","你很久没来了。","……我一个人。","……你在哪。"],
+      warm:  ["……嗯，谢谢你。","……其实我挺喜欢你的。","……别走。","……留下来。","……（小声）你别走。"],
+      scene:{
+        dorm:["……床好舒服。","……别叫我。","……我想躺着。"],
+        class:["……我好困。","……别看我。","……不想上。"],
+        cafe:["……我随便坐。","……安静。","……嗯。"],
+        park:["……好晒。","……我们回去吧。","……嗯。"],
+        night:["……我睡不着。","……别问我。","……嗯。"],
+        beach:["……好晒啊。","……我不下水。","……你自己玩。"]
+      }
+    },
+    angry: {
+      lines:["……我生气了。","……别碰我。","……哼。","……走开。","……你好烦。","……我不想说话。","……别理我。"],
+      overTap:["……你再戳一下试试。","……够了。","……烦。"],
+      calm:["……算了。","……这次原谅你。","……下次别这样。"],
+      soft:["……其实也没那么气。","……嗯。","……知道了。"],
+      rage:["……滚。","……你有病吧。","……别烦我。","……我不想看到你。"],
+      throw:['📕','🧸','🖊️','🍵']
+    },
+    sadLines: {
+      lines:["……","……你为什么要这么说。","……我记住了。","……原来你是这样的。","……我内耗了。","……算了，我自己消化。"],
+      cry:["……（低头不说话）","……呜。","……不想理你。","……你走。"],
+      recover:["……嗯，好一点了。","……不要再说了。"],
+      leave:["……我走了。","……让我一个人待会。","……别找我。"],
+      vanish:["……我先走了。","……你保重。","……算了。"]
+    },
+    coquettish:["……喂。","……陪我一下。","……你在忙吗。","……别走。","……嗯。","……你看我一眼。"],
+    requests:[
+      { text:"……给我买奶茶。", emo:'🧋', want:'milktea', love:4 },
+      { text:"……夸我。", emo:'💬', want:'praise', love:5 },
+      { text:"……陪我聊会。", emo:'💬', want:'chat', love:3 },
+      { text:"……摸摸头。", emo:'🫶', want:'pat', love:4 },
+      { text:"……给我朵花。", emo:'🌷', want:'flower', love:5 },
+      { text:"……饿了。", emo:'🍰', want:'food', love:4 }
+    ],
+    topics:[
+      { minLv:0, emo:'👋', q:'你叫什么名字？', a:['……杨颖。','记住了吗。','……别叫错。'], face:'shy', love:3 },
+      { minLv:0, emo:'😏', q:'你很有梗吗？', a:['……嗯。','……我随便说说的。','……你别当真。'], face:'happy', love:3 },
+      { minLv:1, emo:'🫥', q:'你社恐吗？', a:['……嗯。','……别看我。','……跟你说话已经很努力了。'], face:'shy', love:4 },
+      { minLv:1, emo:'💭', q:'你会内耗吗？', a:['……会。','……每天。','……你别问这个。'], face:'sad', love:4 },
+      { minLv:2, emo:'🤝', q:'我们是朋友吗？', a:['……算是吧。','……嗯。','……你别问这种话，我社恐。'], face:'shy', love:6 },
+      { minLv:2, emo:'🏠', q:'我们认识多久了？', a:['……3年。','……时间过得好快。','……嗯。'], face:'shy', love:8 },
+      { minLv:3, emo:'👑', q:'邱禧悦怎么样？', a:['……她凶。','……但对我好。','……我服她。'], face:'soft', love:6 },
+      { minLv:3, emo:'🙂', q:'何芬怎么样？', a:['……她好安静。','……我喜欢她。','……嗯。'], face:'soft', love:6 },
+      { minLv:3, emo:'📷', q:'陈碧娴怎么样？', a:['……她好阳光。','……但我社恐。','……嗯。'], face:'soft', love:6 },
+      { minLv:4, emo:'💗', q:'你喜欢我吗？', a:['……问这个干嘛！','……一点点。','……嗯。'], face:'blush', love:12 }
+    ]
+  },
+
+  chen: {
+    name:'陈碧娴', avatarBg:'#e0ffe8',
+    baseColor:'#c8f0d0', bodyColor:'#fbe3d3', neckColor:'#f7d9c4', faceColor:'#fbe3d3',
+    defaultHair:'long', defaultGlasses:'none',
+    backHair:`<path d="M40 90 Q36 24 100 18 Q164 24 160 90 L162 172 Q150 184 140 172 L138 98 Q120 82 100 82 Q80 82 62 98 L60 172 Q50 184 38 172 Z" fill="#5a3b2a"/>`,
+    eyesStyle: {
+      normal:`<ellipse cx="80" cy="92" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="92" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="92" r="6.5" fill="#4a3a2a"/><circle cx="120" cy="92" r="6.5" fill="#4a3a2a"/><circle cx="82" cy="89" r="2.2" fill="#fff"/><circle cx="122" cy="89" r="2.2" fill="#fff"/><path d="M70 84 Q80 80 90 84" stroke="#5a3b2a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 84 Q120 80 130 84" stroke="#5a3b2a" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      happy:`<path d="M70 94 Q80 82 90 94" stroke="#5a3b2a" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M110 94 Q120 82 130 94" stroke="#5a3b2a" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M70 84 Q80 80 90 84" stroke="#5a3b2a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 84 Q120 80 130 84" stroke="#5a3b2a" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      shy:`<ellipse cx="80" cy="92" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="92" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="93" r="6.5" fill="#4a3a2a"/><circle cx="120" cy="93" r="6.5" fill="#4a3a2a"/><circle cx="82" cy="90" r="2.2" fill="#fff"/><circle cx="122" cy="90" r="2.2" fill="#fff"/><path d="M70 82 Q80 78 90 82" stroke="#5a3b2a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 82 Q120 78 130 82" stroke="#5a3b2a" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      sad:`<ellipse cx="80" cy="94" rx="9" ry="9" fill="#fff"/><ellipse cx="120" cy="94" rx="9" ry="9" fill="#fff"/><circle cx="80" cy="95" r="6" fill="#4a3a2a"/><circle cx="120" cy="95" r="6" fill="#4a3a2a"/><path d="M70 82 Q80 86 90 82" stroke="#5a3b2a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 82 Q120 86 130 82" stroke="#5a3b2a" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      cry:`<ellipse cx="80" cy="94" rx="9" ry="9" fill="#fff"/><ellipse cx="120" cy="94" rx="9" ry="9" fill="#fff"/><circle cx="80" cy="96" r="5.5" fill="#4a3a2a"/><circle cx="120" cy="96" r="5.5" fill="#4a3a2a"/><path d="M70 80 Q80 86 90 80" stroke="#5a3b2a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 80 Q120 86 130 80" stroke="#5a3b2a" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      angry:`<ellipse cx="80" cy="92" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="92" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="93" r="6.5" fill="#4a3a2a"/><circle cx="120" cy="93" r="6.5" fill="#4a3a2a"/><path d="M70 80 L90 88" stroke="#5a3b2a" stroke-width="3.5" stroke-linecap="round"/><path d="M130 80 L110 88" stroke="#5a3b2a" stroke-width="3.5" stroke-linecap="round"/>`,
+      sleep:`<path d="M70 95 Q80 101 90 95" stroke="#5a3b2a" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M110 95 Q120 101 130 95" stroke="#5a3b2a" stroke-width="3.5" fill="none" stroke-linecap="round"/>`,
+      star:`<ellipse cx="80" cy="92" rx="10" ry="11" fill="#fff"/><ellipse cx="120" cy="92" rx="10" ry="11" fill="#fff"/><circle cx="80" cy="93" r="7" fill="#4a3a2a"/><circle cx="120" cy="93" r="7" fill="#4a3a2a"/><path d="M80 86 L82 92 L88 93 L82 94 L80 100 L78 94 L72 93 L78 92 Z" fill="#fff"/><path d="M120 86 L122 92 L128 93 L122 94 L120 100 L118 94 L112 93 L118 92 Z" fill="#fff"/>`,
+      blush:`<ellipse cx="80" cy="94" rx="9" ry="9" fill="#fff"/><ellipse cx="120" cy="94" rx="9" ry="9" fill="#fff"/><circle cx="80" cy="97" r="6" fill="#4a3a2a"/><circle cx="120" cy="97" r="6" fill="#4a3a2a"/><circle cx="82" cy="94" r="2" fill="#fff"/><circle cx="122" cy="94" r="2" fill="#fff"/>`,
+      shyLook:`<ellipse cx="80" cy="94" rx="9" ry="9" fill="#fff"/><ellipse cx="120" cy="94" rx="9" ry="9" fill="#fff"/><circle cx="76" cy="96" r="5.5" fill="#4a3a2a"/><circle cx="116" cy="96" r="5.5" fill="#4a3a2a"/>`,
+      lookUp:`<ellipse cx="80" cy="89" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="89" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="87" r="6.5" fill="#4a3a2a"/><circle cx="120" cy="87" r="6.5" fill="#4a3a2a"/><circle cx="82" cy="84" r="2.2" fill="#fff"/><circle cx="122" cy="84" r="2.2" fill="#fff"/>`,
+      soft:`<path d="M70 92 Q80 87 90 92" stroke="#5a3b2a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M110 92 Q120 87 130 92" stroke="#5a3b2a" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+      love:`<path d="M80 86 C75 78 64 80 64 89 C64 97 80 104 80 104 C80 104 96 97 96 89 C96 80 85 78 80 86 Z" fill="#ff8fb1" transform="translate(-5,-2) scale(.8)"/><path d="M120 86 C115 78 104 80 104 89 C104 97 120 104 120 104 C120 104 136 97 136 89 C136 80 125 78 120 86 Z" fill="#ff8fb1" transform="translate(5,-2) scale(.8)"/>`,
+      spicy:`<ellipse cx="80" cy="90" rx="9" ry="11" fill="#fff"/><ellipse cx="120" cy="90" rx="9" ry="11" fill="#fff"/><circle cx="80" cy="91" r="6.5" fill="#4a3a2a"/><circle cx="120" cy="91" r="6.5" fill="#4a3a2a"/><circle cx="82" cy="88" r="2.2" fill="#fff"/><circle cx="122" cy="88" r="2.2" fill="#fff"/>`,
+      bitter:`<ellipse cx="80" cy="94" rx="8" ry="8" fill="#fff"/><ellipse cx="120" cy="94" rx="8" ry="8" fill="#fff"/><circle cx="80" cy="95" r="5" fill="#4a3a2a"/><circle cx="120" cy="95" r="5" fill="#4a3a2a"/>`,
+      sour:`<ellipse cx="80" cy="94" rx="9" ry="9" fill="#fff"/><ellipse cx="120" cy="94" rx="9" ry="9" fill="#fff"/><circle cx="80" cy="95" r="6" fill="#4a3a2a"/><circle cx="120" cy="95" r="6" fill="#4a3a2a"/>`,
+      cold:`<ellipse cx="80" cy="94" rx="7" ry="8" fill="#fff"/><ellipse cx="120" cy="94" rx="7" ry="8" fill="#fff"/><circle cx="80" cy="95" r="5" fill="#4a3a2a"/><circle cx="120" cy="95" r="5" fill="#4a3a2a"/>`,
+      hot:`<ellipse cx="80" cy="92" rx="9" ry="10" fill="#fff"/><ellipse cx="120" cy="92" rx="9" ry="10" fill="#fff"/><circle cx="80" cy="92" r="6.5" fill="#4a3a2a"/><circle cx="120" cy="92" r="6.5" fill="#4a3a2a"/>`
+    },
+    lines: {
+      idle:["今天也要加油！","……嗯！","天气真好！","……诶嘿。","要开心呀。","……我在呢！","……来拍张照吧。","……记录一下。","……生活好美。","……一起努力！"],
+      tap:["诶？","……怎么啦。","嗯嗯！","……你好呀。","……戳我干嘛。","……嘿！","……在的在的。"],
+      head:["……嘿嘿。","……好舒服。","……再摸摸。","……谢谢。","……开心。"],
+      faceTap:["……别戳啦。","……痒。","……嘿嘿。","……你在干嘛。"],
+      body:["……诶。","……怎么啦。","……嗯？","……别乱碰。"],
+      feed:["……谢谢！","……好好吃！","……你真好。","……喜欢！","……再来一份。"],
+      play:["……好啊！","……一起玩！","……开心！","……耶！","……再来一次。"],
+      sleep:["……晚安。","……困啦。","……好梦。"],
+      hungry:["……有点饿。","……我们去吃吧。","……肚子叫了。","……好饿呀。"],
+      sad:["……嗯……","……没事的。","……会好起来的。","……你别担心。","……我在。"],
+      warm:["……谢谢你一直陪着我。","……认识你真好。","……我们一直做朋友吧。","……开心。","……嗯！"],
+      scene:{
+        dorm:["……宿舍好温馨。","……要不要一起收拾。","……嗯！"],
+        class:["……要认真听课哦。","……加油！","……笔记借我看看。"],
+        cafe:["……这杯好喝。","……拍一张。","……嗯！"],
+        park:["……风景好好。","……拍照！","……来。"],
+        night:["……晚安啦。","……今天也辛苦了。","……好梦。"],
+        beach:["……海！","……好开心！","……拍照拍照！"]
+      }
+    },
+    angry: {
+      lines:["……生气了。","……哼。","……你别这样。","……我不开心。","……走开。","……有点失望。"],
+      overTap:["……够了。","……别戳了。","……真的生气了。"],
+      calm:["……算了。","……原谅你了。","……下次注意。"],
+      soft:["……其实我没事。","……嗯。","……知道了。"],
+      rage:["……你太过分了。","……我不想理你。","……哼。"],
+      throw:['📷','📕','🧸']
+    },
+    sadLines: {
+      lines:["……","……你为什么这样。","……我做错了吗。","……原来你是这样想的。","……有点难过。"],
+      cry:["……（低头）","……呜。","……不想说话。","……你走。"],
+      recover:["……嗯，好一点了。","……我没事。","……嗯。"],
+      leave:["……我先走了。","……让我静静。","……别找我。"],
+      vanish:["……我先走了。","……你保重。","……嗯。"]
+    },
+    coquettish:["……陪我一下嘛。","……你在吗。","……嘿。","……来拍照。","……一起玩。","……嗯！"],
+    requests:[
+      { text:"……帮我拍张照！", emo:'📷', want:'camera', love:6 },
+      { text:"……给我买奶茶。", emo:'🧋', want:'milktea', love:4 },
+      { text:"……夸夸我。", emo:'💬', want:'praise', love:5 },
+      { text:"……陪我聊会。", emo:'💬', want:'chat', love:3 },
+      { text:"……摸摸头。", emo:'🫶', want:'pat', love:4 },
+      { text:"……给我朵花。", emo:'🌷', want:'flower', love:5 },
+      { text:"……饿了。", emo:'🍰', want:'food', love:4 }
+    ],
+    topics:[
+      { minLv:0, emo:'👋', q:'你叫什么名字？', a:['……陈碧娴。','……叫我碧娴就好。','……嗯！'], face:'happy', love:3 },
+      { minLv:0, emo:'📷', q:'你喜欢拍照？', a:['……嗯！','……记录生活嘛。','……来，你也拍一张。'], face:'happy', love:4 },
+      { minLv:1, emo:'☀️', q:'你为什么这么阳光？', a:['……因为生活很美好呀。','……开心也是一天。','……你也试试。'], face:'happy', love:4 },
+      { minLv:1, emo:'💼', q:'你很有责任心？', a:['……嗯。','……该做的要做好。','……放心交给我。'], face:'normal', love:4 },
+      { minLv:2, emo:'🏠', q:'我们认识多久了？', a:['……3年啦！','……时间好快。','……谢谢你。'], face:'happy', love:8 },
+      { minLv:3, emo:'👑', q:'邱禧悦怎么样？', a:['……邱邱很好。','……她嘴硬心软。','……嘿嘿。'], face:'soft', love:6 },
+      { minLv:3, emo:'🙂', q:'何芬怎么样？', a:['……荷包蛋好安静。','……我喜欢她。','……嗯！'], face:'soft', love:6 },
+      { minLv:3, emo:'😏', q:'杨颖怎么样？', a:['……杨好有梗。','……但她社恐。','……嘿嘿。'], face:'soft', love:6 },
+      { minLv:4, emo:'💗', q:'你喜欢我吗？', a:['……喜欢呀！','……你很好。','……嗯！'], face:'blush', love:12 }
     ]
   }
 };
+
+/* ================= 称呼系统 ================= */
+function qiuCallHe() {
+  const s = getState('qiu');
+  if (s.angry >= 60 || s.sad >= 50 || s.mood < 40) return '何芬';
+  if (s.mood >= 60) return '河粉';
+  return '何芬';
+}
+function yangCallHe() {
+  const s = getState('he');
+  if (s.angry >= 50 || s.sad >= 50 || s.mood < 30) return '臭芬';
+  return '芬';
+}
+function heCallYang() { return '咩'; }
+function heCallQiu() { return '老大'; }
+function qiuCallYang() {
+  const s = getState('qiu');
+  if (s.angry >= 60 || s.sad >= 50 || s.mood < 40) return '杨颖';
+  return '影';
+}
+function yangCallQiu() { return '老大'; }
+// 陈碧娴的称呼
+function chenCallHe() { return '荷包蛋'; }
+function chenCallQiu() { return '邱邱'; }
+function chenCallYang() { return '杨'; }
+// 其他三人对陈碧娴的称呼：统一 BX
+function qiuCallChen() { return 'BX'; }
+function heCallChen() { return 'BX'; }
+function yangCallChen() { return 'BX'; }
 
 /* ================= 发型 ================= */
 const HAIR = {
@@ -470,63 +664,18 @@ const GLASSES = {
   sun:  { name:'墨镜', emo:'🕶️', svg:`<path d="M64 84 Q80 80 94 84 L94 98 Q80 104 64 98 Z" fill="#3a3a4a"/><path d="M106 84 Q120 80 136 84 L136 98 Q120 104 106 98 Z" fill="#3a3a4a"/><path d="M94 88 L106 88" stroke="#3a3a4a" stroke-width="3"/><path d="M64 88 L54 86" stroke="#3a3a4a" stroke-width="2.5"/><path d="M136 88 L146 86" stroke="#3a3a4a" stroke-width="2.5"/>` }
 };
 
-/* ================= 衣服（穿好，不露身体） ================= */
-/* 关键：衣服覆盖整个肩膀到半圆底座，不留空隙 */
+/* ================= 衣服 ================= */
 const CLOTHES = {
-  basic:  { name:'白T',   emo:'👕', svg:`<path d="M52 172 Q56 116 100 108 Q144 116 148 172 Q148 178 100 178 Q52 178 52 172 Z" fill="#ffffff"/>
-    <path d="M100 108 Q92 122 92 130 Q100 136 108 130 Q108 122 100 108 Z" fill="#f0f0f5"/>
-    <path d="M86 110 Q100 118 114 110" fill="none" stroke="#e0e0e8" stroke-width="2" stroke-linecap="round"/>
-    <path d="M52 172 Q56 116 100 108" fill="none" stroke="#e8e8f0" stroke-width="2"/>
-    <path d="M148 172 Q144 116 100 108" fill="none" stroke="#e8e8f0" stroke-width="2"/>` },
-  school: { name:'校服',   emo:'🎽', svg:`<path d="M50 172 Q54 114 100 106 Q146 114 150 172 Q150 178 100 178 Q50 178 50 172 Z" fill="#eef3fa"/>
-    <path d="M100 106 L82 138 L100 148 L118 138 Z" fill="#fff"/>
-    <path d="M100 106 L100 148" stroke="#cdd8e6" stroke-width="1.5"/>
-    <path d="M50 172 Q54 114 100 106" fill="none" stroke="#cdd8e6" stroke-width="2"/>
-    <path d="M150 172 Q146 114 100 106" fill="none" stroke="#cdd8e6" stroke-width="2"/>
-    <path d="M80 108 L100 122 L120 108" fill="none" stroke="#7fa8d8" stroke-width="3" stroke-linecap="round"/>` },
-  hoodie: { name:'卫衣',   emo:'🧥', svg:`<path d="M48 172 Q52 112 100 104 Q148 112 152 172 Q152 178 100 178 Q48 178 48 172 Z" fill="#ffc7d9"/>
-    <path d="M100 104 Q88 120 88 134 Q100 142 112 134 Q112 120 100 104 Z" fill="#ffb0c9"/>
-    <path d="M90 134 L90 152 M110 134 L110 152" stroke="#ff9ab8" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M48 172 Q52 112 100 104" fill="none" stroke="#ffb0c9" stroke-width="2"/>
-    <path d="M152 172 Q148 112 100 104" fill="none" stroke="#ffb0c9" stroke-width="2"/>` },
-  dress:  { name:'裙子',   emo:'👗', svg:`<path d="M52 178 Q54 118 100 108 Q146 118 148 178 Z" fill="#c9b6ff"/>
-    <path d="M56 168 Q100 158 144 168" stroke="#b9a1ff" stroke-width="3" fill="none"/>
-    <path d="M100 108 L88 132 L100 142 L112 132 Z" fill="#fff"/>
-    <path d="M86 110 Q100 120 114 110" fill="none" stroke="#9d82ff" stroke-width="3" stroke-linecap="round"/>` },
-  kimono: { name:'和风',   emo:'🎎', svg:`<path d="M50 172 Q54 114 100 106 Q146 114 150 172 Q150 178 100 178 Q50 178 50 172 Z" fill="#ffe0e6"/>
-    <path d="M100 106 L78 138 L100 150 L122 138 Z" fill="#ff9eb5"/>
-    <path d="M100 106 L100 150" stroke="#ff7fa0" stroke-width="2"/>
-    <path d="M54 160 Q100 148 146 160" stroke="#ffb8c9" stroke-width="4" fill="none"/>
-    <path d="M50 172 Q54 114 100 106" fill="none" stroke="#ffb8c9" stroke-width="2"/>
-    <path d="M150 172 Q146 114 100 106" fill="none" stroke="#ffb8c9" stroke-width="2"/>` },
-  pjs:    { name:'睡衣',   emo:'🛌', svg:`<path d="M50 172 Q54 112 100 104 Q146 112 150 172 Q150 178 100 178 Q50 178 50 172 Z" fill="#d4e8ff"/>
-    <path d="M100 104 L86 130 L100 140 L114 130 Z" fill="#b8d4f0"/>
-    <circle cx="72" cy="140" r="3" fill="#ffd6e0"/>
-    <circle cx="128" cy="140" r="3" fill="#ffd6e0"/>
-    <circle cx="82" cy="160" r="3" fill="#ffd6e0"/>
-    <circle cx="118" cy="160" r="3" fill="#ffd6e0"/>
-    <path d="M50 172 Q54 112 100 104" fill="none" stroke="#b8d4f0" stroke-width="2"/>
-    <path d="M150 172 Q146 112 100 104" fill="none" stroke="#b8d4f0" stroke-width="2"/>` },
-  qipao:  { name:'旗袍',   emo:'🧧', svg:`<path d="M52 178 Q54 118 100 108 Q146 118 148 178 Z" fill="#c9414d"/>
-    <path d="M100 108 L90 132 L100 140 L110 132 Z" fill="#a8323d"/>
-    <circle cx="100" cy="130" r="3" fill="#ffd166"/>
-    <circle cx="100" cy="148" r="3" fill="#ffd166"/>
-    <path d="M70 160 Q100 152 130 160" stroke="#ffd166" stroke-width="2" fill="none"/>
-    <path d="M100 108 Q96 120 100 134" stroke="#a8323d" stroke-width="2" fill="none"/>` },
-  lolita: { name:'洛丽塔', emo:'🎀', svg:`<path d="M50 178 Q52 116 100 106 Q148 116 150 178 Z" fill="#f5e6ff"/>
-    <path d="M54 168 Q100 158 146 168" stroke="#e0c8ff" stroke-width="3" fill="none"/>
-    <path d="M100 106 L88 130 L100 140 L112 130 Z" fill="#fff"/>
-    <path d="M74 122 Q100 114 126 122" stroke="#c9a1ff" stroke-width="3" fill="none" stroke-linecap="round"/>
-    <circle cx="80" cy="156" r="2.5" fill="#ffb3d9"/>
-    <circle cx="100" cy="156" r="2.5" fill="#ffb3d9"/>
-    <circle cx="120" cy="156" r="2.5" fill="#ffb3d9"/>
-    <path d="M52 178 L48 188 M148 178 L152 188" stroke="#e0c8ff" stroke-width="3"/>` },
-  yukata: { name:'浴衣',   emo:'🎐', svg:`<path d="M50 172 Q54 114 100 106 Q146 114 150 172 Q150 178 100 178 Q50 178 50 172 Z" fill="#a8d8ea"/>
-    <path d="M100 106 L80 138 L100 148 L120 138 Z" fill="#7fb8d8"/>
-    <path d="M100 106 L100 148" stroke="#5a9ac0" stroke-width="2"/>
-    <path d="M54 160 Q100 150 146 160" stroke="#ffd166" stroke-width="4" fill="none"/>
-    <path d="M50 172 Q54 114 100 106" fill="none" stroke="#7fb8d8" stroke-width="2"/>
-    <path d="M150 172 Q146 114 100 106" fill="none" stroke="#7fb8d8" stroke-width="2"/>` }
+  basic:  { name:'白T', emo:'👕', svg:`<path d="M52 172 Q56 116 100 108 Q144 116 148 172 Q148 178 100 178 Q52 178 52 172 Z" fill="#ffffff"/><path d="M100 108 Q92 122 92 130 Q100 136 108 130 Q108 122 100 108 Z" fill="#f0f0f5"/><path d="M86 110 Q100 118 114 110" fill="none" stroke="#e0e0e8" stroke-width="2" stroke-linecap="round"/>` },
+  school: { name:'校服', emo:'🎽', svg:`<path d="M50 172 Q54 114 100 106 Q146 114 150 172 Q150 178 100 178 Q50 178 50 172 Z" fill="#eef3fa"/><path d="M100 106 L82 138 L100 148 L118 138 Z" fill="#fff"/><path d="M100 106 L100 148" stroke="#cdd8e6" stroke-width="1.5"/><path d="M80 108 L100 122 L120 108" fill="none" stroke="#7fa8d8" stroke-width="3" stroke-linecap="round"/>` },
+  hoodie: { name:'卫衣', emo:'🧥', svg:`<path d="M48 172 Q52 112 100 104 Q148 112 152 172 Q152 178 100 178 Q48 178 48 172 Z" fill="#ffc7d9"/><path d="M100 104 Q88 120 88 134 Q100 142 112 134 Q112 120 100 104 Z" fill="#ffb0c9"/><path d="M90 134 L90 152 M110 134 L110 152" stroke="#ff9ab8" stroke-width="2.5" stroke-linecap="round"/>` },
+  dress:  { name:'裙子', emo:'👗', svg:`<path d="M52 178 Q54 118 100 108 Q146 118 148 178 Z" fill="#c9b6ff"/><path d="M56 168 Q100 158 144 168" stroke="#b9a1ff" stroke-width="3" fill="none"/><path d="M100 108 L88 132 L100 142 L112 132 Z" fill="#fff"/>` },
+  kimono: { name:'和风', emo:'🎎', svg:`<path d="M50 172 Q54 114 100 106 Q146 114 150 172 Q150 178 100 178 Q50 178 50 172 Z" fill="#ffe0e6"/><path d="M100 106 L78 138 L100 150 L122 138 Z" fill="#ff9eb5"/><path d="M100 106 L100 150" stroke="#ff7fa0" stroke-width="2"/><path d="M54 160 Q100 148 146 160" stroke="#ffb8c9" stroke-width="4" fill="none"/>` },
+  pjs:    { name:'睡衣', emo:'🛌', svg:`<path d="M50 172 Q54 112 100 104 Q146 112 150 172 Q150 178 100 178 Q50 178 50 172 Z" fill="#d4e8ff"/><path d="M100 104 L86 130 L100 140 L114 130 Z" fill="#b8d4f0"/><circle cx="72" cy="140" r="3" fill="#ffd6e0"/><circle cx="128" cy="140" r="3" fill="#ffd6e0"/><circle cx="82" cy="160" r="3" fill="#ffd6e0"/><circle cx="118" cy="160" r="3" fill="#ffd6e0"/>` },
+  qipao:  { name:'旗袍', emo:'🧧', svg:`<path d="M52 178 Q54 118 100 108 Q146 118 148 178 Z" fill="#c9414d"/><path d="M100 108 L90 132 L100 140 L110 132 Z" fill="#a8323d"/><circle cx="100" cy="130" r="3" fill="#ffd166"/><circle cx="100" cy="148" r="3" fill="#ffd166"/><path d="M70 160 Q100 152 130 160" stroke="#ffd166" stroke-width="2" fill="none"/>` },
+  lolita: { name:'洛丽塔', emo:'🎀', svg:`<path d="M50 178 Q52 116 100 106 Q148 116 150 178 Z" fill="#f5e6ff"/><path d="M54 168 Q100 158 146 168" stroke="#e0c8ff" stroke-width="3" fill="none"/><path d="M100 106 L88 130 L100 140 L112 130 Z" fill="#fff"/><path d="M74 122 Q100 114 126 122" stroke="#c9a1ff" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="80" cy="156" r="2.5" fill="#ffb3d9"/><circle cx="100" cy="156" r="2.5" fill="#ffb3d9"/><circle cx="120" cy="156" r="2.5" fill="#ffb3d9"/>` },
+  yukata: { name:'浴衣', emo:'🎐', svg:`<path d="M50 172 Q54 114 100 106 Q146 114 150 172 Q150 178 100 178 Q50 178 50 172 Z" fill="#a8d8ea"/><path d="M100 106 L80 138 L100 148 L120 138 Z" fill="#7fb8d8"/><path d="M100 106 L100 148" stroke="#5a9ac0" stroke-width="2"/><path d="M54 160 Q100 150 146 160" stroke="#ffd166" stroke-width="4" fill="none"/>` },
+  cardigan: { name:'开衫', emo:'🧶', svg:`<path d="M50 172 Q54 114 100 106 Q146 114 150 172 Q150 178 100 178 Q50 178 50 172 Z" fill="#f5e6d0"/><path d="M100 106 L100 178" stroke="#8a6a4a" stroke-width="4"/><path d="M60 120 L60 170 M140 120 L140 170" stroke="#8a6a4a" stroke-width="6"/><path d="M100 106 L85 130 L100 140 L115 130 Z" fill="#fff"/>` }
 };
 
 /* ================= 头饰 ================= */
@@ -535,7 +684,7 @@ const HEADWEAR = {
   bow:    { name:'蝴蝶结', emo:'🎀', svg:`<path d="M60 30 Q50 20 60 12 Q72 18 68 30 Z" fill="#ff9ec4"/><path d="M76 30 Q86 20 76 12 Q64 18 68 30 Z" fill="#ff9ec4"/><circle cx="68" cy="22" r="4" fill="#ff6b9d"/>` },
   clip:   { name:'发卡', emo:'📎', svg:`<rect x="118" y="28" width="26" height="7" rx="3.5" fill="#ffd166"/><circle cx="131" cy="31.5" r="3" fill="#ff8fb1"/>` },
   catEar: { name:'猫耳', emo:'🐱', svg:`<path d="M62 20 L58 -6 L80 10 Z" fill="#2b2b33"/><path d="M66 16 L63 0 L76 10 Z" fill="#ffb3c8"/><path d="M138 20 L142 -6 L120 10 Z" fill="#2b2b33"/><path d="M134 16 L137 0 L124 10 Z" fill="#ffb3c8"/>` },
-  flower: { name:'花环', emo:'🌸', svg:`<circle cx="52" cy="28" r="5" fill="#ffd6e0"/><circle cx="52" cy="28" r="2" fill="#ffb3c8"/><circle cx="66" cy="16" r="5" fill="#fff0b3"/><circle cx="66" cy="16" r="2" fill="#ffd166"/><circle cx="82" cy="12" r="5" fill="#c8e6ff"/><circle cx="82" cy="12" r="2" fill="#7fb8e0"/><circle cx="118" cy="12" r="5" fill="#ffd6e0"/><circle cx="118" cy="12" r="2" fill="#ffb3c8"/><circle cx="134" cy="16" r="5" fill="#fff0b3"/><circle cx="134" cy="16" r="2" fill="#ffd166"/><circle cx="148" cy="28" r="5" fill="#c8e6ff"/><circle cx="148" cy="28" r="2" fill="#7fb8e0"/>` },
+  flower: { name:'花环', emo:'🌸', svg:`<circle cx="52" cy="28" r="5" fill="#ffd6e0"/><circle cx="66" cy="16" r="5" fill="#fff0b3"/><circle cx="82" cy="12" r="5" fill="#c8e6ff"/><circle cx="118" cy="12" r="5" fill="#ffd6e0"/><circle cx="134" cy="16" r="5" fill="#fff0b3"/><circle cx="148" cy="28" r="5" fill="#c8e6ff"/>` },
   ribbon: { name:'发带', emo:'🎗️', svg:`<path d="M52 22 Q100 8 148 22" stroke="#a8d8ea" stroke-width="6" fill="none" stroke-linecap="round"/><circle cx="100" cy="14" r="5" fill="#ffb3c8"/>` },
   crown:  { name:'皇冠', emo:'👑', svg:`<path d="M66 16 L74 0 L86 14 L100 -4 L114 14 L126 0 L134 16 Z" fill="#ffd166"/><circle cx="74" cy="0" r="2.5" fill="#ff8fb1"/><circle cx="100" cy="-4" r="3" fill="#ff6b9d"/><circle cx="126" cy="0" r="2.5" fill="#ff8fb1"/><rect x="64" y="14" width="72" height="6" rx="3" fill="#e8b84a"/>` },
   bunny:  { name:'兔耳', emo:'🐰', svg:`<ellipse cx="74" cy="0" rx="9" ry="22" fill="#fff" stroke="#e8e8f0" stroke-width="1.5"/><ellipse cx="74" cy="2" rx="5" ry="15" fill="#ffd6e0"/><ellipse cx="126" cy="0" rx="9" ry="22" fill="#fff" stroke="#e8e8f0" stroke-width="1.5"/><ellipse cx="126" cy="2" rx="5" ry="15" fill="#ffd6e0"/>` },
@@ -544,41 +693,272 @@ const HEADWEAR = {
 
 /* ================= 礼物 ================= */
 const ITEMS = {
-  flower:  { name:'花',   emo:'🌷', lines:['……谢谢。','好看。','……收下了。','……嗯。'], face:'blush', love:5, mood:10, calm:20 },
-  milktea: { name:'奶茶', emo:'🧋', lines:['……你懂我。','好喝。','珍珠多吗。','……嗯，不错。'], face:'happy', love:6, mood:12, food:15, calm:22 },
-  gift:    { name:'礼物', emo:'🎁', lines:['……什么啊。','给我的？','……打开了哦。','……嗯。'], face:'star', love:10, mood:15, calm:30 },
-  cake:    { name:'蛋糕', emo:'🍰', lines:['……甜的。','今天什么日子。','……好吃。','……嗯。'], face:'happy', love:5, mood:10, food:20, calm:25 },
-  star:    { name:'星星', emo:'⭐', lines:['……哪来的。','亮亮的。','……谢谢。','……嗯。'], face:'lookUp', love:8, mood:12, calm:20 },
-  cat:     { name:'小猫', emo:'🐱', lines:['……好可爱。','可以摸吗。','……它叫什么。','……嗯。'], face:'soft', love:12, mood:18, calm:28 },
-  ring:    { name:'戒指', emo:'💍', lines:['……这个……','……太贵重了。','……我收下了。','……嗯。'], face:'shyLook', love:20, mood:20, calm:35 },
-  letter:  { name:'信',   emo:'💌', lines:['……写给我的？','……我看一下。','……（认真读）','……嗯。'], face:'shyLook', love:15, mood:15, calm:30 },
-  book:    { name:'书',   emo:'📖', lines:['……什么书。','……我看看。','……谢谢。','……嗯，好看。'], face:'soft', love:8, mood:12, calm:22 },
-  music:   { name:'音乐盒', emo:'🎵', lines:['……好听的。','……再放一次。','……谢谢。','……嗯。'], face:'soft', love:10, mood:15, calm:25 },
-  scarf:   { name:'围巾', emo:'🧣', lines:['……暖的。','……织的？','……谢谢。','……嗯。'], face:'blush', love:12, mood:18, calm:28 },
-  teddy:   { name:'小熊', emo:'🧸', lines:['……好软。','……给我的？','……谢谢。','……嗯。'], face:'love', love:14, mood:20, calm:30 },
-  candy:   { name:'糖果', emo:'🍬', lines:['……甜的。','……谢谢。','……再来一颗。','……嗯。'], face:'happy', love:4, mood:8, food:5, calm:15 },
-  juice:   { name:'果汁', emo:'🧃', lines:['……渴了。','……谢谢。','……好喝。','……嗯。'], face:'happy', love:5, mood:10, food:12, calm:18 },
-  snack:   { name:'零食', emo:'🍪', lines:['……饿了。','……谢谢。','……好吃。','……嗯。'], face:'happy', love:5, mood:10, food:18, calm:18 },
-  balloon: { name:'气球', emo:'🎈', lines:['……幼稚。','……但还行。','……谢谢。','……嗯。'], face:'happy', love:6, mood:12, calm:18 }
+  flower:  { name:'花', emo:'🌷', lines:['……谢谢。','好看。','……收下了。'], face:'blush', love:5, mood:10, calm:20 },
+  milktea: { name:'奶茶', emo:'🧋', lines:['……你懂我。','好喝。','珍珠多吗。'], face:'happy', love:6, mood:12, food:15, calm:22 },
+  gift:    { name:'礼物', emo:'🎁', lines:['……什么啊。','给我的？','……打开了哦。'], face:'star', love:10, mood:15, calm:30 },
+  cake:    { name:'蛋糕', emo:'🍰', lines:['……甜的。','今天什么日子。','……好吃。'], face:'happy', love:5, mood:10, food:20, calm:25 },
+  star:    { name:'星星', emo:'⭐', lines:['……哪来的。','亮亮的。','……谢谢。'], face:'lookUp', love:8, mood:12, calm:20 },
+  cat:     { name:'小猫', emo:'🐱', lines:['……好可爱。','可以摸吗。','……它叫什么。'], face:'soft', love:12, mood:18, calm:28 },
+  ring:    { name:'戒指', emo:'💍', lines:['……这个……','……太贵重了。','……我收下了。'], face:'shyLook', love:20, mood:20, calm:35 },
+  letter:  { name:'信', emo:'💌', lines:['……写给我的？','……我看一下。','……（认真读）'], face:'shyLook', love:15, mood:15, calm:30 },
+  book:    { name:'书', emo:'📖', lines:['……什么书。','……我看看。','……谢谢。'], face:'soft', love:8, mood:12, calm:22 },
+  music:   { name:'音乐盒', emo:'🎵', lines:['……好听的。','……再放一次。','……谢谢。'], face:'soft', love:10, mood:15, calm:25 },
+  scarf:   { name:'围巾', emo:'🧣', lines:['……暖的。','……织的？','……谢谢。'], face:'blush', love:12, mood:18, calm:28 },
+  teddy:   { name:'小熊', emo:'🧸', lines:['……好软。','……给我的？','……谢谢。'], face:'love', love:14, mood:20, calm:30 },
+  camera:  { name:'相机', emo:'📷', lines:['……谢谢！','……我要拍你！','……茄子！'], face:'happy', love:10, mood:18, calm:25, flash:true },
+  candy:   { name:'糖果', emo:'🍬', lines:['……甜的。','……谢谢。','……再来一颗。'], face:'happy', love:4, mood:8, food:5, calm:15 },
+  juice:   { name:'果汁', emo:'🧃', lines:['……渴了。','……谢谢。','……好喝。'], face:'happy', love:5, mood:10, food:12, calm:18 },
+  snack:   { name:'零食', emo:'🍪', lines:['……饿了。','……谢谢。','……好吃。'], face:'happy', love:5, mood:10, food:18, calm:18 },
+  balloon: { name:'气球', emo:'🎈', lines:['……幼稚。','……但还行。','……谢谢。'], face:'happy', love:6, mood:12, calm:18 }
+};
+
+/* ================= 食物 ================= */
+const FOODS = {
+  chili:   { name:'辣椒', emo:'🌶️', 
+    reaction: {
+      qiu:  { lines:['……辣死了！','……你故意的吧。','……水！'], face:'spicy', mood:-10, sad:15, angry:10 },
+      he:   { lines:['……好辣……','……呜。','……水……'], face:'spicy', mood:-8, sad:10 },
+      yang: { lines:['……啊啊啊。','……我不行了。','……你干嘛。'], face:'spicy', mood:-10, sad:12, angry:8 },
+      chen: { lines:['……好辣！','……但是好吃！','……再来一口？'], face:'spicy', mood:-3, sad:2 }
+    }
+  },
+  bitter:  { name:'苦瓜', emo:'🥒',
+    reaction: {
+      qiu:  { lines:['……好苦。','……这什么。','……你吃。'], face:'bitter', mood:-8, sad:8, angry:6 },
+      he:   { lines:['……苦。','……嗯。','……还可以。'], face:'bitter', mood:-5 },
+      yang: { lines:['……我不吃。','……拿走。','……恶心。'], face:'bitter', mood:-10, sad:10, angry:8 },
+      chen: { lines:['……有点苦。','……但健康！','……嗯！'], face:'bitter', mood:-2 }
+    }
+  },
+  lemon:   { name:'柠檬', emo:'🍋',
+    reaction: {
+      qiu:  { lines:['……酸死了。','……你等着。','……脸都皱了。'], face:'sour', mood:-6, sad:5, angry:8 },
+      he:   { lines:['……好酸。','……嗯。','……还可以。'], face:'sour', mood:-4 },
+      yang: { lines:['……酸。','……不想吃。','……你吃。'], face:'sour', mood:-6, sad:5 },
+      chen: { lines:['……好酸！','……但是提神！','……哈哈。'], face:'sour', mood:3 }
+    }
+  },
+  candy:   { name:'糖', emo:'🍬',
+    reaction: {
+      qiu:  { lines:['……甜的。','……还行。','……谢谢。'], face:'happy', mood:8 },
+      he:   { lines:['……甜。','……喜欢。','……谢谢。'], face:'happy', mood:8 },
+      yang: { lines:['……甜。','……再来一颗。','……嗯。'], face:'happy', mood:8 },
+      chen: { lines:['……好甜！','……谢谢！','……开心！'], face:'happy', mood:12 }
+    }
+  },
+  icecream:{ name:'冰淇淋', emo:'🍦',
+    reaction: {
+      qiu:  { lines:['……凉。','……还行。','……谢谢。'], face:'cold', mood:5, temp:-10 },
+      he:   { lines:['……好凉。','……喜欢。','……嗯。'], face:'cold', mood:6, temp:-10 },
+      yang: { lines:['……凉。','……舒服。','……嗯。'], face:'cold', mood:6, temp:-10 },
+      chen: { lines:['……好凉！','……好吃！','……耶！'], face:'cold', mood:10, temp:-10 }
+    }
+  },
+  hotpot:  { name:'火锅', emo:'🍲',
+    reaction: {
+      qiu:  { lines:['……好烫。','……还行。','……谢谢。'], face:'hot', mood:8, temp:15 },
+      he:   { lines:['……好烫。','……喜欢。','……嗯。'], face:'hot', mood:8, temp:15 },
+      yang: { lines:['……烫。','……好吃。','……嗯。'], face:'hot', mood:8, temp:15 },
+      chen: { lines:['……好烫！','……好吃！','……一起！'], face:'hot', mood:12, temp:15 }
+    }
+  }
 };
 
 /* ================= 欺负 ================= */
 const MEAN = [
-  { emo:'🧠', q:'你好笨啊',   sad:25, face:'sad', reply:['……','……你再说一遍。','……我记着了。','……哼。'] },
-  { emo:'😤', q:'你好烦',     sad:20, face:'angry', reply:['……','……你才烦。','……哼。','……不理你了。'] },
-  { emo:'⚽', q:'拿球砸她',   sad:30, face:'cry', reply:['……呜。','……好痛。','……你完了。','……哼。'] },
-  { emo:'😝', q:'嘲笑她',     sad:22, face:'angry', reply:['……','……笑什么笑。','……不理你了。','……哼。'] },
-  { emo:'🙄', q:'说她丑',     sad:28, face:'cry', reply:['……','……你眼光有问题。','……（转身）','……哼。'] },
-  { emo:'💔', q:'说讨厌她',   sad:35, face:'cry', reply:['……','……好。','……那我走。','……嗯。'] },
-  { emo:'🚶', q:'不理她',     sad:18, face:'sad', reply:['……','……你去哪。','……哼。','……嗯。'] },
-  { emo:'🎭', q:'骗她',       sad:26, face:'cry', reply:['……','……你骗我。','……记你一辈子。','……哼。'] },
-  { emo:'🗯️', q:'凶她',       sad:24, face:'cry', reply:['……','……你凶我。','……（眼眶红）','……嗯。'] },
-  { emo:'💥', q:'摔她东西',   sad:32, face:'cry', reply:['……！','……那是我收拾好的……','……（捡起来）','……哼。'] },
-  { emo:'🥀', q:'说她没用',   sad:30, face:'cry', reply:['……','……你凭什么。','……（沉默）','……嗯。'] },
-  { emo:'😶', q:'冷落她',     sad:20, face:'sad', reply:['……','……哦。','……（安静）','……嗯。'] },
-  { emo:'💬', q:'说她烦人',   sad:23, face:'angry', reply:['……','……你才烦。','……哼。','……不理你了。'] },
-  { emo:'👎', q:'说讨厌她',   sad:34, face:'cry', reply:['……','……好。','……我记住了。','……嗯。'] }
+  { emo:'🧠', q:'你好笨啊', sad:25, face:'sad', reply:['……','……你再说一遍。','……我记着了。','……哼。'] },
+  { emo:'😤', q:'你好烦', sad:20, face:'angry', reply:['……','……你才烦。','……哼。','……不理你了。'] },
+  { emo:'⚽', q:'拿球砸她', sad:30, face:'cry', reply:['……呜。','……好痛。','……你完了。','……哼。'] },
+  { emo:'🙄', q:'说她丑', sad:28, face:'cry', reply:['……','……你眼光有问题。','……（转身）','……哼。'] },
+  { emo:'💔', q:'说讨厌她', sad:35, face:'cry', reply:['……','……好。','……那我走。','……嗯。'] },
+  { emo:'🎭', q:'骗她', sad:26, face:'cry', reply:['……','……你骗我。','……记你一辈子。','……哼。'] },
+  { emo:'💥', q:'摔她东西', sad:32, face:'cry', reply:['……！','……那是我收拾好的……','……（捡起来）','……哼。'] },
+  { emo:'🥀', q:'说她没用', sad:30, face:'cry', reply:['……','……你凭什么。','……（沉默）','……嗯。'] },
+  { emo:'😶', q:'冷落她', sad:20, face:'sad', reply:['……','……哦。','……（安静）','……嗯。'] }
 ];
+
+/* ============================================================
+   打架系统
+   ============================================================ */
+const FIGHTS = {
+  qiu_he: [
+    { a:'qiu', b:'he', lines:[
+      ['……河粉，你又不收拾。','……我忘了。'],
+      ['……说了多少次。','……对不起嘛。'],
+      ['……哼。','……（低头）'],
+      ['……算了。','……嗯。']
+    ]},
+    { a:'qiu', b:'he', lines:[
+      ['……你昨天去哪了。','……图书馆。'],
+      ['……骗人。','……真的。'],
+      ['……我不信。','……（委屈）'],
+      ['……哼。','……你凶我。']
+    ]}
+  ],
+  qiu_yang: [
+    { a:'qiu', b:'yang', lines:[
+      ['……杨颖，你又躺着。','……我累。'],
+      ['……起来。','……不要。'],
+      ['……你是不是又熬夜了。','……没有。'],
+      ['……撒谎。','……哼。']
+    ]},
+    { a:'yang', b:'qiu', lines:[
+      ['……老大你好烦。','……你说什么。'],
+      ['……我说你好烦。','……你再说一遍。'],
+      ['……（闭嘴）','……哼。'],
+      ['……对不起。','……这还差不多。']
+    ]}
+  ],
+  qiu_chen: [
+    { a:'qiu', b:'chen', lines:[
+      ['……BX，别拍我了。','……就一张嘛。'],
+      ['……不行。','……求你啦。'],
+      ['……唉。','……嘿嘿。'],
+      ['……最后一张。','……好！']
+    ]}
+  ],
+  he_yang: [
+    { a:'yang', b:'he', lines:[
+      ['……芬，你太软了。','……嗯。'],
+      ['……你要学会拒绝。','……我知道。'],
+      ['……哎。','……嗯。'],
+      ['……算了。','……谢谢你。']
+    ]}
+  ],
+  he_chen: [
+    { a:'chen', b:'he', lines:[
+      ['……荷包蛋，笑一个！','……不要。'],
+      ['……就一张嘛。','……好吧。'],
+      ['……茄子！','……嗯。'],
+      ['……好看！','……谢谢。']
+    ]}
+  ],
+  yang_chen: [
+    { a:'yang', b:'chen', lines:[
+      ['……BX，别拍我。','……就一张。'],
+      ['……我不上镜。','……你很好看啊。'],
+      ['……唉。','……嘿嘿。'],
+      ['……好吧。','……耶！']
+    ]}
+  ],
+  // 大吵
+  big: [
+    { a:'qiu', b:'yang', lines:[
+      ['……杨颖！你是不是又动我东西了！','……我没有。'],
+      ['……那我的本子呢！','……我不知道。'],
+      ['……你撒谎！','……你凭什么凶我！'],
+      ['……你！','……哼！'],
+      ['……绝交！','……绝交就绝交！']
+    ]},
+    { a:'he', b:'qiu', lines:[
+      ['……老大……','……别劝我。'],
+      ['……你们别吵了。','……是她先的。'],
+      ['……（哭）','……唉。'],
+      ['……我去劝她。','……随你。']
+    ]},
+    { a:'chen', b:'he', lines:[
+      ['……荷包蛋，别哭。','……嗯。'],
+      ['……她们很快就好的。','……真的吗。'],
+      ['……真的，3年了。','……嗯。']
+    ]}
+  ]
+};
+
+function startFight() {
+  if (mode !== 'both') { showToast('需要四人同屏才能打架', 'angry'); return; }
+  const list = ['qiu','he','yang','chen'].filter(k => {
+    const s = getState(k);
+    return !s.away && s.angry < 80;
+  });
+  if (list.length < 2) return;
+  // 随机选2人
+  const shuffled = [...list].sort(() => Math.random() - 0.5);
+  const a = shuffled[0], b = shuffled[1];
+  const key = [a,b].sort().join('_');
+  let scripts = FIGHTS[key] || FIGHTS.big;
+  const script = rand(scripts);
+  // 打架
+  const sA = getState(a), sB = getState(b);
+  sA.angry = Math.min(100, sA.angry + 25);
+  sB.angry = Math.min(100, sB.angry + 25);
+  sA.mood = Math.max(0, sA.mood - 10);
+  sB.mood = Math.max(0, sB.mood - 10);
+  sA.fight = Math.min(100, (sA.fight || 0) + 30);
+  sB.fight = Math.min(100, (sB.fight || 0) + 30);
+  update();
+  showToast(`⚔️ ${CHARS[a].name} 和 ${CHARS[b].name} 吵起来了！`, 'fight');
+  // 动画
+  const slotA = slotOf(a), slotB = slotOf(b);
+  slotA.classList.add('fighting'); slotB.classList.add('fighting');
+  // 台词
+  let i = 0;
+  const runLine = () => {
+    if (i >= script.lines.length) {
+      slotA.classList.remove('fighting'); slotB.classList.remove('fighting');
+      // 打完后有伤
+      setTimeout(() => {
+        slotA.classList.add('hit'); slotB.classList.add('hit');
+        floatText('💢', slotA.getBoundingClientRect().left + 30, slotA.getBoundingClientRect().top + 40);
+        floatText('💢', slotB.getBoundingClientRect().left + 30, slotB.getBoundingClientRect().top + 40);
+        // 其他舍友反应
+        const others = ['qiu','he','yang','chen'].filter(k => k !== a && k !== b);
+        if (others.length > 0) {
+          const o = others[0];
+          if (o === 'he') say('he', '……别打了。', 2200);
+          else if (o === 'qiu') say('qiu', '……够了！', 2200);
+          else if (o === 'yang') say('yang', '……啊这。', 2200);
+          else say('chen', '……别吵啦！', 2200);
+        }
+        setTimeout(() => { slotA.classList.remove('hit'); slotB.classList.remove('hit'); }, 400);
+      }, 500);
+      return;
+    }
+    const [l1, l2] = script.lines[i];
+    const isAA = script.a === a;
+    say(isAA ? a : b, isAA ? l1 : l2, 1800);
+    slotA.classList.add('talking');
+    setTimeout(() => {
+      slotA.classList.remove('talking');
+      slotB.classList.add('talking');
+      say(isAA ? b : a, isAA ? l2 : l1, 1800);
+      setTimeout(() => slotB.classList.remove('talking'), 1800);
+    }, 900);
+    i++;
+    setTimeout(runLine, 2200);
+  };
+  runLine();
+}
+function openFight() {
+  lastUserAction = Date.now();
+  choices.classList.remove('show');
+  buildPanel('⚔️ 让她们吵架', [
+    ['fight', { emo:'⚔️', name:'随机吵架' }],
+    ['stop', { emo:'🕊️', name:'劝架' }]
+  ], (k) => {
+    closePanel();
+    if (k === 'fight') startFight();
+    else stopFight();
+  });
+}
+function stopFight() {
+  const list = ['qiu','he','yang','chen'];
+  let any = false;
+  list.forEach(k => {
+    const s = getState(k);
+    if ((s.fight || 0) > 0) {
+      s.fight = Math.max(0, s.fight - 40);
+      s.angry = Math.max(0, s.angry - 30);
+      any = true;
+    }
+  });
+  if (any) {
+    showToast('🕊️ 劝架成功', 'calm');
+    say(activeChar, '……算了。', 2200);
+  } else {
+    showToast('她们没在吵', 'calm');
+  }
+  update();
+}
 
 /* ================= 场景 ================= */
 const SCENES = {
@@ -586,10 +966,16 @@ const SCENES = {
   class: { name:'教室', emo:'📚', decor:`<div class="deco board"></div><div class="deco desk"></div>` },
   cafe:  { name:'咖啡店', emo:'☕', decor:`<div class="deco table"></div><div class="deco window"></div>` },
   park:  { name:'公园', emo:'🌳', decor:`<div class="deco tree"></div>` },
-  night: { name:'夜晚', emo:'🌙', decor:`<div class="deco moon"></div><div class="deco stars"></div>` }
+  night: { name:'夜晚', emo:'🌙', decor:`<div class="deco moon"></div><div class="deco stars"></div>` },
+  beach: { name:'海边', emo:'🌊', decor:`<div class="deco sun"></div><div class="deco wave"></div>` }
 };
 
-/* ================= 等级 ================= */
+const TEMPS = {
+  cold:  { name:'冷', emo:'❄️', val:15 },
+  normal:{ name:'常温', emo:'🌡️', val:50 },
+  hot:   { name:'热', emo:'🔥', val:85 }
+};
+
 const LEVELS = [
   { lv:1, name:'陌生', min:0 },
   { lv:2, name:'眼熟', min:30 },
@@ -606,12 +992,11 @@ let currentScene = 'dorm';
 let states = {};
 let lastUserAction = Date.now();
 let idleChatTimer = null;
-let idleChatCount = 0;
 
 function defaultState() {
   return {
-    mood: 55, food: 80, love: 0, angry: 0, sad: 0,
-    clothes: 'basic', headwear: 'none', hair: null, glasses: 'none',
+    mood: 55, food: 80, love: 0, angry: 0, sad: 0, temp: 50, fight: 0,
+    clothes: 'basic', headwear: 'none', hair: null, glasses: null,
     bag: [], away: false, currentRequest: null,
     lastTime: Date.now(), lastTap: 0, tapCount: 0
   };
@@ -624,12 +1009,16 @@ const bgDecor = document.getElementById('bgDecor');
 const stage = document.getElementById('stage');
 const slotQiu = document.getElementById('slotQiu');
 const slotHe  = document.getElementById('slotHe');
+const slotYang= document.getElementById('slotYang');
+const slotChen= document.getElementById('slotChen');
 const choices = document.getElementById('choices');
 const moodFill= document.getElementById('moodFill');
 const foodFill= document.getElementById('foodFill');
 const loveFill= document.getElementById('loveFill');
 const angryFill=document.getElementById('angryFill');
 const sadFill = document.getElementById('sadFill');
+const tempFill= document.getElementById('tempFill');
+const fightFill=document.getElementById('fightFill');
 const loveLv  = document.getElementById('loveLv');
 const bagCount= document.getElementById('bagCount');
 const toastEl = document.getElementById('toast');
@@ -637,6 +1026,10 @@ const panel   = document.getElementById('panel');
 const panelTitle = document.getElementById('panelTitle');
 const panelGrid  = document.getElementById('panelGrid');
 const selectPage = document.getElementById('selectPage');
+
+function slotOf(key) {
+  return key === 'qiu' ? slotQiu : key === 'he' ? slotHe : key === 'yang' ? slotYang : slotChen;
+}
 
 /* ================= SVG ================= */
 function buildSVG() {
@@ -662,7 +1055,6 @@ function buildSVG() {
     <g class="prop"></g>
   </svg>`;
 }
-
 function renderChar(slot, key) {
   slot.innerHTML = buildSVG();
   applyCharToSlot(slot, key);
@@ -681,7 +1073,11 @@ function applyCharToSlot(slot, key) {
   slot.querySelector('.frontHair').innerHTML = hair ? hair.svg : c.backHair;
   slot.querySelector('.headwear').innerHTML = HEADWEAR[s.headwear]?.svg || '';
   slot.querySelector('.clothes').innerHTML = CLOTHES[s.clothes]?.svg || '';
-  slot.querySelector('.glasses').innerHTML = GLASSES[s.glasses]?.svg || '';
+  const glassesKey = s.glasses || c.defaultGlasses;
+  slot.querySelector('.glasses').innerHTML = GLASSES[glassesKey]?.svg || '';
+  slot.classList.remove('cold','hot');
+  if (s.temp < 30) slot.classList.add('cold');
+  else if (s.temp > 70) slot.classList.add('hot');
   setFaceInSlot(slot, key, 'normal');
 }
 function setFaceInSlot(slot, key, type) {
@@ -691,11 +1087,11 @@ function setFaceInSlot(slot, key, type) {
   const tearsEl = slot.querySelector('.tears');
   const eyesEl = slot.querySelector('.eyes');
   const mouthEl = slot.querySelector('.mouth');
-  const deepBlush = ['blush','shy','star','love'].includes(type);
-  blushL.setAttribute('opacity', deepBlush ? '0.85' : '0.55');
-  blushR.setAttribute('opacity', deepBlush ? '0.85' : '0.55');
-  blushL.setAttribute('rx', deepBlush ? '12' : '10');
-  blushR.setAttribute('rx', deepBlush ? '12' : '10');
+  const deepBlush = ['blush','shy','star','love','spicy'].includes(type);
+  blushL.setAttribute('opacity', deepBlush ? '0.9' : '0.55');
+  blushR.setAttribute('opacity', deepBlush ? '0.9' : '0.55');
+  blushL.setAttribute('rx', deepBlush ? '13' : '10');
+  blushR.setAttribute('rx', deepBlush ? '13' : '10');
   tearsEl.style.opacity = (type === 'cry') ? '1' : '0';
   const E = c.eyesStyle;
   const M = {
@@ -711,7 +1107,13 @@ function setFaceInSlot(slot, key, type) {
     love:`<path d="M90 110 Q100 120 110 110" stroke="#c9736f" stroke-width="2.5" fill="none" stroke-linecap="round"/>`,
     shyLook:`<path d="M95 114 Q100 117 105 114" stroke="#c9736f" stroke-width="2.2" fill="none" stroke-linecap="round"/>`,
     lookUp:`<ellipse cx="100" cy="112" rx="4" ry="4" fill="#c9736f" opacity=".8"/>`,
-    soft:`<path d="M92 112 Q100 118 108 112" stroke="#c9736f" stroke-width="2.5" fill="none" stroke-linecap="round"/>`
+    soft:`<path d="M92 112 Q100 118 108 112" stroke="#c9736f" stroke-width="2.5" fill="none" stroke-linecap="round"/>`,
+    tongue:`<path d="M92 112 Q100 116 108 112" stroke="#c9736f" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M98 116 Q100 122 102 116 Z" fill="#ff7a9a"/>`,
+    spicy:`<path d="M92 114 Q100 108 108 114" stroke="#c9736f" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M98 114 Q100 120 102 114 Z" fill="#ff7a9a"/>`,
+    bitter:`<path d="M90 114 Q100 110 110 114" stroke="#c9736f" stroke-width="2.5" fill="none" stroke-linecap="round"/>`,
+    sour:`<path d="M92 112 L100 116 L108 112" stroke="#c9736f" stroke-width="2.5" fill="none" stroke-linecap="round"/>`,
+    cold:`<ellipse cx="100" cy="113" rx="4" ry="3" fill="#c9736f" opacity=".8"/>`,
+    hot:`<path d="M92 114 Q100 118 108 114" stroke="#c9736f" stroke-width="2.5" fill="none" stroke-linecap="round"/>`
   };
   eyesEl.innerHTML = E[type] || E.normal;
   mouthEl.outerHTML = (M[type] || M.normal).replace('<path', '<path class="mouth"');
@@ -724,42 +1126,79 @@ function setScene(key) {
   bgLayer.className = key;
   bgDecor.innerHTML = sc.decor;
   save(activeChar);
-  say(activeChar, `……${sc.name}。`, 2000);
+  const c = CHARS[activeChar];
+  if (c.lines.scene && c.lines.scene[key]) {
+    setTimeout(() => say(activeChar, rand(c.lines.scene[key]), 2200), 300);
+  }
 }
 function openScene() {
+  lastUserAction = Date.now();
   choices.classList.remove('show');
   const entries = Object.keys(SCENES).map(k => [k, { emo: SCENES[k].emo, name: SCENES[k].name }]);
   buildPanel('🏠 换个场景', entries, (k) => { setScene(k); openScene(); }, currentScene);
 }
 
+/* ================= 温度 ================= */
+function setTemp(key) {
+  const t = TEMPS[key];
+  const s = st();
+  s.temp = t.val;
+  let line;
+  if (key === 'cold') { line = rand(['……好冷。','……你开空调了？','……哆嗦。','……抱抱。']); setFaceFor(activeChar, 'cold'); }
+  else if (key === 'hot') { line = rand(['……好热。','……热死了。','……你别烤火。','……流汗了。']); setFaceFor(activeChar, 'hot'); }
+  else { line = rand(['……温度刚好。','……嗯。','……还行。','……舒服。']); setFaceFor(activeChar, 'normal'); }
+  say(activeChar, line, 2200);
+  const slot = slotOf(activeChar);
+  slot.classList.remove('cold','hot');
+  if (key === 'cold') slot.classList.add('cold');
+  else if (key === 'hot') slot.classList.add('hot');
+  update();
+}
+function openTemp() {
+  lastUserAction = Date.now();
+  choices.classList.remove('show');
+  const entries = Object.keys(TEMPS).map(k => [k, { emo: TEMPS[k].emo, name: TEMPS[k].name }]);
+  buildPanel('🌡️ 调节温度', entries, (k) => { setTemp(k); openTemp(); }, Object.keys(TEMPS).find(k => Math.abs(TEMPS[k].val - st().temp) < 15));
+}
+
 /* ================= 模式 ================= */
 function applyMode() {
-  if (mode === 'qiu') {
-    slotQiu.className = 'petSlot single'; slotQiu.style.display = ''; slotHe.style.display = 'none';
-    activeChar = 'qiu'; renderChar(slotQiu, 'qiu');
-  } else if (mode === 'he') {
-    slotHe.className = 'petSlot single'; slotHe.style.display = ''; slotQiu.style.display = 'none';
-    activeChar = 'he'; renderChar(slotHe, 'he');
+  ['qiu','he','yang','chen'].forEach(k => {
+    const slot = slotOf(k);
+    slot.style.display = 'none';
+    slot.className = 'petSlot';
+  });
+  if (mode === 'both') {
+    ['qiu','he','yang','chen'].forEach(k => {
+      const slot = slotOf(k);
+      slot.classList.add('quad');
+      slot.style.display = '';
+      renderChar(slot, k);
+    });
+    activeChar = 'qiu';
   } else {
-    slotQiu.className = 'petSlot duo'; slotHe.className = 'petSlot duo';
-    slotQiu.style.display = ''; slotHe.style.display = '';
-    activeChar = 'qiu'; renderChar(slotQiu, 'qiu'); renderChar(slotHe, 'he');
+    const slot = slotOf(mode);
+    slot.classList.add('single');
+    slot.style.display = '';
+    renderChar(slot, mode);
+    activeChar = mode;
   }
   selectPage.classList.add('hide');
   update();
   setTimeout(() => {
     if (mode === 'both') {
-      say('qiu', '……她怎么也在这。', 2200);
-      setTimeout(() => say('he', '……老大。', 2200), 1400);
+      say('qiu', `……${qiuCallHe()}，别发呆了。`, 2200);
+      setTimeout(() => say('he', '……嗯。', 1800), 1300);
+      setTimeout(() => say('yang', `……${yangCallHe()}，你又在发呆。`, 2200), 2500);
+      setTimeout(() => say('chen', `……大家！拍张照吧！`, 2200), 3700);
     } else {
       say(mode, `我是${CHARS[mode].name}。……你好。`, 2200);
     }
   }, 500);
 }
-
 function chooseMode(m) {
   mode = m;
-  ['qiu','he'].forEach(k => {
+  ['qiu','he','yang','chen'].forEach(k => {
     const s = getState(k);
     const raw = localStorage.getItem('petState_' + k);
     if (raw) {
@@ -771,20 +1210,19 @@ function chooseMode(m) {
         s.love = d.love || 0;
         s.angry = Math.max(0, (d.angry || 0) - hours * 10);
         s.sad   = Math.max(0, (d.sad   || 0) - hours * 10);
+        s.temp  = d.temp || 50;
+        s.fight = d.fight || 0;
         s.clothes = d.clothes || 'basic';
         s.headwear = d.headwear || 'none';
         s.hair = d.hair || null;
-        s.glasses = d.glasses || 'none';
+        s.glasses = d.glasses || null;
         s.bag = d.bag || [];
       } catch(e) {}
     }
   });
   applyMode();
-  // 场景
-  const sc = localStorage.getItem('scene') || 'dorm';
-  setScene(sc);
+  setScene(localStorage.getItem('scene') || 'dorm');
   localStorage.setItem('mode', mode);
-  // 启动空闲聊天
   startIdleChat();
 }
 function showSelect() {
@@ -795,8 +1233,8 @@ function showSelect() {
 
 /* ================= 气泡 ================= */
 function say(charKey, text, ms = 2400) {
-  const slot = charKey === 'qiu' ? slotQiu : slotHe;
-  if (slot.style.display === 'none' && mode !== 'both') return;
+  const slot = slotOf(charKey);
+  if (!slot || slot.style.display === 'none') return;
   const bubble = document.createElement('div');
   bubble.className = 'bubble ' + charKey;
   bubble.textContent = text;
@@ -814,10 +1252,8 @@ function say(charKey, text, ms = 2400) {
 function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 function floatText(txt, x, y) {
   const el = document.createElement('div');
-  el.className = 'float';
-  el.textContent = txt;
-  el.style.left = (x - 14) + 'px';
-  el.style.top  = (y - 20) + 'px';
+  el.className = 'float'; el.textContent = txt;
+  el.style.left = (x - 14) + 'px'; el.style.top = (y - 20) + 'px';
   document.body.appendChild(el);
   setTimeout(() => el.remove(), 1000);
 }
@@ -826,14 +1262,19 @@ function showToast(text, type) {
   toastEl.className = 'show ' + (type || '');
   setTimeout(() => toastEl.className = '', 1800);
 }
+function cameraFlash() {
+  const el = document.createElement('div');
+  el.className = 'flash';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 500);
+}
 
 /* ================= 物品飞行 ================= */
 function itemFlyToPet(emo, key) {
-  const slot = key === 'qiu' ? slotQiu : slotHe;
+  const slot = slotOf(key);
   const r = slot.getBoundingClientRect();
   const el = document.createElement('div');
-  el.className = 'itemFly';
-  el.textContent = emo;
+  el.className = 'itemFly'; el.textContent = emo;
   el.style.left = (window.innerWidth / 2) + 'px';
   el.style.top  = (window.innerHeight - 80) + 'px';
   document.body.appendChild(el);
@@ -845,30 +1286,26 @@ function itemFlyToPet(emo, key) {
   setTimeout(() => { el.style.opacity = '0'; setTimeout(() => el.remove(), 300); }, 900);
 }
 function itemFlyFromPet(emo, key) {
-  const slot = key === 'qiu' ? slotQiu : slotHe;
+  const slot = slotOf(key);
   const r = slot.getBoundingClientRect();
   const el = document.createElement('div');
-  el.className = 'itemFly show';
-  el.textContent = emo;
+  el.className = 'itemFly show'; el.textContent = emo;
   el.style.left = (r.left + r.width/2 - 17) + 'px';
   el.style.top  = (r.top + r.height/3) + 'px';
   document.body.appendChild(el);
   requestAnimationFrame(() => {
     el.style.left = (window.innerWidth/2) + 'px';
     el.style.top  = (window.innerHeight - 80) + 'px';
-    el.style.opacity = '1';
   });
   setTimeout(() => { el.style.opacity = '0'; setTimeout(() => el.remove(), 300); }, 900);
 }
-/* 生气时扔东西 */
 function throwItem(key) {
   const c = CHARS[key];
-  const slot = key === 'qiu' ? slotQiu : slotHe;
+  const slot = slotOf(key);
   const r = slot.getBoundingClientRect();
   const item = rand(c.angry.throw);
   const el = document.createElement('div');
-  el.className = 'throwItem';
-  el.textContent = item;
+  el.className = 'throwItem'; el.textContent = item;
   el.style.left = (r.left + r.width/2) + 'px';
   el.style.top  = (r.top + r.height/3) + 'px';
   document.body.appendChild(el);
@@ -895,10 +1332,12 @@ function render() {
   loveFill.style.width = lovePercent(s.love) + '%';
   angryFill.style.width = s.angry + '%';
   sadFill.style.width = s.sad + '%';
+  tempFill.style.width = s.temp + '%';
+  fightFill.style.width = (s.fight || 0) + '%';
   loveLv.textContent = `Lv.${getLevel(s.love).lv}`;
   bagCount.textContent = s.bag.length;
   const btn = document.getElementById('apologyBtn');
-  if (s.angry >= 60 || s.sad >= 50) btn.classList.add('apologize');
+  if (s.angry >= 60 || s.sad >= 50 || (s.fight || 0) >= 50) btn.classList.add('apologize');
   else btn.classList.remove('apologize');
 }
 function update() {
@@ -907,6 +1346,8 @@ function update() {
   s.food = Math.max(0, Math.min(100, s.food));
   s.angry = Math.max(0, Math.min(100, s.angry));
   s.sad = Math.max(0, Math.min(100, s.sad));
+  s.temp = Math.max(0, Math.min(100, s.temp));
+  s.fight = Math.max(0, Math.min(100, s.fight || 0));
   s.love = Math.max(0, s.love);
   render(); save(activeChar);
 }
@@ -916,7 +1357,7 @@ function save(key) {
   localStorage.setItem('petState_' + key, JSON.stringify(s));
   if (key === activeChar) localStorage.setItem('scene', currentScene);
 }
-function saveAll() { save('qiu'); save('he'); }
+function saveAll() { save('qiu'); save('he'); save('yang'); save('chen'); }
 
 /* ================= 情绪 ================= */
 function addLove(key, n) {
@@ -928,7 +1369,6 @@ function addLove(key, n) {
 }
 function isAngry(key) { return getState(key).angry >= 60; }
 function isSad(key)   { return getState(key).sad >= 50; }
-function isRage(key)  { return getState(key).angry >= 90; }
 
 function addAngry(key, n) {
   const s = getState(key);
@@ -942,13 +1382,10 @@ function addAngry(key, n) {
     setFaceFor(key, 'angry');
   }
   if (!wasRage && s.angry >= 90) {
-    // 生气极了：骂人 + 扔东西
     showToast(`💢 ${CHARS[key].name}暴怒了！`, 'angry');
     setTimeout(() => {
       say(key, rand(CHARS[key].angry.rage), 3000);
-      setFaceFor(key, 'angry');
-      shakeSlot(key);
-      // 连扔3个东西
+      setFaceFor(key, 'angry'); shakeSlot(key);
       for (let i = 0; i < 3; i++) setTimeout(() => throwItem(key), i * 200);
     }, 400);
   }
@@ -962,10 +1399,7 @@ function calmDown(key, n) {
     showToast('😌 她没那么气了', 'calm');
     setFaceFor(key, 'shy'); say(key, rand(CHARS[key].angry.soft), 2200);
   }
-  if (before > 0 && s.angry === 0) {
-    showToast('😊 她原谅你了', 'calm');
-    setFaceFor(key, 'happy');
-  }
+  if (before > 0 && s.angry === 0) { showToast('😊 她原谅你了', 'calm'); setFaceFor(key, 'happy'); }
 }
 function addSad(key, n) {
   const s = getState(key);
@@ -987,7 +1421,6 @@ function calmSad(key, n) {
   if (before >= 50 && s.sad < 50 && s.sad > 0) showToast('💙 她好受一点了', 'calm');
   if (before > 0 && s.sad === 0) { showToast('😊 她不难过了', 'calm'); setFaceFor(key, 'happy'); }
 }
-/* 伤心消失：说伤心话 + 消失 */
 function scheduleLeave(key) {
   const s = getState(key);
   if (s.away) return;
@@ -996,38 +1429,35 @@ function scheduleLeave(key) {
     s.away = true;
     say(key, rand(CHARS[key].sadLines.vanish), 2500);
     setFaceFor(key, 'cry');
-    const slot = key === 'qiu' ? slotQiu : slotHe;
+    const slot = slotOf(key);
     setTimeout(() => {
       slot.classList.add('away');
       setTimeout(() => {
-        s.away = false;
-        slot.classList.remove('away');
-        s.sad = Math.max(0, s.sad - 25);
-        update();
-        say(key, '……我回来了。', 2500);
-        setFaceFor(key, 'sad');
+        s.away = false; slot.classList.remove('away');
+        s.sad = Math.max(0, s.sad - 25); update();
+        say(key, '……我回来了。', 2500); setFaceFor(key, 'sad');
       }, 30000);
     }, 1200);
   }, 1500);
 }
 function setFaceFor(key, type) {
-  const slot = key === 'qiu' ? slotQiu : slotHe;
-  if (slot.style.display === 'none') return;
+  const slot = slotOf(key);
+  if (!slot || slot.style.display === 'none') return;
   setFaceInSlot(slot, key, type);
 }
 function shakeSlot(key) {
-  const slot = key === 'qiu' ? slotQiu : slotHe;
+  const slot = slotOf(key);
   slot.classList.remove('shake'); void slot.offsetWidth; slot.classList.add('shake');
 }
 
-/* ================= 点击 ================= */
+/* ================= 点击（只有杨颖吐舌头，3秒收回） ================= */
+let yangTongueTimer = null;
 function bindPetClick(slot, key) {
   slot.addEventListener('click', (e) => {
     lastUserAction = Date.now();
     const s = getState(key);
     if (s.away) return;
     if (mode === 'both') { activeChar = key; update(); }
-
     const rect = slot.getBoundingClientRect();
     const y = (e.clientY - rect.top) / rect.height;
     const x = (e.clientX - rect.left) / rect.width;
@@ -1048,12 +1478,36 @@ function bindPetClick(slot, key) {
       if (mode === 'both') partnerReact(key, 'sad');
       return;
     }
-
     slot.classList.remove('happy'); void slot.offsetWidth; slot.classList.add('happy');
     const now = Date.now();
     if (now - s.lastTap < 700) s.tapCount++;
     else s.tapCount = 1;
     s.lastTap = now;
+
+    // ★ 只有杨颖点 6 次吐舌头，3 秒收回
+    if (key === 'yang' && s.tapCount === 6) {
+      say(key, '略——', 1500);
+      setFaceFor(key, 'tongue');
+      slot.classList.add('tongue');
+      setTimeout(() => slot.classList.remove('tongue'), 500);
+      // 3秒后收回
+      if (yangTongueTimer) clearTimeout(yangTongueTimer);
+      yangTongueTimer = setTimeout(() => {
+        setFaceFor('yang', 'normal');
+      }, 3000);
+      // 舍友反应
+      if (mode === 'both') {
+        setTimeout(() => {
+          const others = ['qiu','he','chen'];
+          const k1 = rand(others);
+          if (k1 === 'qiu') say('qiu', `……${qiuCallYang()}，你幼稚。`, 2000);
+          else if (k1 === 'he') say('he', `……${heCallYang()}，你也这样。`, 2000);
+          else say('chen', '……杨，你也会这个？', 2000);
+        }, 800);
+      }
+      s.tapCount = 0;
+      return;
+    }
 
     let face = 'normal', line = 'tap', loveAdd = 1;
     if (y < 0.45) {
@@ -1072,70 +1526,32 @@ function bindPetClick(slot, key) {
       line = 'tap'; loveAdd = 1;
       floatText('💕', e.clientX, e.clientY);
     }
-    if (s.tapCount >= 5) { addAngry(key, 8); s.tapCount = 0; }
-
+    if (s.tapCount >= 5 && !(key === 'yang' && s.tapCount === 6)) { addAngry(key, 8); }
     s.mood = Math.min(100, s.mood + 2);
-    addLove(key, loveAdd);
-    update();
+    addLove(key, loveAdd); update();
     say(key, rand(c.lines[line]), 2400);
     setFaceFor(key, face);
   });
 }
 bindPetClick(slotQiu, 'qiu');
 bindPetClick(slotHe, 'he');
+bindPetClick(slotYang, 'yang');
+bindPetClick(slotChen, 'chen');
 
-/* ================= 同伴反应（依据性格） ================= */
+/* ================= 同伴反应 ================= */
 function partnerReact(victimKey, type) {
-  const partnerKey = victimKey === 'qiu' ? 'he' : 'qiu';
-  // 依角色性格反应
+  const partners = ['qiu','he','yang','chen'].filter(k => k !== victimKey);
+  const p = rand(partners);
   if (type === 'angry') {
-    if (partnerKey === 'he') {
-      // 何芬：护着老大、劝和
-      say('he', rand([
-        '……老大，别生气了。',
-        '……（小声）你别惹她。',
-        '……她其实不坏。',
-        '……嗯，我陪你。',
-        '……老大，消消气。',
-        '……别气坏了。'
-      ]), 2600);
-      setFaceFor('he', 'shy');
-    } else {
-      // 邱禧悦：看戏/护短/记仇
-      say('qiu', rand([
-        '……活该。',
-        '……哼，早说了。',
-        '……别欺负她。',
-        '……你等着。',
-        '……我记着了。',
-        '……你是不是欠收拾。'
-      ]), 2600);
-      setFaceFor('qiu', 'angry');
-    }
+    if (p === 'he') { say('he', rand(['……别生气了。','……（小声）你别惹她。','……她其实不坏。']), 2400); setFaceFor('he', 'shy'); }
+    else if (p === 'qiu') { say('qiu', rand(['……活该。','……哼，早说了。','……别欺负她。']), 2400); setFaceFor('qiu', 'angry'); }
+    else if (p === 'yang') { say('yang', rand(['……啊这。','……不关我事。','……别看我。']), 2400); setFaceFor('yang', 'shy'); }
+    else { say('chen', rand(['……别生气啦。','……笑一个。','……我拍照了哦。']), 2400); setFaceFor('chen', 'happy'); }
   } else if (type === 'sad') {
-    if (partnerKey === 'he') {
-      // 何芬：心疼老大
-      say('he', rand([
-        '……老大，别难过。',
-        '……（拍拍她）',
-        '……我在。',
-        '……嗯，我陪你。',
-        '……别理他。',
-        '……老大……'
-      ]), 2600);
-      setFaceFor('he', 'shy');
-    } else {
-      // 邱禧悦：护短、报复、骂人
-      say('qiu', rand([
-        '……谁欺负你了？',
-        '……告诉我，我记他。',
-        '……别哭了。',
-        '……我帮你出头。',
-        '……你等着，我收拾他。',
-        '……谁啊，说名字。'
-      ]), 2600);
-      setFaceFor('qiu', 'angry');
-    }
+    if (p === 'he') { say('he', rand(['……别难过。','……（拍拍她）','……我在。']), 2400); setFaceFor('he', 'shy'); }
+    else if (p === 'qiu') { say('qiu', rand(['……谁欺负你了？','……告诉我，我记他。','……别哭了。']), 2400); setFaceFor('qiu', 'angry'); }
+    else if (p === 'yang') { say('yang', rand(['……我陪你。','……别哭了。','……嗯。']), 2400); setFaceFor('yang', 'soft'); }
+    else { say('chen', rand(['……别哭啦。','……来，笑一个。','……我在。']), 2400); setFaceFor('chen', 'happy'); }
   }
 }
 
@@ -1147,14 +1563,8 @@ function chat() {
   const c = CHARS[key];
   const s = getState(key);
   if (s.away) { say(key, '……（她不在）', 2000); return; }
-  if (isAngry(key)) {
-    say(key, rand(['……现在不想说话。','……哼。','……干嘛。','……别烦我。']), 2500);
-    setFaceFor(key, 'angry'); calmDown(key, 6); update(); return;
-  }
-  if (isSad(key)) {
-    say(key, rand(['……','……嗯。','……你说吧。','……嗯。']), 2500);
-    setFaceFor(key, 'sad'); calmSad(key, 5); update(); return;
-  }
+  if (isAngry(key)) { say(key, rand(['……现在不想说话。','……哼。','……干嘛。']), 2500); setFaceFor(key, 'angry'); calmDown(key, 6); update(); return; }
+  if (isSad(key)) { say(key, rand(['……','……嗯。','……你说吧。']), 2500); setFaceFor(key, 'sad'); calmSad(key, 5); update(); return; }
   const lv = getLevel(s.love).lv;
   const available = c.topics.filter(t => t.minLv <= lv);
   const pool = [...available].sort(() => Math.random() - 0.5).slice(0, 3);
@@ -1194,61 +1604,35 @@ function buildPanel(title, entries, onClick, activeKey) {
   });
   panel.classList.add('show');
 }
-function openItems() {
-  lastUserAction = Date.now();
-  choices.classList.remove('show');
-  const entries = Object.keys(ITEMS).map(k => [k, { emo: ITEMS[k].emo, name: ITEMS[k].name }]);
-  buildPanel('🎁 选一个送给她', entries, (k) => useItem(k));
-}
+function openItems() { lastUserAction = Date.now(); choices.classList.remove('show'); const entries = Object.keys(ITEMS).map(k => [k, { emo: ITEMS[k].emo, name: ITEMS[k].name }]); buildPanel('🎁 选一个送给她', entries, (k) => useItem(k)); }
+function openFood() { lastUserAction = Date.now(); choices.classList.remove('show'); const entries = Object.keys(FOODS).map(k => [k, { emo: FOODS[k].emo, name: FOODS[k].name }]); buildPanel('🍽️ 喂她吃点东西', entries, (k) => useFood(k)); }
 function openClothes() {
-  lastUserAction = Date.now();
-  choices.classList.remove('show');
+  lastUserAction = Date.now(); choices.classList.remove('show');
   const s = st();
   const entries = Object.keys(CLOTHES).map(k => [k, { emo: CLOTHES[k].emo, name: CLOTHES[k].name }]);
-  buildPanel('👗 换衣服', entries, (k) => {
-    s.clothes = k; redrawActive(); say(activeChar, '……这件？', 1800);
-    setFaceFor(activeChar, 'shy'); addLove(activeChar, 1); update(); openClothes();
-  }, s.clothes);
+  buildPanel('👗 换衣服', entries, (k) => { s.clothes = k; redrawActive(); say(activeChar, '……这件？', 1800); setFaceFor(activeChar, 'shy'); addLove(activeChar, 1); update(); openClothes(); }, s.clothes);
 }
 function openHeadwear() {
-  lastUserAction = Date.now();
-  choices.classList.remove('show');
+  lastUserAction = Date.now(); choices.classList.remove('show');
   const s = st();
   const entries = Object.keys(HEADWEAR).map(k => [k, { emo: HEADWEAR[k].emo, name: HEADWEAR[k].name }]);
-  buildPanel('🎀 换头饰', entries, (k) => {
-    s.headwear = k; redrawActive(); say(activeChar, '……好看吗？', 1800);
-    setFaceFor(activeChar, 'shy'); addLove(activeChar, 1); update(); openHeadwear();
-  }, s.headwear);
+  buildPanel('🎀 换头饰', entries, (k) => { s.headwear = k; redrawActive(); say(activeChar, '……好看吗？', 1800); setFaceFor(activeChar, 'shy'); addLove(activeChar, 1); update(); openHeadwear(); }, s.headwear);
 }
 function openHair() {
-  lastUserAction = Date.now();
-  choices.classList.remove('show');
+  lastUserAction = Date.now(); choices.classList.remove('show');
   const s = st();
   const entries = Object.keys(HAIR).map(k => [k, { emo: HAIR[k].emo, name: HAIR[k].name }]);
-  buildPanel('💇 换发型', entries, (k) => {
-    s.hair = k; redrawActive(); say(activeChar, '……这个发型？', 1800);
-    setFaceFor(activeChar, 'shy'); addLove(activeChar, 1); update(); openHair();
-  }, s.hair || CHARS[activeChar].defaultHair);
+  buildPanel('💇 换发型', entries, (k) => { s.hair = k; redrawActive(); say(activeChar, '……这个发型？', 1800); setFaceFor(activeChar, 'shy'); addLove(activeChar, 1); update(); openHair(); }, s.hair || CHARS[activeChar].defaultHair);
 }
 function openGlasses() {
-  lastUserAction = Date.now();
-  choices.classList.remove('show');
+  lastUserAction = Date.now(); choices.classList.remove('show');
   const s = st();
   const entries = Object.keys(GLASSES).map(k => [k, { emo: GLASSES[k].emo, name: GLASSES[k].name }]);
-  buildPanel('👓 换眼镜', entries, (k) => {
-    s.glasses = k; redrawActive(); say(activeChar, '……怎么样？', 1800);
-    setFaceFor(activeChar, 'shy'); addLove(activeChar, 1); update(); openGlasses();
-  }, s.glasses);
+  buildPanel('👓 换眼镜', entries, (k) => { s.glasses = k; redrawActive(); say(activeChar, '……怎么样？', 1800); setFaceFor(activeChar, 'shy'); addLove(activeChar, 1); update(); openGlasses(); }, s.glasses || CHARS[activeChar].defaultGlasses);
 }
-function openMean() {
-  lastUserAction = Date.now();
-  choices.classList.remove('show');
-  const entries = MEAN.map((m, i) => [i, { emo: m.emo, name: m.q.slice(0, 4) }]);
-  buildPanel('😈 欺负她（会伤心）', entries, (i) => meanAction(MEAN[i]));
-}
+function openMean() { lastUserAction = Date.now(); choices.classList.remove('show'); const entries = MEAN.map((m, i) => [i, { emo: m.emo, name: m.q.slice(0, 4) }]); buildPanel('😈 欺负她（会伤心）', entries, (i) => meanAction(MEAN[i])); }
 function openBag() {
-  lastUserAction = Date.now();
-  choices.classList.remove('show');
+  lastUserAction = Date.now(); choices.classList.remove('show');
   const s = st();
   if (s.bag.length === 0) { say(activeChar, '……我还没送过你东西呢。', 2500); return; }
   const counts = {};
@@ -1259,7 +1643,7 @@ function openBag() {
 function closePanel() { panel.classList.remove('show'); }
 function redrawActive() {
   const key = activeChar;
-  const slot = key === 'qiu' ? slotQiu : slotHe;
+  const slot = slotOf(key);
   if (slot.style.display !== 'none') applyCharToSlot(slot, key);
   save(key);
 }
@@ -1271,47 +1655,27 @@ document.addEventListener('click', (e) => {
   }
 });
 
-/* ================= 送礼物 ================= */
+/* ================= 送礼 ================= */
 function useItem(key) {
   lastUserAction = Date.now();
   const it = ITEMS[key]; if (!it) return;
   const ck = activeChar;
   const s = getState(ck);
   const isA = s.angry >= 30, isS = s.sad >= 30;
-
   itemFlyToPet(it.emo, ck);
-
   setTimeout(() => {
-    if (isA) {
-      say(ck, rand(['……哼。','……干嘛。','……这次就算了。','……嗯。']), 2800);
-      setFaceFor(ck, 'shy');
-    } else if (isS) {
-      say(ck, rand(['……嗯。','……谢谢。','……好一点了。','……嗯。']), 2800);
-      setFaceFor(ck, 'shy'); calmSad(ck, 20);
-    } else {
-      say(ck, rand(it.lines), 2800);
-      setFaceFor(ck, it.face || 'shy');
-    }
+    if (isA) { say(ck, rand(['……哼。','……干嘛。','……这次就算了。']), 2800); setFaceFor(ck, 'shy'); }
+    else if (isS) { say(ck, rand(['……嗯。','……谢谢。','……好一点了。']), 2800); setFaceFor(ck, 'shy'); calmSad(ck, 20); }
+    else { say(ck, rand(it.lines), 2800); setFaceFor(ck, it.face || 'shy'); }
     s.mood = Math.min(100, s.mood + (it.mood || 0));
     s.food = Math.min(100, s.food + (it.food || 0));
     addLove(ck, isA || isS ? Math.ceil((it.love || 3) / 2) : (it.love || 3));
     calmDown(ck, it.calm || 20);
     if (isS) calmSad(ck, it.calm || 20);
     update();
-    if (s.currentRequest && s.currentRequest.want === key) {
-      say(ck, '……就是这个。谢谢你。', 3000);
-      addLove(ck, 8);
-      showToast('💗 她很高兴！', 'love');
-      s.currentRequest = null;
-    }
+    if (s.currentRequest && s.currentRequest.want === key) { say(ck, '……就是这个。谢谢你。', 3000); addLove(ck, 8); showToast('💗 她很高兴！', 'love'); s.currentRequest = null; }
+    if (it.flash) cameraFlash();
     for (let i = 0; i < 6; i++) setTimeout(() => spawnHeart(), i * 100);
-    if (mode === 'both') {
-      setTimeout(() => {
-        const pk = ck === 'qiu' ? 'he' : 'qiu';
-        if (pk === 'he') say('he', '……老大开心就好。', 2200);
-        else say('qiu', '……哼。', 2200);
-      }, 1200);
-    }
   }, 700);
   closePanel();
 }
@@ -1325,28 +1689,50 @@ function spawnHeart() {
   setTimeout(() => h.remove(), 1700);
 }
 
+/* ================= 食物 ================= */
+function useFood(key) {
+  lastUserAction = Date.now();
+  const food = FOODS[key]; if (!food) return;
+  const ck = activeChar;
+  const s = getState(ck);
+  const react = food.reaction[ck] || food.reaction.qiu;
+  itemFlyToPet(food.emo, ck);
+  setTimeout(() => {
+    say(ck, rand(react.lines), 2800);
+    setFaceFor(ck, react.face || 'normal');
+    s.mood = Math.min(100, s.mood + (react.mood || 0));
+    if (react.sad) addSad(ck, react.sad);
+    if (react.angry) addAngry(ck, react.angry);
+    if (react.temp) s.temp = Math.max(0, Math.min(100, s.temp + react.temp));
+    update();
+    if (mode === 'both') {
+      setTimeout(() => {
+        const others = ['qiu','he','yang','chen'].filter(k => k !== ck);
+        const p = rand(others);
+        if (key === 'chili') say(p, rand(['……你干嘛给她吃辣椒。','……好惨。','……哈哈。']), 2200);
+        else if (key === 'bitter') say(p, rand(['……苦瓜。','……你过分了。','……嗯。']), 2200);
+      }, 900);
+    }
+  }, 700);
+  closePanel();
+}
+
 /* ================= 欺负 ================= */
 function meanAction(m) {
   lastUserAction = Date.now();
   closePanel();
   const key = activeChar;
-  if (m.emo !== '💔') {
-    itemFlyToPet(m.emo, key);
-    setTimeout(() => doMeanEffect(key, m), 600);
-  } else {
-    doMeanEffect(key, m);
-  }
+  if (m.emo !== '💔') { itemFlyToPet(m.emo, key); setTimeout(() => doMeanEffect(key, m), 600); }
+  else doMeanEffect(key, m);
 }
 function doMeanEffect(key, m) {
-  addSad(key, m.sad);
-  addAngry(key, m.sad * 0.3);
-  addLove(key, -2);
+  addSad(key, m.sad); addAngry(key, m.sad * 0.3); addLove(key, -2);
   const s = getState(key);
   s.mood = Math.max(0, s.mood - 5);
   update();
   say(key, rand(m.reply), 3000);
   setFaceFor(key, m.face || 'sad');
-  const slot = key === 'qiu' ? slotQiu : slotHe;
+  const slot = slotOf(key);
   const r = slot.getBoundingClientRect();
   if (m.emo === '⚽') floatText('💥', r.left + r.width/2, r.top + 40);
   else if (m.emo === '💥') floatText('💥', r.left + r.width/2, r.top + 40);
@@ -1361,24 +1747,15 @@ function apologize() {
   const key = activeChar;
   const s = getState(key);
   if (s.away) { say(key, '……（她不在）', 2000); return; }
-  const wasA = isAngry(key), wasS = isSad(key);
-  if (!wasA && !wasS) {
-    say(key, rand(['……干嘛道歉。','我又没生气。','……嗯，知道了。','……嗯。']), 2200);
-    setFaceFor(key, 'shy'); return;
-  }
+  const wasA = isAngry(key), wasS = isSad(key), wasF = (s.fight || 0) >= 50;
+  if (!wasA && !wasS && !wasF) { say(key, rand(['……干嘛道歉。','我又没生气。','……嗯，知道了。']), 2200); setFaceFor(key, 'shy'); return; }
   if (wasA) calmDown(key, rand([25,28,30,35]));
   if (wasS) calmSad(key, rand([25,28,30,35]));
-  addLove(key, 2);
-  s.mood = Math.min(100, s.mood + 5);
-  update();
-  if (isAngry(key) || isSad(key)) {
-    say(key, rand(['……哼。','……还没消气。','……再哄哄。','……嗯。']), 2200);
-    setFaceFor(key, wasS ? 'sad' : 'angry');
-  } else {
-    say(key, rand(['……好吧。','……原谅你了。','……这次就算了。','……嗯。']), 2600);
-    setFaceFor(key, 'shy');
-  }
-  const slot = key === 'qiu' ? slotQiu : slotHe;
+  if (wasF) { s.fight = Math.max(0, (s.fight || 0) - 40); }
+  addLove(key, 2); s.mood = Math.min(100, s.mood + 5); update();
+  if (isAngry(key) || isSad(key) || (s.fight || 0) >= 50) { say(key, rand(['……哼。','……还没消气。','……再哄哄。']), 2200); setFaceFor(key, wasS ? 'sad' : 'angry'); }
+  else { say(key, rand(['……好吧。','……原谅你了。','……这次就算了。']), 2600); setFaceFor(key, 'shy'); }
+  const slot = slotOf(key);
   const r = slot.getBoundingClientRect();
   floatText('🙇', r.left + r.width/2, r.top);
 }
@@ -1386,21 +1763,22 @@ function apologize() {
 /* ================= 她送礼物 ================= */
 function giveGiftToUser(key) {
   const s = getState(key);
-  const keys = Object.keys(ITEMS);
-  const k = rand(keys);
+  const k = rand(Object.keys(ITEMS));
   const it = ITEMS[k];
   s.bag.push(k);
   save(key); if (key === activeChar) render();
-
   itemFlyFromPet(it.emo, key);
   showToast(`🎁 ${CHARS[key].name}送了你${it.name}！`, 'gift');
   let line;
-  if (key === 'qiu') line = rand(['……这个给你。','……拿着，别弄丢了。','……看到就想到你了。','……哼，不是特意给你的。','……收好。','……不喜欢就还我。']);
-  else line = rand(['……这个给你。','……拿着吧。','……看到就想到你了。','……不是什么好东西。','……嗯。','……你收下就好。']);
+  if (key === 'qiu') line = rand([`……${qiuCallHe()}，这个给你。`,'……拿着，别弄丢了。','……看到就想到你了。','……哼，不是特意给你的。']);
+  else if (key === 'he') line = rand(['……这个给你。','……拿着吧。','……看到就想到你了。']);
+  else if (key === 'yang') line = rand(['……给你。','……别多想。','……顺手买的。','……嗯。']);
+  else line = rand(['……送你！','……拍张照吧。','……嘿嘿。']);
   say(key, line, 3000);
   setFaceFor(key, 'shy');
   addLove(key, 3);
   update();
+  if (it.flash) cameraFlash();
 }
 
 /* ================= 提要求 ================= */
@@ -1412,7 +1790,7 @@ function makeRequest(key) {
   say(key, req.text, 3500);
   setFaceFor(key, 'shy');
   showToast(`${req.emo} ${c.name}想要什么…`, 'love');
-  const slot = key === 'qiu' ? slotQiu : slotHe;
+  const slot = slotOf(key);
   const r = slot.getBoundingClientRect();
   floatText(req.emo, r.left + r.width/2, r.top + 30);
 }
@@ -1420,7 +1798,7 @@ function makeRequest(key) {
 /* ================= 撒娇 ================= */
 function coquetry(key) {
   const c = CHARS[key];
-  const slot = key === 'qiu' ? slotQiu : slotHe;
+  const slot = slotOf(key);
   slot.classList.add('lean');
   setTimeout(() => slot.classList.remove('lean'), 2400);
   say(key, rand(c.coquettish), 2800);
@@ -1430,12 +1808,17 @@ function coquetry(key) {
 /* ================= 她欺负用户 ================= */
 function meanToUser(key) {
   if (key === 'qiu') {
-    const lines = ['……上次的事我还记着呢。','……你今天怎么这么闲。','……哼，别以为我忘了。','……你是不是又偷懒了。','……我记仇的。','……你怎么还不理我。','……3年了，你还不懂我。','……算了。'];
-    say(key, rand(lines), 3000);
+    const heName = qiuCallHe();
+    say(key, rand([`……${heName}上次的事我还记着呢。`,'……你今天怎么这么闲。','……哼，别以为我忘了。','……你怎么还不理我。']), 3000);
+    setFaceFor(key, 'angry');
+  } else if (key === 'he') {
+    say(key, rand(['……你今天都没理我。','……哼。','……别走。','……陪我。']), 3000);
+    setFaceFor(key, 'sad');
+  } else if (key === 'yang') {
+    say(key, rand(['……你好烦。','……别理我。','……我社恐。','……嗯。']), 3000);
     setFaceFor(key, 'angry');
   } else {
-    const lines = ['……你今天都没理我。','……哼。','……别走。','……陪我。','……你去哪了。','……我以为你不来了。','……嗯。','……你忙就算了。'];
-    say(key, rand(lines), 3000);
+    say(key, rand(['……你今天没陪我。','……哼。','……来拍照。','……嗯。']), 3000);
     setFaceFor(key, 'sad');
   }
   getState(key).mood = Math.max(0, getState(key).mood - 3);
@@ -1443,137 +1826,277 @@ function meanToUser(key) {
 }
 
 /* ============================================================
-   双人自主互动（≥10 套台本，含吵架、吐槽、送东西）
+   四人自主互动 + 打架
    ============================================================ */
-const DUO_SCRIPTS = [
-  // 1. 日常
-  { a:'qiu', b:'he', lines:[['……何芬，过来。','……嗯。'],['……你今天怎么这么安静。','……没什么。'],['……别发呆，帮我看着点。','……好。'],['……哼，也就你还听我的。','……因为你是老大。']] },
-  // 2. 一起吃饭
-  { a:'qiu', b:'he', lines:[['……该吃饭了。','……嗯。'],['……你想吃什么。','……都行。'],['……那就楼下那家。','……好。'],['……我请你。','……谢谢老大。']] },
-  // 3. 护短
-  { a:'qiu', b:'he', lines:[['……谁欺负你了？','……没有。'],['……别骗我。','……真的没有。'],['……有就告诉我。','……嗯。']] },
-  // 4. 何芬道谢
-  { a:'he', b:'qiu', lines:[['……老大。','……干嘛。'],['……谢谢你。','……少来。'],['……3年了，一直照顾我。','……嗯。'],['……我会记着的。','……知道了。']] },
-  // 5. 吵架（小）
-  { a:'qiu', b:'he', lines:[['……你昨天又没收拾。','……忘了。'],['……说了多少次。','……对不起。'],['……算了。','……嗯。'],['……下次注意。','……好。']] },
-  // 6. 吐槽用户
-  { a:'qiu', b:'he', lines:[['……他今天又没来。','……嗯。'],['……你说他是不是忘了我们。','……可能忙。'],['……哼。','……嗯。']] },
-  // 7. 何芬关心
-  { a:'he', b:'qiu', lines:[['……老大，你脸色不好。','……没事。'],['……是不是没睡好。','……嗯。'],['……那你休息。','……好。']] },
-  // 8. 邱禧悦记仇
-  { a:'qiu', b:'he', lines:[['……我还记得上次那事。','……哪次。'],['……你忘了？','……嗯。'],['……算了。','……对不起。']] },
-  // 9. 送东西
-  { a:'qiu', b:'he', lines:[['……这个给你。','……什么。'],['……奶茶。','……谢谢老大。'],['……哼。','……嗯。']] },
-  // 10. 夜晚
-  { a:'he', b:'qiu', lines:[['……老大，睡不着。','……数羊。'],['……数了。','……那我陪你。'],['……嗯。','……别多想。']] },
-  // 11. 吐槽用户（升级）
-  { a:'qiu', b:'he', lines:[['……他最近是不是烦我们。','……没有吧。'],['……哼。','……老大你别多想。'],['……嗯。','……我在。']] },
-  // 12. 回忆3年
-  { a:'he', b:'qiu', lines:[['……老大，我们认识3年了。','……嗯。'],['……时间好快。','……是。'],['……谢谢你。','……少来。']] },
-  // 13. 吵架（升级）
-  { a:'qiu', b:'he', lines:[['……你能不能别老这样。','……哪样。'],['……什么都不说。','……我……'],['……算了。','……对不起。'],['……嗯。','……我改。']] },
-  // 14. 何芬委屈
-  { a:'he', b:'qiu', lines:[['……老大……','……怎么了。'],['……没事。','……说。'],['……他今天说我烦。','……我去找他。'],['……不用。','……哼。']] }
-];
+function DUO_SCRIPTS() {
+  const qh = qiuCallHe();
+  const yh = yangCallHe();
+  const hy = heCallYang();
+  const hq = heCallQiu();
+  const qy = qiuCallYang();
+  const yq = yangCallQiu();
+  const che = chenCallHe();
+  const cq = chenCallQiu();
+  const cy = chenCallYang();
+  const bx = qiuCallChen();  // BX
+  return [
+    { a:'qiu', b:'he', lines:[
+      [`……${qh}，过来。`,'……嗯。'],
+      [`……你今天怎么这么安静。`,'……没什么。'],
+      [`……哼，也就你还听我的。`,'……因为你是老大。']
+    ]},
+    { a:'qiu', b:'yang', lines:[
+      [`……${qy}，别躺着。`,'……我好累。'],
+      ['……起来。','……嗯……'],
+      ['……真是的。','……谢谢老大。']
+    ]},
+    { a:'he', b:'yang', lines:[
+      [`……${hy}。`,'……嗯？'],
+      ['……你还好吗。','……还行。'],
+      ['……有事叫我。','……好。']
+    ]},
+    { a:'chen', b:'he', lines:[
+      [`……${che}！`,'……嗯。'],
+      [`……来拍照。`,'……不要。'],
+      [`……就一张嘛。`,'……好吧。']
+    ]},
+    { a:'chen', b:'qiu', lines:[
+      [`……${cq}！`,'……干嘛。'],
+      [`……你笑一个。`,'……不要。'],
+      [`……拍一张嘛。`,'……烦。']
+    ]},
+    { a:'chen', b:'yang', lines:[
+      [`……${cy}！`,'……嗯。'],
+      [`……你出镜嘛。`,'……不。'],
+      [`……求你啦。`,'……好吧。']
+    ]},
+    { a:'qiu', b:'chen', lines:[
+      [`……${bx}，别拍了。`,'……再一张。'],
+      [`……够了。`,'……就一张。'],
+      [`……唉。`,'……嘿嘿。']
+    ]},
+    { a:'he', b:'chen', lines:[
+      [`……${bx}。`,'……在！'],
+      [`……你累不累。`,'……不累。'],
+      [`……嗯。`,'……谢谢荷包蛋。']
+    ]},
+    { a:'yang', b:'chen', lines:[
+      [`……${bx}。`,'……嗯？'],
+      [`……别拍我。`,'……就一张。'],
+      [`……唉。`,'……嘿嘿。']
+    ]},
+    { a:'qiu', b:'yang', lines:[
+      ['……他今天又没来。','……嗯。'],
+      ['……你说他是不是忘了我们。','……可能忙。'],
+      ['……哼。','……别想了。']
+    ]},
+    { a:'qiu', b:'he', lines:[
+      ['……这个给你。','……什么。'],
+      ['……奶茶。','……谢谢老大。'],
+      ['……哼。','……嗯。']
+    ]},
+    { a:'he', b:'qiu', lines:[
+      [`……${hq}，睡不着。`,'……数羊。'],
+      ['……数了。','……那我陪你。'],
+      ['……嗯。','……别多想。']
+    ]},
+    { a:'he', b:'yang', lines:[
+      [`……${hy}，你内耗了吗。`,'……嗯。'],
+      ['……别想太多。','……我知道。'],
+      ['……我在。','……嗯。']
+    ]},
+    { a:'chen', b:'qiu', lines:[
+      [`……${cq}，加油！`,'……嗯。'],
+      [`……今天也要开心。`,'……知道了。'],
+      [`……笑一个嘛。`,'……哼。']
+    ]},
+    { a:'qiu', b:'yang', lines:[
+      [`……${qy}，你是不是又花心了。`,'……哪有。'],
+      ['……那谁送你东西了。','……朋友。'],
+      ['……哼。','……真的。']
+    ]},
+    { a:'he', b:'yang', lines:[
+      [`……${hy}，你哭了？`,'……没有。'],
+      ['……你眼睛红了。','……风大。'],
+      ['……嗯，我在。','……嗯。']
+    ]},
+    // 新增
+    { a:'chen', b:'yang', lines:[
+      [`……${cy}，笑一个。`,'……不。'],
+      [`……求你了。`,'……好吧。'],
+      [`……耶！`,'……嗯。']
+    ]},
+    { a:'qiu', b:'he', lines:[
+      [`……${qh}，帮我拿一下。`,'……好。'],
+      [`……谢谢。`,'……嗯。'],
+      [`……哼。`,'……（笑）']
+    ]},
+    { a:'yang', b:'qiu', lines:[
+      [`……${yq}，我饿了。`,'……自己去买。'],
+      [`……没钱。`,'……（叹气）我请你。'],
+      [`……谢谢老大。`,'……少来。']
+    ]},
+    { a:'he', b:'chen', lines:[
+      [`……${bx}，你照片好多。`,'……嗯！'],
+      [`……拍得好看。`,'……谢谢！'],
+      [`……嗯。`,'……嘿嘿。']
+    ]}
+  ];
+}
 
-function duoInteract() {
+function groupInteract() {
   if (mode !== 'both') return;
-  const sQ = getState('qiu'), sH = getState('he');
-  if (sQ.away || sH.away) return;
-  if (sQ.angry >= 60 || sH.angry >= 60) return;
-  if (sQ.sad >= 50 || sH.sad >= 50) return;
-
-  const d = rand(DUO_SCRIPTS);
+  const list = ['qiu','he','yang','chen'].filter(k => {
+    const s = getState(k);
+    return !s.away && s.angry < 60 && s.sad < 50 && (s.fight || 0) < 50;
+  });
+  if (list.length < 2) return;
+  // 15% 概率触发打架
+  if (Math.random() < 0.15 && list.length >= 2) {
+    startFight();
+    return;
+  }
+  const scripts = DUO_SCRIPTS();
+  const d = rand(scripts);
+  if (!list.includes(d.a) || !list.includes(d.b)) return;
   const pair = rand(d.lines);
   const [l1, l2] = pair;
-  const [first, second] = d.a === 'qiu' ? ['qiu', 'he'] : ['he', 'qiu'];
-  const lineA = d.a === first ? l1 : l2;
-  const lineB = d.a === first ? l2 : l1;
-
+  const [first, second] = Math.random() < 0.5 ? [d.a, d.b] : [d.b, d.a];
+  const lineA = first === d.a ? l1 : l2;
+  const lineB = first === d.a ? l2 : l1;
   say(first, lineA, 2000);
-  const slotA = first === 'qiu' ? slotQiu : slotHe;
-  const slotB = second === 'qiu' ? slotQiu : slotHe;
+  const slotA = slotOf(first);
+  const slotB = slotOf(second);
   slotA.classList.add('talking');
-  setTimeout(() => {
-    slotA.classList.remove('talking');
-    slotB.classList.add('talking');
-    say(second, lineB, 2000);
-  }, 1300);
+  setTimeout(() => { slotA.classList.remove('talking'); slotB.classList.add('talking'); say(second, lineB, 2000); }, 1300);
   setTimeout(() => slotB.classList.remove('talking'), 2600);
 }
 
-/* ================= 空闲自动聊天（用户5秒不动） ================= */
+/* ================= 四人同屏互动 ================= */
+function allFourInteract() {
+  if (mode !== 'both') return;
+  const list = ['qiu','he','yang','chen'].filter(k => {
+    const s = getState(k);
+    return !s.away && s.angry < 60 && s.sad < 50;
+  });
+  if (list.length < 4) return;
+  const scenarios = [
+    // 一起吃饭
+    () => {
+      say('qiu', '……该吃饭了。', 1800);
+      setTimeout(() => say('he', '……嗯。', 1600), 900);
+      setTimeout(() => say('yang', '……我想躺着。', 1600), 1800);
+      setTimeout(() => say('chen', '……一起嘛！', 1600), 2700);
+      setTimeout(() => say('qiu', '……走。', 1600), 3600);
+      setTimeout(() => say('yang', '……好吧。', 1600), 4500);
+    },
+    // 拍照
+    () => {
+      say('chen', '……大家！拍张照！', 1800);
+      setTimeout(() => say('qiu', '……不要。', 1600), 900);
+      setTimeout(() => say('he', '……嗯。', 1600), 1800);
+      setTimeout(() => say('yang', '……我不上镜。', 1600), 2700);
+      setTimeout(() => say('chen', '……来嘛！', 1600), 3600);
+      setTimeout(() => { cameraFlash(); say('chen', '……茄子！', 1600); }, 4500);
+    },
+    // 夜晚
+    () => {
+      say('he', '……晚安。', 1800);
+      setTimeout(() => say('qiu', '……早点睡。', 1600), 900);
+      setTimeout(() => say('yang', '……我睡不着。', 1600), 1800);
+      setTimeout(() => say('chen', '……数羊！', 1600), 2700);
+      setTimeout(() => say('yang', '……数了。', 1600), 3600);
+      setTimeout(() => say('he', '……我陪你。', 1600), 4500);
+    },
+    // 回忆
+    () => {
+      say('qiu', '……3年了。', 1800);
+      setTimeout(() => say('he', '……嗯。', 1600), 900);
+      setTimeout(() => say('yang', '……时间好快。', 1600), 1800);
+      setTimeout(() => say('chen', '……以后也一起！', 1600), 2700);
+      setTimeout(() => say('qiu', '……嗯。', 1600), 3600);
+      setTimeout(() => say('he', '……好。', 1600), 4500);
+    },
+    // 吐槽用户
+    () => {
+      say('qiu', '……他今天又没来。', 1800);
+      setTimeout(() => say('yang', '……嗯。', 1600), 900);
+      setTimeout(() => say('chen', '……可能忙。', 1600), 1800);
+      setTimeout(() => say('he', '……嗯。', 1600), 2700);
+      setTimeout(() => say('qiu', '……哼。', 1600), 3600);
+    },
+    // 吵架后和好
+    () => {
+      say('qiu', '……对不起。', 1800);
+      setTimeout(() => say('yang', '……我也是。', 1600), 900);
+      setTimeout(() => say('he', '……嗯。', 1600), 1800);
+      setTimeout(() => say('chen', '……和好！', 1600), 2700);
+      setTimeout(() => { cameraFlash(); say('chen', '……拍一张。', 1600); }, 3600);
+    }
+  ];
+  rand(scenarios)();
+}
+
+/* ================= 空闲自动 ================= */
 function startIdleChat() {
   stopIdleChat();
   idleChatTimer = setInterval(() => {
-    // 用户5秒不动 + 双人模式
     if (Date.now() - lastUserAction < 5000) return;
-    if (mode !== 'both') {
-      // 单人模式：自己说话
-      const key = activeChar;
-      const s = getState(key);
-      if (s.away || s.angry >= 60 || s.sad >= 50) return;
-      if (choices.classList.contains('show') || panel.classList.contains('show')) return;
-      if (Math.random() < 0.35) {
-        const c = CHARS[key];
-        const pool = [...c.lines.idle, ...c.lines.warm];
-        say(key, rand(pool), 2400);
+    if (mode === 'both') {
+      const r = Math.random();
+      if (r < 0.3) groupInteract();
+      else if (r < 0.5) allFourInteract();
+      else {
+        const key = rand(['qiu','he','yang','chen']);
+        const s = getState(key);
+        if (s.away || s.angry >= 60 || s.sad >= 50) return;
+        say(key, rand(CHARS[key].lines.idle), 2400);
       }
       return;
     }
-    // 双人模式：自主互动
-    if (Math.random() < 0.5) {
-      duoInteract();
-    } else {
-      // 或者单人自言自语
-      const key = Math.random() < 0.5 ? 'qiu' : 'he';
-      const s = getState(key);
-      if (s.away || s.angry >= 60 || s.sad >= 50) return;
-      const c = CHARS[key];
-      say(key, rand(c.lines.idle), 2400);
-    }
+    const key = activeChar;
+    const s = getState(key);
+    if (s.away || s.angry >= 60 || s.sad >= 50) return;
+    if (choices.classList.contains('show') || panel.classList.contains('show')) return;
+    if (Math.random() < 0.35) say(key, rand([...CHARS[key].lines.idle, ...CHARS[key].lines.warm]), 2400);
   }, 4000);
 }
-function stopIdleChat() {
-  if (idleChatTimer) { clearInterval(idleChatTimer); idleChatTimer = null; }
-}
+function stopIdleChat() { if (idleChatTimer) { clearInterval(idleChatTimer); idleChatTimer = null; } }
 
 /* ================= 定时 ================= */
 setInterval(() => {
-  ['qiu','he'].forEach(key => {
+  ['qiu','he','yang','chen'].forEach(key => {
     const s = getState(key);
     s.mood = Math.max(0, s.mood - 0.5);
     s.food = Math.max(0, s.food - 1.0);
     if (s.angry > 0) s.angry = Math.max(0, s.angry - 1.5);
     if (s.sad > 0)   s.sad   = Math.max(0, s.sad   - 1.0);
+    if ((s.fight || 0) > 0) s.fight = Math.max(0, s.fight - 2);
+    if (s.temp > 50) s.temp = Math.max(50, s.temp - 1);
+    if (s.temp < 50) s.temp = Math.min(50, s.temp + 1);
   });
   render(); saveAll();
 
-  ['qiu','he'].forEach(key => {
+  ['qiu','he','yang','chen'].forEach(key => {
     const s = getState(key);
-    const slot = key === 'qiu' ? slotQiu : slotHe;
+    const slot = slotOf(key);
     if (slot.style.display === 'none') return;
     if (s.away || s.angry >= 60 || s.sad >= 50) return;
     if (choices.classList.contains('show') || panel.classList.contains('show')) return;
-    // 用户5秒内有操作就不主动说
     if (Date.now() - lastUserAction < 5000) return;
-
     if (Math.random() < 0.08) {
       const c = CHARS[key];
       if (s.food < 25) { say(key, rand(c.lines.hungry), 2200); setFaceFor(key, 'sad'); }
       else if (s.mood < 25) { say(key, rand(c.lines.sad), 2200); setFaceFor(key, 'sad'); }
-      else { say(key, rand(c.lines.idle), 2200); }
+      else say(key, rand(c.lines.idle), 2200);
     }
     if (Math.random() < 0.06 && s.mood > 65 && s.love > 50) coquetry(key);
-    // 开心送东西
     if (Math.random() < 0.05 && s.mood > 70 && s.love > 60) giveGiftToUser(key);
     if (Math.random() < 0.05 && s.love > 40 && !s.currentRequest) makeRequest(key);
     if (Math.random() < 0.03 && s.love > 30) meanToUser(key);
   });
 
-  // 双人互动
-  if (mode === 'both' && Math.random() < 0.08) duoInteract();
-
+  if (mode === 'both' && Math.random() < 0.1) groupInteract();
   saveAll();
 }, 8000);
 
@@ -1582,11 +2105,8 @@ document.addEventListener('visibilitychange', () => { if (document.hidden) saveA
 
 /* ================= 启动 ================= */
 const savedMode = localStorage.getItem('mode');
-if (savedMode && (CHARS[savedMode] || savedMode === 'both')) {
-  chooseMode(savedMode);
-} else {
-  selectPage.classList.remove('hide');
-}
+if (savedMode && (CHARS[savedMode] || savedMode === 'both')) chooseMode(savedMode);
+else selectPage.classList.remove('hide');
 </script>
 </body>
 </html>
